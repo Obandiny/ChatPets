@@ -1,0 +1,45 @@
+/* You can add global styles to this file, and also import other style files */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background-color: #ff640a;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #FFC107; /* Color de la barra */
+    border-radius: 10px; /* Esquinas redondeadas */
+    border: 2px solid #FF5722; /* Espaciado entre el thumb y el track */
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #FF9800; /* Color al pasar el mouse */
+}
+
+body {
+    background-color: #ffffff;
+    color: #000000;
+    transition: background-color 0.3s, color 0.3s;
+    margin: 0; padding: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+  
+body.dark-theme {
+    background-color: #121212;
+    color: #ffffff;
+    margin: 0; padding: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+  
+aside {
+    transition: background-color 0.3s;
+}
+
+body:not(.dark-theme) aside {
+    background-color: #e0e0e0; /* Un poco más oscuro que blanco */
+    color: #000;
+}
+
+body.dark-theme aside {
+    background-color: #1f1f1f; /* Un poco más claro que #121212 */
+    color: #fff;
+}

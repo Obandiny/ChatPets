@@ -1,0 +1,16 @@
+<div class="titulo-p">
+  <h1>DIAGNOSTICO DE LA MASCOTA</h1>
+</div>
+
+<div class="titulo-s">
+  <h2>Por favor ingresar el estado de la mascota respondiendo las siguientes preguntas</h2>
+</div>
+
+<div class="diagnostico">
+  <div class="question-card animate-slide">
+    <h3>{{ questions[currentQuestionIndex] }}</h3>
+    <input [(ngModel)]="currentAnswer" placeholder="Escribe tu respuesta" />
+    <button (click)="next()">Siguiente</button>
+    <button [routerLink]="['/chatbot']">Chat</button>
+  </div>
+</div>

@@ -1,0 +1,60 @@
+.diagnostico {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 90vh;
+  padding: 20px;
+  margin-top: -150px;
+}
+
+.question-card {
+  width: 100%;
+  max-width: 500px;
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  background: white;
+  text-align: center;
+  transition: transform 0.4s ease;
+}
+
+input {
+  margin-top: 12px;
+  padding: 10px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+button {
+  margin-top: 16px;
+  padding: 10px 20px;
+  border-radius: 8px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  cursor: pointer;
+  margin-right: 5px;
+}
+
+.titulo-p {
+  text-align: center;
+  padding: 10px;
+  border-radius: 5px;
+  background-color: #e95d00;
+  margin-top: 20px;
+  width: 350px;
+  margin-left: 10px;
+  color: #fff;
+}
+
+.titulo-p h1 {
+  padding-top: 10px;
+}
+
+.titulo-s {
+  text-align: center;
+  margin-top: 30px;
+  margin-left: 10px;
+  margin-right: 10px;
+}
