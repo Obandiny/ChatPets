@@ -16,6 +16,10 @@ export class ChatbotService {
   obtenerRecomendacion(userInput: string): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/api/chat`, { sintomas: userInput });
   }
+
+  enviarDiagnostico(data: any) {
+    return this.http.post(`${this.apiUrl}/api/diagnostico`, data);
+  }
  
   toggleTheme() {
     this.isDarkTheme = !this.isDarkTheme;

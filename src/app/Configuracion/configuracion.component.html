@@ -1,16 +1,44 @@
-<div class="titulo-p">
-  <h1>DIAGNOSTICO DE LA MASCOTA</h1>
+<div class="header">
+  <div class="titulo-p">
+    <h1>DIAGNOSTICO DE MASCOTA</h1>
+  </div>
+  
+  <div class="titulo-s">
+    <h2>Por favor ingresar el estado de la mascota respondiendo las siguientes preguntas</h2>
+  </div>
 </div>
 
-<div class="titulo-s">
-  <h2>Por favor ingresar el estado de la mascota respondiendo las siguientes preguntas</h2>
-</div>
 
 <div class="diagnostico">
   <div class="question-card animate-slide">
     <h3>{{ questions[currentQuestionIndex] }}</h3>
-    <input [(ngModel)]="currentAnswer" placeholder="Escribe tu respuesta" />
-    <button (click)="next()">Siguiente</button>
-    <button [routerLink]="['/chatbot']">Chat</button>
+
+    <input
+      [(ngModel)]="currentAnswer"
+      placeholder="Escribe tu respuesta"
+      [type]="getInputType(currentQuestionIndex)"
+    />
+
+    <button
+      (click)="before()"
+      [disabled]="isFirstQuestion()"
+    >
+      Anterior
+    </button>
+
+    <button
+      (click)="next()"
+      [disabled]="isAnswerEmpty()"
+    >
+      Siguiente
+    </button>
+
+    <button
+      *ngIf="currentQuestionIndex === questions.length - 1 && !isAnswerEmpty()"
+      [routerLink]="['/chatbot']"
+    >
+      Chat
+    </button>
   </div>
 </div>
+

@@ -25,6 +25,7 @@
   <!-- <button class="btn-new-chat" (click)="newChat()">Nuevo</button> -->
   <ul>
       <li><button [routerLink]="['/informacion']">Informacion</button></li>
+      <li><button [routerLink]="['/eleccion']">Nuevo Diagnostico</button></li>
       <li><button (click)="toggleTheme()">
         {{ chatbotService.currentThemeIsDark ? 'Modo Claro' : 'Modo Oscuro' }}
       </button></li>

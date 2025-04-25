@@ -4,6 +4,8 @@ import { RouterLink } from '@angular/router';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
+import { ChatbotService } from '../chatbot.service';
+import { response } from 'express';
 
 @Component({
   selector: 'app-configuracion',
@@ -27,37 +29,58 @@ export class ConfiguracionComponent {
     '¿Ha estado en contacto con otros animales últimamente?'
   ];
 
-  answers: string[] = [];
+  answers: string[] = Array(this.questions.length).fill('');
+
   currentQuestionIndex = 0;
-  currentAnswer = '';
-  petId = 0;
 
-  constructor(private http: HttpClient, private router: Router, private route: ActivatedRoute) {}
+  constructor(private chatbotService: ChatbotService) {}
 
-  ngOnInit() {
-    this.petId = +this.route.snapshot.paramMap.get('id')!;
+  get currentAnswer(): string {
+    return this.answers[this.currentQuestionIndex];
   }
 
-  next() {
-    if (this.currentAnswer.trim() !== '') {
-      this.answers.push(this.currentAnswer.trim());
-      this.currentAnswer = '';
+  set currentAnswer(value: string) {
+    this.answers[this.currentQuestionIndex] = value;
+  }
+
+  before(): void {
+    if (this.currentQuestionIndex > 0) {
+      this.currentQuestionIndex--;
+    }
+  }
+
+  next(): void {
+    const respuesta = this.answers[this.currentQuestionIndex]?.trim();
+    if (respuesta !== '') {
       if (this.currentQuestionIndex < this.questions.length - 1) {
         this.currentQuestionIndex++;
-      } else {
-        this.finishDiagnosis();
       }
     }
   }
 
-  finishDiagnosis() {
-    const finalPrompt = this.questions.map((q, i) => `${q} ${this.answers[i]}`).join('\n');
+  isFirstQuestion(): boolean {
+    return this.currentQuestionIndex === 0;
+  }
 
-    this.http.post<any>('http://localhost:5000/chat', {
-      pet_id: this.petId,
-      message: finalPrompt
-    }).subscribe(response => {
-      this.router.navigate(['/chat', this.petId]);
+  isAnswerEmpty(): boolean {
+    return this.answers[this.currentQuestionIndex]?.trim() === '';
+  }
+
+  getInputType(index: number): string {
+    if (index === 1) {
+      return 'number';
+    }
+    return 'text';
+  }
+
+  finishDiagnosis() {
+    const mascota = JSON.parse(localStorage.getItem('mascota')!);
+    const diagnostico = {
+      ...mascota,
+      respuestas: this.answers
+    };
+    this.chatbotService.enviarDiagnostico(diagnostico).subscribe(response => {
+      console.log('Diagnostico enviado:', response);
     });
   }
 

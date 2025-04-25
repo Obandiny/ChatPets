@@ -1,10 +1,18 @@
+.header {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 40vh;
+}
+
 .diagnostico {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 90vh;
   padding: 20px;
-  margin-top: -150px;
+  margin-top: -220px;
 }
 
 .question-card {
@@ -21,7 +29,7 @@
 input {
   margin-top: 12px;
   padding: 10px;
-  width: 100%;
+  width: 90%;
   border-radius: 8px;
   border: 1px solid #ccc;
 }
@@ -38,18 +46,22 @@ button {
 }
 
 .titulo-p {
-  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 10px;
   border-radius: 5px;
-  background-color: #e95d00;
   margin-top: 20px;
   width: 350px;
   margin-left: 10px;
-  color: #fff;
+  color: #000;
 }
 
 .titulo-p h1 {
   padding-top: 10px;
+  font-size: 30px;
+  text-align: center;
+  font-weight: bold;
 }
 
 .titulo-s {
