@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+    <div id="contenedor-principal">
+        <div class="contenedor-login">
+            <h1 class="titulo-label">MASCOTAPP</h1>
+
+            <div class="input-group">
+                <input type="email" required>
+                <label>Ingresar Correo</label>
+            </div>
+
+            <div class="input-group">
+                <input type="password" required>
+                <label>Ingresar Contraseña</label>
+            </div>
+
+            <button class="send-user">Login</button>
+
+            <div class="links">
+                <a [routerLink]="['/auth/register']">Crear cuenta.</a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

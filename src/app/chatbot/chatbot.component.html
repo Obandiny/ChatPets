@@ -24,7 +24,6 @@
   <button matTooltip="Cerrar barra lateral" class="btn-close-aside" (click)="toggleAside()">☰</button>
   <!-- <button class="btn-new-chat" (click)="newChat()">Nuevo</button> -->
   <ul>
-      <li><button [routerLink]="['/informacion']">Informacion</button></li>
       <li><button [routerLink]="['/eleccion']">Nuevo Diagnostico</button></li>
       <li><button (click)="toggleTheme()">
         {{ chatbotService.currentThemeIsDark ? 'Modo Claro' : 'Modo Oscuro' }}
@@ -37,7 +36,6 @@
     <nav>
       <ul class="lista-modal-aside">
         <li><button [routerLink]="['/configuracion']">Settings</button></li>
-        <li><button [routerLink]="['/informacion']">Info</button></li>
         <li><button [routerLink]="['/auth/register']">Registro</button></li>
       </ul>
     </nav>

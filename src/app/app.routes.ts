@@ -1,14 +1,18 @@
 import { Routes } from '@angular/router';
 import { ChatbotComponent } from './chatbot/chatbot.component';
-import { InformacionComponent } from './informacion/informacion.component';
 import { ConfiguracionComponent } from './Configuracion/configuracion.component';
 import { EleccionComponent } from './eleccion/eleccion.component';
+import { MenuComponent } from './menu/menu.component';
+import { LoginComponent } from './auth/login/login.component';
+import { RegisterComponent } from './auth/register/register.component';
 
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'inicio', pathMatch: 'full' },
+    { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
     { path: 'chatbot', component: ChatbotComponent },
-    { path: 'informacion', component: InformacionComponent },
     { path: 'diagnostico', component: ConfiguracionComponent },
-    { path: 'eleccion', component: EleccionComponent }
+    { path: 'eleccion', component: EleccionComponent },
+    { path: 'menu', component: MenuComponent },
+    { path: 'auth/login', component: LoginComponent },
+    { path: 'auth/register', component: RegisterComponent }
 ];

@@ -74,33 +74,8 @@ def cargar_datos_db():
     recomendaciones_texto = [str(r) for r in recomendaciones_texto]
     return sintomas_texto, recomendaciones_texto
 
-# def entrenar_modelo(sintomas, recomendaciones):
-
-#     if len(sintomas) != len(recomendaciones):
-#         raise ValueError("El número de síntomas y recomendaciones no coincide.")
-    
-#     data = list(zip(sintomas, recomendaciones))
-#     data = [(s, r) for s, r in data if s and r] 
-#     sintomas, recomendaciones = zip(*data)
-
-#     # Codificar etiquetas
-#     label_encoder = LabelEncoder()
-#     y = label_encoder.fit_transform(recomendaciones)
-
-#     # Vectorizar los textos
-#     vectorizer = TfidfVectorizer(max_features=5000)
-#     X = vectorizer.fit_transform(sintomas)
-
-#     # Crear y entrenar el modelo
-#     model = MLPClassifier(hidden_layer_sizes=(128,), max_iter=500, solver='adam', random_state=42)
-#     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
-#     model.fit(X_train, y_train)
-    
-#     return model, vectorizer, label_encoder
-
 with app.app_context():
     sintomas = cargar_datos_db()
-    # model, vectorizer, label_encoder = entrenar_modelo(sintomas, recomendaciones)
 
     # Consultar modelo preentrenado de Machine Learning 
     def consultar_google_ai(sintomas):
@@ -118,9 +93,7 @@ with app.app_context():
             generation_config=generation_config
         )
         
-        chat_session = model.start_chat(history=[]) 
-
-        # sintomas_form = ', '.join(sintomas)    
+        chat_session = model.start_chat(history=[])   
 
         prompt = f"""
         Un usuario dueño de mascota ha reportado los siguientes síntomas en su mascota: {sintomas}.
