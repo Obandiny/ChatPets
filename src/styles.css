@@ -4,17 +4,17 @@
 }
 
 ::-webkit-scrollbar-track {
-    background-color: #ff640a;
+    background-color: #e2e2e2;
 }
 
 ::-webkit-scrollbar-thumb {
-    background-color: #FFC107; /* Color de la barra */
+    background-color: #6a6a6a; /* Color de la barra */
     border-radius: 10px; /* Esquinas redondeadas */
-    border: 2px solid #FF5722; /* Espaciado entre el thumb y el track */
+    transition: background-color 0.5s ease;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-    background-color: #FF9800; /* Color al pasar el mouse */
+    background-color: #b6b6b6; /* Color al pasar el mouse */
 }
 
 body {

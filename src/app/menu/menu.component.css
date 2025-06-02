@@ -15,11 +15,18 @@ textarea {
     justify-content: space-between;
     align-items: center;
     padding: 10px 20px;
-    position: relative;
-    border-bottom-left-radius: 10px;
-    border-bottom-right-radius: 10px;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 70px; /* Añade una altura explícita */
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    background-color: white; /* Asegura que no sea transparente */
+    z-index: 1000;
 }
+
 
 .main {
     flex: 1;
@@ -28,6 +35,8 @@ textarea {
     text-align: center;
     justify-content: center;
     height: 100vh;
+    margin-top: 70px;
+    padding: 20px;
 }
 
 .footer {
@@ -59,12 +68,15 @@ textarea {
 
 .btn-open-menu {
     border: none;
-    padding: 8px 16px;
+    padding: 8px 12px;
     cursor: pointer;
     font-size: 12px;
     background: #3f51b5;
     color: #fff;
     transition: background 0.5s ease;
+    display: flex;               /* FLEXBOX ACTIVADO */
+    justify-content: center;     /* Centra horizontalmente */
+    align-items: center;
 }
 
 .btn-open-menu:hover {
@@ -73,12 +85,18 @@ textarea {
 
 .btn-open-login {
     border: none;
-    padding: 8px 16px;
+    padding: 0; /* Elimina padding extra que puede romper el centrado */
     cursor: pointer;
-    font-size: 12px;
-    background: #e45c02;
+    background: #2c3cae;
     color: #fff;
     transition: background 0.5s ease;
+    border-radius: 50%;
+    width: 45px;
+    height: 45px;
+
+    display: flex;               /* FLEXBOX ACTIVADO */
+    justify-content: center;     /* Centra horizontalmente */
+    align-items: center;         /* Centra verticalmente */
 }
 
 .btn-open-login:hover {
@@ -104,19 +122,21 @@ textarea {
 }
 
 .contenedor-info {
-   margin-left: 10px;
-   margin-right: 10px;
+   margin-left: 20px;
    margin-bottom: 10px;
 }
 
 .tj-blog {
-    width: 100%;
+    width: 95%;
     height: 450px;
     border: none;
     border-radius: 10px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    background-color: #edebeb;
+    background-color: #b6b6b6;
     position: relative;
+    display: flex;
+    flex-direction: column;
+
 }
 
 .tj-blog .image {
@@ -129,30 +149,53 @@ textarea {
 }
 
 .tj-blog .image .add {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     position: absolute;
     bottom: 5px;
     right: 5px;
     cursor: pointer;
-    background-color: #0e8d00;
+    background-color: #cecece;
+    border: none;
 }
 
 .tj-blog .image .delete {
-    width: 30px;
-    height: 30px;
+    width: 35px;
+    height: 35px;
     border-radius: 50%;
     position: absolute;
     bottom: 5px;
-    right: 40px;
+    right: 45px;
     cursor: pointer;
-    background-color: #e10202;
+    background-color: #cecece;
+    border: none;
+}
+
+.delete mat-icon {
+    font-size: 25px;
+}
+
+.add mat-icon {
+    font-size: 25px;
 }
 
 .add-text {
-    border: 1px solid;
     height: 50%;
     margin: 10px 10px 0 10px;
     border-radius: 5px;
+    position: relative;
+}
+
+.add-text textarea {
+    width: 90%;
+    height: 130px;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    background: none;
+    font-size: 16px;
+    font-weight: bold;
+    resize: none;
+    padding-top: 80px;
 }
