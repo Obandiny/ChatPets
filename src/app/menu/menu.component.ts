@@ -1,28 +1,26 @@
+import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { RouterLink } from '@angular/router';
+import { BlobOptions } from 'buffer';
 
 @Component({
   selector: 'app-menu',
   standalone: true,
   imports: [
     MatIconModule,
-    RouterLink
+    RouterLink,
+    CommonModule
   ],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css'
 })
 export class MenuComponent {
-  isMenuOpen = false;
+  isMenuOpen: boolean = false;
 
   constructor() {}
 
-  openMenu() {
-    this.isMenuOpen = true;
-    console.log("Click");
-  }
-
-  closeMenu() {
-    this.isMenuOpen = false;
+  toggleMenu() {
+    this.isMenuOpen = !this.isMenuOpen;
   }
 }

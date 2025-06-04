@@ -206,7 +206,6 @@ textarea {
 }
 
 .menu-lateral {
-   display: none;
    position: fixed;
    top: 0;
    left: 0;
@@ -215,15 +214,15 @@ textarea {
    background-color: #2e2e2e;
    color: #fff;
    padding: 1rem;
-   z-index: 999;
-   transform:  translateX(-100%);
-   transition: transform 0.3s ease-in-out;
+   z-index: 1000;
+   /* transform:  translateX(-100%);
+   transition: transform 0.3s ease-in-out; */
    opacity: 0;
    pointer-events: none;
 }
 
 .menu-lateral.open {
-    transform: translateX(0);
+    display: block;
     opacity: 1;
     pointer-events: auto;
 }

@@ -1,58 +1,21 @@
 <!-- Contenedor del Encabezado -->
 <header>
   <div class="options">
-      <div class="btn-aside">
-          <button matTooltip="Abrir barra lateral" class="btn-aside-open" type="button" (click)="toggleAside()">☰</button>
-      </div>
-
-      <div class="nuevo">
-        <button matTooltip="Nuevo chat" class="btn-nuevo" (click)="nuevoChat()">+</button>
+      <div class="back">
+        <button matTooltip="Volver" class="btn-back" [routerLink]="['/menu']">
+          <mat-icon>arrow_left</mat-icon>
+        </button>
       </div>
   
       <div class="logo">
           <p>ChatPET</p>   
       </div>
 
-      <div class="window">
-          <button class="btn-open-window" (click)="openModal()"><mat-icon aria-hidden="false" aria-label="login icon" fontIcon="pets" [ariaSetSize]="80" color="yellow"></mat-icon></button>
+      <div class="nuevo">
+        <button matTooltip="Nuevo chat" class="btn-nuevo" (click)="nuevoChat()">+</button>
       </div>
   </div>
 </header>
-
-<!-- Contenedor Menu Lateral -->
-<aside class="chat-history" *ngIf="isAsideOpen">
-  <button matTooltip="Cerrar barra lateral" class="btn-close-aside" (click)="toggleAside()">☰</button>
-  <!-- <button class="btn-new-chat" (click)="newChat()">Nuevo</button> -->
-  <ul>
-      <li><button [routerLink]="['/eleccion']">Nuevo Diagnostico</button></li>
-      <li><button (click)="toggleTheme()">
-        {{ chatbotService.currentThemeIsDark ? 'Modo Claro' : 'Modo Oscuro' }}
-      </button></li>
-  </ul>
-  
-  <button class="btn-entrar-aside" [routerLink]="['/auth/register']">Registro</button>
-
-  <div class="window-modal-aside" *ngIf="isModalOpenAside">
-    <nav>
-      <ul class="lista-modal-aside">
-        <li><button [routerLink]="['/configuracion']">Settings</button></li>
-        <li><button [routerLink]="['/auth/register']">Registro</button></li>
-      </ul>
-    </nav>
-  </div>
-
-</aside>
-
-<div class="window-modal" *ngIf="isModalOpen">
-  <nav>
-    <ul class="lista-modal">
-      <li><button [routerLink]="['/auth/register']">Registro</button></li>
-      <li><button (click)="toggleTheme()">
-        {{ chatbotService.currentThemeIsDark ? 'Modo Claro' : 'Modo Oscuro' }}
-      </button></li>
-    </ul>
-  </nav>
-</div>
 
 <div class="chat-container">
     <div class="chat-box">
