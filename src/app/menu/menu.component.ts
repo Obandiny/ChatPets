@@ -1,8 +1,9 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 import { RouterLink } from '@angular/router';
-import { BlobOptions } from 'buffer';
+
 
 @Component({
   selector: 'app-menu',
@@ -10,7 +11,8 @@ import { BlobOptions } from 'buffer';
   imports: [
     MatIconModule,
     RouterLink,
-    CommonModule
+    CommonModule,
+    MatTooltipModule
   ],
   templateUrl: './menu.component.html',
   styleUrl: './menu.component.css'
