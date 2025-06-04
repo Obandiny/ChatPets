@@ -1,32 +1,36 @@
 body {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: linear-gradient(135deg, #8EC5FC, #E0C3FC);
+  height: 100vh;
 }
 
 #contenedor-principal {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
-  background: #f0f2f5;
+  height: 100%;
   padding: 20px;
 }
 
 .contenedor-login {
-  padding: 25px 20px;
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 40px;
+  max-width: 400px;
   width: 100%;
-  max-width: 360px;
+  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  text-align: center;
 }
 
 .titulo-label {
-  text-align: center;
-  font-size: 24px;
+  font-size: 32px;
   margin-bottom: 30px;
-  color: #333;
-  font-weight: bold;
+  color: #007bff;
 }
 
 .input-group {
@@ -35,68 +39,51 @@ body {
 }
 
 .input-group input {
-  width: 93%;
+  width: 100%;
   padding: 12px 10px;
   border: none;
   border-radius: 8px;
   outline: none;
+  background-color: rgba(255, 255, 255, 0.8);
   font-size: 16px;
-  transition: border-color 0.2s;
-}
-
-.input-group input:focus {
-  border-color: #3f51b5;
-}
-
-.input-group input:hover {
-    transform: scale(1.05);
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);;
 }
 
 .input-group label {
   position: absolute;
-  left: 12px;
-  top: 12px;
-  color: #aaa;
+  top: -12px;
+  left: 10px;
+  font-size: 14px;
+  background-color: rgba(255, 255, 255, 0.8);
   padding: 0 5px;
-  font-size: 16px;
-  pointer-events: none;
-  transition: 0.2s ease all;
-}
-
-.input-group input:focus + label,
-.input-group input:not(:placeholder-shown) + label,
-.input-group input:valid + label {
-  top: -10px;
-  left: 8px;
-  font-size: 12px;
-  color: #3f51b5;
+  color: #555;
 }
 
 .send-user {
   width: 100%;
   padding: 12px;
-  background: #3f51b5;
+  background-color: #007bff;
   color: white;
-  font-weight: bold;
   border: none;
   border-radius: 8px;
+  font-size: 16px;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: background-color 0.3s ease;
 }
 
 .send-user:hover {
-  background: #2c3cae;
+  background-color: #0056b3;
 }
 
 .links {
-  text-align: center;
-  margin-top: 15px;
+  margin-top: 20px;
 }
 
 .links a {
-  color: #3f51b5;
+  color: #007bff;
   text-decoration: none;
   font-size: 14px;
-  cursor: pointer;
+}
+
+.links a:hover {
+  text-decoration: underline;
 }
