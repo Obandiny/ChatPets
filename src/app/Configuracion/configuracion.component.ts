@@ -4,7 +4,7 @@ import { RouterLink } from '@angular/router';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { ChatbotService } from '../chatbot.service';
+import { ChatbotService } from '../services/chatbot.service';
 import { response } from 'express';
 
 @Component({
