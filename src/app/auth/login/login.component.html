@@ -1,31 +1,22 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
-    <div id="contenedor-principal">
-        <div class="contenedor-login">
-            <h1 class="titulo-label">MASCOTAPP</h1>
+<div id="contenedor-principal">
+  <div class="contenedor-login">
+    <h1 class="titulo-label">MASCOTAPP</h1>
 
-            <div class="input-group">
-                <input type="email" required>
-                <label>Email</label>
-            </div>
-
-            <div class="input-group">
-                <input type="password" required>
-                <label>Contraseña</label>
-            </div>
-
-            <button class="send-user">Ingresar</button>
-
-            <div class="links">
-                <a [routerLink]="['/auth/register']">Registrarse</a>
-                <a [routerLink]="['/menu']">Menu</a>
-            </div>
-        </div>
+    <div class="input-group">
+      <label for="email">Email</label>
+      <input id="email" type="email" required>
     </div>
-</body>
-</html>
+
+    <div class="input-group">
+      <label for="password">Contraseña</label>
+      <input id="password" type="password" required>
+    </div>
+
+    <button class="send-user">Ingresar</button>
+
+    <div class="links">
+      <a [routerLink]="['/auth/register']">Registrarse</a>
+      <a [routerLink]="['/menu']">Menu</a>
+    </div>
+  </div>
+</div>

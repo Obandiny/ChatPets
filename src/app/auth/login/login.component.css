@@ -30,12 +30,19 @@ body {
 .titulo-label {
   font-size: 32px;
   margin-bottom: 30px;
-  color: #007bff; /* Azul */
+  color: #007bff;
 }
 
 .input-group {
-  position: relative;
   margin-bottom: 25px;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: #555;
 }
 
 .input-group input {
@@ -46,16 +53,6 @@ body {
   outline: none;
   background-color: rgba(255, 255, 255, 0.8);
   font-size: 16px;
-}
-
-.input-group label {
-  position: absolute;
-  top: -12px;
-  left: 10px;
-  font-size: 14px;
-  background-color: rgba(255, 255, 255, 0.8);
-  padding: 0 5px;
-  color: #555;
 }
 
 .send-user {
@@ -82,7 +79,7 @@ body {
 }
 
 .links a {
-  color: #007bff; /* Azul */
+  color: #007bff;
   text-decoration: none;
   font-weight: bold;
   transition: color 0.3s;
