@@ -20,7 +20,7 @@ db = SQLAlchemy(app)
 
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "C:\\ProyectChat\\JSON\\chatpets-447422-74d12ad55a99.json"
 os.environ["GOOGLE_API_KEY"] = "AIzaSyD1PorqaIDwXplr-fVR42NmhUDG3W2LQoM"
-
+ 
 class Sintoma(db.Model):
     __tablename__ = 'sintomas'
     id_sintomas = db.Column(db.Integer, primary_key=True)

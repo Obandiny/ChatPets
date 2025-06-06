@@ -11,14 +11,14 @@ auth_bp = Blueprint('auth', __name__)
 def register():
     data = request.get_json()
     nombre = data.get('nombre')
-    apellido = data.get('correo')
+    apellido = data.get('apellido')
     correo = data.get('correo')
     password = data.get('password')
     
     if User.query.filter_by(correo=correo).first():
         return jsonify({'message': 'El correo ya esta registrado.'}), 400
     
-    new_user = User(nombre=nombre, correo=correo)
+    new_user = User(nombre=nombre, apellido=apellido, correo=correo)
     new_user.set_password(password)
     db.session.add(new_user)
     db.session.commit()
