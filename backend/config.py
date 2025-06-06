@@ -1,7 +1,12 @@
+from dotenv import load_dotenv
 import os
 
+load_dotenv()
+
 class Config:
-    SECRET_KEY = os.environ.get("SECRET_KEY", "secret-dev")
-    SQLALCHEMY_DATABASE_URI = 'mysql+pymysql://root:SQL#pass2000@localhost/sys'
+    SECRET_KEY = os.getenv('SECRET_KEY')
+    SQLALCHEMY_DATABASE_URI = os.getenv('JWT_SECRET_KEY')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
-    JWT_SECRET_KEY = os.environ.get("JWT_SECRET_KEY", "jwr-secret")
+    JWT_SECRET_KEY = os.getenv('DATABASE_URI')
+    GOOGLE_API_KEY = os.getenv('GOOGLE_API_KEY')
+    GOOGLE_APPLICATION_CREDENTIALS = os.getenv('GOOGLE_APPLICATION_CREDENTIALS')

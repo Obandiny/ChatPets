@@ -1,21 +1,37 @@
 from flask import Flask
 from flask_cors import CORS
+from dotenv import load_dotenv
+import os
+
 from config import Config
 from database import db
+from Models import *
+from Routes import auth_bp, chat_bp
 
-from Routes.auth_routes import auth_bp
-from Routes.chat_routes import chat_bp
+# Cargar variables de entorno
+load_dotenv()
 
-app = Flask(__name__)
-app.config.from_object(Config)
+def create_app():
+    app = Flask(__name__)
+    app.config.from_object(Config)
 
-CORS(app, resources={r"/api/*": {"origins": "*"}})
-db.init_app(app)
+    # Incializar extensiones
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
+    db.init_app(app)
 
-app.register_blueprint(auth_bp)
-app.register_blueprint(chat_bp)
+    # Registrar Blueprints
+    app.register_blueprint(auth_bp, url_prefix="/api/auth")
+    app.register_blueprint(chat_bp, url_prefix="/api/chat")
+
+    return app
 
 if __name__ == '__main__':
+    app = create_app()
+
+    # Crear tablas si no existen (SOLO EN DESARROLLO)
     with app.app_context():
         db.create_all()
+    
     app.run(debug=True)    
+
+# Usar con WSGI (gunicorn) o contenedor cuando sea en PRODUCCION. 

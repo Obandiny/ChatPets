@@ -1,9 +1,9 @@
 from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
-from config.database import Base
+from database import db
 
-class HistorialDiagnostico(Base):
+class HistorialDiagnostico(db.Model):
     __tablename__ = "historial_diagnostico"
 
     id = Column(Integer, primary_key=True, index=True)

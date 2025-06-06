@@ -12,10 +12,10 @@ class User(db.Model):
     password_hash = db.Column(db.String(128), nullable=False)
     rol = db.Column(db.String(50), default='usuario')
     
-    diagnostico = relationship('Diagnostico', back_populates='usuario')
+    historiales = relationship('HistorialDiagnostico', back_populates='usuario')
 
-def set_password(self, password):
-    self.password_hash = generate_password_hash(password)
+    def set_password(self, password):
+        self.password_hash = generate_password_hash(password)
 
-def check_password(self, password):
-    return check_password_hash(self.password_hash, password)    
+    def check_password(self, password):
+        return check_password_hash(self.password_hash, password)    

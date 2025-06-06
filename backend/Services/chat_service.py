@@ -1,6 +1,7 @@
 import google.generativeai as genai
 import os
 from Models.historial import HistorialDiagnostico
+from Models.relaciones import RelacionTablas
 from database import db
 
 def configurar_gemini():
@@ -37,6 +38,21 @@ def construir_prompt(respuestas):
     
     return prompt
 
+def consultar_database(respuestas):
+    for r in respuestas:
+        resultado = RelacionTablas.query.filter(
+            RelacionTablas.sintoma.ilike(f"%{r}")
+        ).first()
+        
+        if resultado:
+            return (
+                f"Segun nuestros registros:\n"
+                f"- Sintoma: {resultado.sintoma}\n"
+                f"- Enfermedad: {resultado.enfermedad}\n"
+                f"- Recomendacion: {resultado.recomendacion}"
+            )
+    return "No se encontró una recomendación en la base de datos para los síntomas proporcionados."    
+
 def procesar_diagnostico(usuario_actual, respuestas):
     try:
         prompt = construir_prompt(respuestas)
@@ -57,4 +73,15 @@ def procesar_diagnostico(usuario_actual, respuestas):
         return texto_respuesta
     except Exception as e:
         print(f"Error al procesar diagnostico: {e}")
-        return "Ocurrio un error al procesar la informacion."
+        
+        texto_fallback = consultar_database(respuestas)
+        
+        historial = HistorialDiagnostico(
+            usuario_id=usuario_actual.id,
+            respuestas_usuario=", ".join(respuestas),
+            respuestas_ai=texto_fallback
+        )
+        db.session.add(historial)
+        db.session.commit()
+        
+        return texto_fallback
