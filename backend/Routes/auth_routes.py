@@ -25,3 +25,28 @@ def register():
     
     return jsonify({'message': 'Usuario registrado con exito.'})
 
+@auth_bp.route('/api/login', methods=['POST'])
+def login():
+    data =request.get_json()
+    correo = data.get('correo')
+    password = data.get('password')
+    
+    user = User.query.filter_by(correo=correo).first()
+    
+    if user and user.check_password(password):
+        token = jwt.encode({
+            'user_id': user.id,
+            'rol': user.rol,
+            'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=6)
+        }, Config.SECRET_KEY, algorithm='HS256')  
+        
+        return jsonify({
+            'token': token,
+            'usuario': {
+                'id': user.id,
+                'nombre': user.nombre,
+                'correo': user.correo,
+                'rol': user.rol
+            }
+        })
+    return jsonify({'message': 'Credenciales invalidas'}), 401
