@@ -6,6 +6,10 @@
 /out-tsc
 /bazel-out
 
+# Ignorar caches de Python
+__pycache__/
+*.py[cod]
+
 # Node
 /node_modules
 npm-debug.log
@@ -41,3 +45,4 @@ testem.log
 .DS_Store
 Thumbs.db
 .env
+*.json

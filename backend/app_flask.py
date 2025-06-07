@@ -5,7 +5,7 @@ import os
 
 from config import Config
 from database import db
-from Models import *
+from Models import app_usuarios, mascota, diagnostico, historial, relaciones
 from Routes import auth_bp, chat_bp
 
 # Cargar variables de entorno
@@ -25,9 +25,9 @@ def create_app():
 
     return app
 
-if __name__ == '__main__':
-    app = create_app()
+app = create_app()
 
+if __name__ == '__main__':
     # Crear tablas si no existen (SOLO EN DESARROLLO)
     with app.app_context():
         db.create_all()

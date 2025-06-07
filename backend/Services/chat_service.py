@@ -12,7 +12,7 @@ def configurar_gemini():
         "top_p": 0.95,
         "top_k": 40,
         "max_output_tokens": 800,
-        "reponse_mime_type": "text/plain"
+        "response_mime_type": "text/plain"
     }
     
     model = genai.GenerativeModel(

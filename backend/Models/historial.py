@@ -2,6 +2,8 @@ from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from database import db
+from Models.app_usuarios import Usuario
+from Models.mascota import Mascota
 
 class HistorialDiagnostico(db.Model):
     __tablename__ = "historial_diagnostico"
@@ -13,5 +15,5 @@ class HistorialDiagnostico(db.Model):
     recomendacion = Column(Text, nullable=False)
     fecha = Column(DateTime, default=datetime.utcnow)
 
-    usuario = relationship("usuarios", back_populates="historiales")
+    usuario = relationship("Usuario", back_populates="historiales")
     mascota = relationship("Mascota", back_populates="historiales")
