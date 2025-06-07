@@ -15,10 +15,10 @@ def register():
     correo = data.get('correo')
     password = data.get('password')
     
-    if User.query.filter_by(correo=correo).first():
+    if Usuario.query.filter_by(correo=correo).first():
         return jsonify({'message': 'El correo ya esta registrado.'}), 400
     
-    new_user = User(nombre=nombre, apellido=apellido, correo=correo)
+    new_user = Usuario(nombre=nombre, apellido=apellido, correo=correo)
     new_user.set_password(password)
     db.session.add(new_user)
     db.session.commit()
@@ -31,7 +31,7 @@ def login():
     correo = data.get('correo')
     password = data.get('password')
     
-    user = User.query.filter_by(correo=correo).first()
+    user = Usuario.query.filter_by(correo=correo).first()
     
     if user and user.check_password(password):
         token = jwt.encode({
