@@ -1,4 +1,3 @@
-from sqlalchemy import Column, Integer, Text, DateTime, ForeignKey
 from sqlalchemy.orm import relationship
 from datetime import datetime
 from database import db
@@ -8,12 +7,15 @@ from Models.mascota import Mascota
 class HistorialDiagnostico(db.Model):
     __tablename__ = "historial_diagnostico"
 
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("usuarios.id"), nullable=False)
-    mascota_id = Column(Integer, ForeignKey("mascotas.id"), nullable=False)
-    sintomas = Column(Text, nullable=False)
-    recomendacion = Column(Text, nullable=False)
-    fecha = Column(DateTime, default=datetime.utcnow)
+    id = db.Column(db.Integer, primary_key=True, index=True)
 
-    usuario = relationship("Usuario", back_populates="historiales")
-    mascota = relationship("Mascota", back_populates="historiales")
+    usuario_id = db.Column(db.Integer, db.ForeignKey("usuarios.id"), nullable=False)
+    usuario = db.relationship("Usuario", back_populates="historiales")
+
+    mascota_id = db.Column(db.Integer, db.ForeignKey("mascotas.id"), nullable=False)
+    mascota = db.relationship("Mascota", back_populates="historiales")
+
+    sintomas = db.Column(db.Text, nullable=False)
+    recomendacion = db.Column(db.Text, nullable=False)
+    fecha = db.Column(db.DateTime, default=datetime.utcnow)
+

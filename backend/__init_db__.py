@@ -1,7 +1,7 @@
 from flask import Flask
 from config import Config
 from database import db
-from Models import app_usuarios, mascota, diagnostico, historial, relaciones
+from Models import app_usuarios, mascota, historial, relaciones
 
 app = Flask(__name__)
 app.config.from_object(Config)

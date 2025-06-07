@@ -6,34 +6,33 @@ class Sintoma(db.Model):
 
     id_sintomas = db.Column(db.Integer, primary_key=True)
     sintomas = db.Column(db.Text, nullable=False)
-    enfermedades = relationship('SintomaEnfermedad', back_populates='sintoma')
+    relaciones = relationship('RelacionTablas', back_populates='sintoma')
 
 class Enfermedad(db.Model):
     __tablename__ = 'enfermedades'
 
     id_enfermedad = db.Column(db.Integer, primary_key=True)
     enfermedad = db.Column(db.String(255), nullable=False)
-    sintomas = relationship('SintomaEnfermedad', back_populates='enfermedad')
-    recomendaciones = relationship('EnfermedadRecomendacion', back_populates='enfermedad')
+    relaciones = relationship('RelacionTablas', back_populates='enfermedad')
 
 class Recomendacion(db.Model):
     __tablename__ = 'recomendaciones'
 
     id_recomendacion = db.Column(db.Integer, primary_key=True)
     recomendacion = db.Column(db.String(255), nullable=False)
-    enfermedades_relacionadas = relationship('EnfermedadRecomendacion', back_populates='recomendacion')
+    relaciones = relationship('RelacionTablas', back_populates='recomendacion')
 
 class RelacionTablas(db.Model):
     __tablename__ = 'relacion_tablas'
     id = db.Column(db.Integer, primary_key=True)
     
-    sintoma = db.Column(db.String(255), db.ForeignKey('sintomas.id_sintomas'), nullable=False)
-    enfermedad = db.Column(db.String(255), db.ForeignKey('enfermedades.id_enfermedad'), nullable=False)
-    recomendacion = db.Column(db.String(255), db.ForeignKey('recomendaciones.id_recomendacion'), nullable=False)
+    sintoma_id = db.Column(db.Integer, db.ForeignKey('sintomas.id_sintomas'), nullable=False)
+    enfermedad_id = db.Column(db.Integer, db.ForeignKey('enfermedades.id_enfermedad'), nullable=False)
+    recomendacion_id = db.Column(db.Integer, db.ForeignKey('recomendaciones.id_recomendacion'), nullable=False)
     
-    sintoma = db.relationship("Sintoma", backref="relaciones")
-    enfermedad = db.relationship("Enfermedad", backref="relaciones")
-    recomendacion = db.relationship("Recomendacion", backref="relaciones")
+    sintoma = db.relationship("Sintoma", back_populates="relaciones")
+    enfermedad = db.relationship("Enfermedad", back_populates="relaciones")
+    recomendacion = db.relationship("Recomendacion", back_populates="relaciones")
 
 # class SintomaEnfermedad(db.Model):
 #     __tablename__ = 'sintomas_enfermedades'
