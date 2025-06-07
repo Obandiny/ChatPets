@@ -64,8 +64,8 @@ def procesar_diagnostico(usuario_actual, respuestas):
         # Guardar historial
         historial = HistorialDiagnostico(
             usuario_id=usuario_actual.id,
-            respuestas_usuario=", ".join(respuestas),
-            respuestas_ai=texto_respuesta
+            sintomas=", ".join(respuestas),
+            recomendacion=texto_respuesta
         )
         db.session.add(historial)
         db.session.commit()
@@ -78,8 +78,8 @@ def procesar_diagnostico(usuario_actual, respuestas):
         
         historial = HistorialDiagnostico(
             usuario_id=usuario_actual.id,
-            respuestas_usuario=", ".join(respuestas),
-            respuestas_ai=texto_fallback
+            sintomas=", ".join(respuestas),
+            recomendacion=texto_fallback
         )
         db.session.add(historial)
         db.session.commit()
