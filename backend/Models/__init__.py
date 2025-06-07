@@ -1,10 +1,10 @@
 from database import db
 
 from .app_usuarios import *
+from .mascota import *
 from .diagnostico import *
 from .historial import *
 from .relaciones import *
-from .mascota import *
 
 __all__ = [
     "User",

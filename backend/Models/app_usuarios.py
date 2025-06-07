@@ -2,8 +2,8 @@ from database import db
 from sqlalchemy.orm import relationship
 from werkzeug.security import generate_password_hash, check_password_hash
 
-class User(db.Model):
-    __tablename__ = "users"
+class Usuario(db.Model):
+    __tablename__ = "usuarios"
     
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)

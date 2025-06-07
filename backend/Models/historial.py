@@ -13,5 +13,5 @@ class HistorialDiagnostico(db.Model):
     recomendacion = Column(Text, nullable=False)
     fecha = Column(DateTime, default=datetime.utcnow)
 
-    usuario = relationship("Usuario", back_populates="historiales")
+    usuario = relationship("usuarios", back_populates="historiales")
     mascota = relationship("Mascota", back_populates="historiales")
