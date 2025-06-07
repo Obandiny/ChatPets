@@ -19,7 +19,7 @@ class Recomendacion(db.Model):
     __tablename__ = 'recomendaciones'
 
     id_recomendacion = db.Column(db.Integer, primary_key=True)
-    recomendacion = db.Column(db.String(255), nullable=False)
+    recomendacion = db.Column(db.Text, nullable=False)
     relaciones = relationship('RelacionTablas', back_populates='recomendacion')
 
 class RelacionTablas(db.Model):

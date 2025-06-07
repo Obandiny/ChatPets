@@ -12,6 +12,8 @@ from Routes import auth_bp, chat_bp
 # Cargar variables de entorno
 load_dotenv()
 
+migrate = Migrate()
+
 def create_app():
     app = Flask(__name__)
     app.config.from_object(Config)
@@ -20,7 +22,7 @@ def create_app():
     CORS(app, resources={r"/api/*": {"origins": "*"}})
     db.init_app(app)
 
-    migrate = Migrate(app, db)
+    migrate.init_app(app, db)
 
     # Registrar Blueprints
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
