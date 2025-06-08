@@ -9,7 +9,7 @@ class Usuario(db.Model):
     nombre = db.Column(db.String(100), nullable=False)
     apellido = db.Column(db.String(100), nullable=False)
     correo = db.Column(db.String(120), unique=True, nullable=False)
-    password_hash = db.Column(db.String(128), nullable=False)
+    password_hash = db.Column(db.String(512), nullable=False)
     rol = db.Column(db.String(50), default='usuario')
     
     historiales = db.relationship("HistorialDiagnostico", back_populates="usuario")

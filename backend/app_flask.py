@@ -1,4 +1,4 @@
-from flask import Flask
+from flask import Flask, request
 from flask_cors import CORS
 from dotenv import load_dotenv
 from flask_migrate import Migrate
@@ -19,7 +19,13 @@ def create_app():
     app.config.from_object(Config)
 
     # Incializar extensiones
-    CORS(app, resources={r"/api/*": {"origins": "*"}})
+    CORS(app, supports_credentials=True, resources={
+        r"/api/*": {
+            "origins": ["http://localhost:4200"],
+            "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+            "allow_headers": ["Content-Type", "Authorization"]
+        }
+    })
     db.init_app(app)
 
     migrate.init_app(app, db)
@@ -36,7 +42,11 @@ if __name__ == '__main__':
     # Crear tablas si no existen (SOLO EN DESARROLLO)
     # with app.app_context():
     #     db.create_all()
-    
+    @app.before_request
+    def handle_option():
+        if request.method == 'OPTIONS':
+            return '', 200
+
     app.run(debug=True)    
 
 # Usar con WSGI (gunicorn) o contenedor cuando sea en PRODUCCION. 

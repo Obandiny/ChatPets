@@ -1,24 +1,44 @@
-<div id="contenedor-principal">
-  <div class="contenedor-login">
-    <h1 class="titulo-label">MASCOTAPP</h1>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <div class="login-container">
+    <h2>Iniciar Sesión</h2>
 
-    <form (ngSubmit)="login()">
-      <div class="input-group">
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" required [(ngModel)]="email">
-      </div>
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Correo*</mat-label>
+        <input matInput formControlName="correo" type="email" required />
+        <mat-error *ngIf="loginForm.get('correo')?.invalid && loginForm.get('correo')?.touched">
+          Ingresa un correo válido
+        </mat-error>
+      </mat-form-field>
 
-      <div class="input-group">
-        <label for="password">Contraseña</label>
-        <input id="password" name="password" type="password" required [(ngModel)]="password">
-      </div>
+      <mat-form-field appearance="fill" class="full-width">
+        <mat-label>Contraseña*</mat-label>
+        <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required />
+        <button mat-icon-button matSuffix (click)="togglePassword()" type="button">
+          <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
+        </button>
+        <mat-error *ngIf="loginForm.get('password')?.invalid && loginForm.get('password')?.touched">
+          La contraseña es requerida
+        </mat-error>
+      </mat-form-field>
 
-      <button class="send-user" type="submit">Ingresar</button>
+      <button mat-raised-button color="primary" class="btn-submit" type="submit" (click)="loginForm.invalid">
+        Iniciar sesión
+      </button>
     </form>
 
-    <div class="links">
-      <a [routerLink]="['/auth/register']">Registrarse</a>
+    <p class="registro-link">
+      ¿No tienes una cuenta?
+      <a routerLink="/auth/register">Regístrate aquí</a>
+      <br>
       <a [routerLink]="['/menu']">Menu</a>
-    </div>
+    </p>
   </div>
-</div>
+</body>
+</html>

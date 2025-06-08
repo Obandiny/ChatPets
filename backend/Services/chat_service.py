@@ -2,6 +2,7 @@ import google.generativeai as genai
 import os
 from Models.historial import HistorialDiagnostico
 from Models.relaciones import RelacionTablas
+from Models.mascota import Mascota
 from database import db
 
 def configurar_gemini():
@@ -53,8 +54,13 @@ def consultar_database(respuestas):
             )
     return "No se encontró una recomendación en la base de datos para los síntomas proporcionados."    
 
-def procesar_diagnostico(usuario_actual, respuestas):
+def procesar_diagnostico(usuario_actual, respuestas, mascota_id):
     try:
+        # Validar existencia y pertenencia de la mascota
+        mascota = Mascota.query.filter_by(id=mascota_id, usuario_id=usuario_actual.id).first()
+        if not mascota:
+            raise ValueError("Mascota no encontrada o no pertenece al usuario")
+
         prompt = construir_prompt(respuestas)
         model = configurar_gemini()
         chat = model.start_chat(history=[])
@@ -64,6 +70,7 @@ def procesar_diagnostico(usuario_actual, respuestas):
         # Guardar historial
         historial = HistorialDiagnostico(
             usuario_id=usuario_actual.id,
+            mascota_id=mascota_id,
             sintomas=", ".join(respuestas),
             recomendacion=texto_respuesta
         )
@@ -78,6 +85,7 @@ def procesar_diagnostico(usuario_actual, respuestas):
         
         historial = HistorialDiagnostico(
             usuario_id=usuario_actual.id,
+            mascota_id=mascota_id,
             sintomas=", ".join(respuestas),
             recomendacion=texto_fallback
         )

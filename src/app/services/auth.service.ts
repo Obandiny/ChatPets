@@ -1,27 +1,90 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, of, throwError } from 'rxjs';
+import { Router } from '@angular/router'
+import { Observable, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  constructor(private http: HttpClient) {}
+  private readonly API_URL = 'http://localhost:5000/api/auth'; // Cambia por tu URL real si está desplegado
+  private authStatus = new BehaviorSubject<boolean>(this.isLoggedIn());
 
-  login(data: { email: string; password: string }): Observable<any> {
-    // Simulación de login exitoso
-    if (data.email === 'admin@mascotapp.com' && data.password === '123456') {
-      return of({ token: 'fake-jwt-token' });
+  private http = inject(HttpClient);
+  private router = inject(Router);
+
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined' && !!window.localStorage;
+  }
+
+  /** REGISTRO */
+  register(data: any): Observable<any> {
+    return this.http.post(`${this.API_URL}/register`, data);
+  }
+
+  /** LOGIN */
+  login(data: any): Observable<any> {
+    return this.http.post(`${this.API_URL}/login`, data);
+  }
+
+ saveToken(token: string): void {
+    if (this.isBrowser()) {
+      localStorage.setItem('token', token);
+      this.authStatus.next(true);
     }
-
-    return throwError(() => new Error('Credenciales inválidas'));
   }
 
-  register(data: { email: string; password: string }): Observable<any> {
-    // Aquí iría tu llamada real al backend (por ejemplo):
-    // return this.http.post('http://tuapi.com/register', data);
-
-    // Simulación de registro exitoso
-    return of({ message: 'Usuario registrado exitosamente' });
+  /** OBTENER TOKEN */
+  getToken(): string | null {
+    if (this.isBrowser()) {
+      return localStorage.getItem('token');
+    }
+    return null;
   }
+
+  /** CERRAR SESIÓN */
+  logout(): void {
+    if (this.isBrowser()) {
+      localStorage.removeItem('token');
+    }
+    this.authStatus.next(false);
+    this.router.navigate(['/login']);
+  }
+
+  /** VERIFICAR SI EL USUARIO ESTÁ LOGUEADO */
+  isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
+
+  /** DECODIFICAR TOKEN y OBTENER ROL */
+  getRole(): string | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.rol;
+    } catch {
+      return null;
+    }
+  }
+
+  /** OBTENER ID DEL USUARIO LOGUEADO */
+  getUserId(): number | null {
+    const token = this.getToken();
+    if (!token) return null;
+
+    try {
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      return payload.user_id;
+    } catch {
+      return null;
+    }
+  }
+
+  /** OBSERVABLE para escuchar cambios de sesión */
+  authStatus$(): Observable<boolean> {
+    return this.authStatus.asObservable();
+  }
+
 }

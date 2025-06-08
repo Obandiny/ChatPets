@@ -10,6 +10,7 @@ from app_flask import app
 from Models.app_usuarios import Usuario
 from Services.chat_service import procesar_diagnostico
 from app_flask import create_app
+from Models.mascota import Mascota
 
 load_dotenv()
 
@@ -25,7 +26,7 @@ def limpiar_respuesa(texto):
             vistos.add(linea_limpia)
     return "\n".join(resultado)     
 
-app = create_app()   
+# app = create_app()   
 
 # print("\n============== VERIFICACIÓN .ENV ==============")
 # print("SECRET_KEY:", os.getenv("SECRET_KEY"))
@@ -73,17 +74,18 @@ app = create_app()
 # except Exception as e:
 #     print("❌ Error al generar JWT:", e)
 
-with app.app_context():
-    print("\n============== PRUEBA DE FUNCIÓN DE DIAGNÓSTICO ==============")
-    try:
-        usuario_mock = type("Usuario", (), {"id": 1})  # Mock de un usuario
-        respuestas = ["Tiene fiebre", "No quiere comer", "Vomita espuma"]
-        respuesta_ai = procesar_diagnostico(usuario_mock, respuestas)
-        respuesta_limpia = limpiar_respuesa(respuesta_ai)
-        print("✅ Diagnóstico generado:\n")
-        print("🧠 RESPUESTA FORMATEADA 🧠")
-        print("-" * 50)
-        print(respuesta_limpia)
-        print("-" * 50)
-    except Exception as e:
-        print("❌ Error al procesar el diagnóstico:", e)
+# with app.app_context():    
+
+#     print("\n============== PRUEBA DE FUNCIÓN DE DIAGNÓSTICO ==============")
+#     try:
+#         usuario_mock = type("Usuario", (), {"id": 1})
+#         respuestas = ["Tiene escalofrios", "No quiere comer", "Vomita amarillo"]
+#         respuesta_ai = procesar_diagnostico(usuario_mock, respuestas)
+#         respuesta_limpia = limpiar_respuesa(respuesta_ai)
+#         print("✅ Diagnóstico generado:\n")
+#         print("🧠 RESPUESTA FORMATEADA 🧠")
+#         print("-" * 50)
+#         print(respuesta_limpia)
+#         print("-" * 50)
+#     except Exception as e:
+#         print("❌ Error al procesar el diagnóstico:", e)

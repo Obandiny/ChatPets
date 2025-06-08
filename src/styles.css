@@ -18,28 +18,12 @@
 }
 
 body {
-    background-color: #ffffff;
-    color: #000000;
+    background: linear-gradient(135deg, #8EC5FC, #E0C3FC);
+    /* color: #000000; */
     transition: background-color 0.3s, color 0.3s;
-    margin: 0; padding: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
-}
-  
-body.dark-theme {
-    background-color: #121212;
-    color: #ffffff;
     margin: 0; padding: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
 }
   
 aside {
     transition: background-color 0.3s;
-}
-
-body:not(.dark-theme) aside {
-    background-color: #e0e0e0; /* Un poco más oscuro que blanco */
-    color: #000;
-}
-
-body.dark-theme aside {
-    background-color: #1f1f1f; /* Un poco más claro que #121212 */
-    color: #fff;
 }

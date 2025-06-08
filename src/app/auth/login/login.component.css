@@ -2,89 +2,46 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  background: linear-gradient(135deg, #8EC5FC, #E0C3FC);
-  height: 100vh;
 }
 
-#contenedor-principal {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100%;
-  padding: 20px;
-}
-
-.contenedor-login {
-  background: rgba(255, 255, 255, 0.2);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border-radius: 20px;
-  padding: 40px;
+.login-container {
   max-width: 400px;
-  width: 100%;
-  box-shadow: 0 8px 32px rgba(31, 38, 135, 0.37);
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  margin: 80px auto;
+  padding: 32px;
+  border-radius: 10px;
+  background-color: #f7f7f7;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
   text-align: center;
 }
 
-.titulo-label {
-  font-size: 32px;
-  margin-bottom: 30px;
-  color: #007bff;
+.login-form {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 24px;
 }
 
-.input-group {
-  margin-bottom: 25px;
-  text-align: left;
-}
-
-.input-group label {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 14px;
-  color: #555;
-}
-
-.input-group input {
+.full-width {
   width: 100%;
-  padding: 12px 10px;
-  border: none;
-  border-radius: 8px;
-  outline: none;
-  background-color: rgba(255, 255, 255, 0.8);
-  font-size: 16px;
 }
 
-.send-user {
+.btn-submit {
   width: 100%;
-  padding: 12px;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-top: 10px;
+  font-weight: bold;
   transition: background-color 0.3s;
 }
 
-.send-user:hover {
-  background-color: #0056b3;
+.btn-submit[disabled] {
+  opacity: 0.5;
+  pointer-events: none;
 }
 
-.links {
-  margin-top: 20px;
-  display: flex;
-  justify-content: space-between;
+.registro-link {
+  margin-top: 16px;
+  font-size: 14px;
 }
 
-.links a {
-  color: #007bff;
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s;
+mat-form-field {
+  background-color: rgb(255, 255, 255);
 }
 
-.links a:hover {
-  color: #0056b3;
-}

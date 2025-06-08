@@ -5,57 +5,66 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-    <header class="header">
-        <div class="btn-menu-lateral">
-            <button class="btn-open-menu" matTooltip="Abrir menu" (click)="toggleMenu()">
+    <ng-container *ngIf="authService.isLoggedIn(); else redirectToLogin">
+        <header class="header">
+            <div class="btn-menu-lateral">
+                <button mat-icon-button matTooltip="Abrir menú" (click)="toggleMenu()">
                 <mat-icon>dehaze</mat-icon>
-            </button>
-        </div>
-        <div class="app-name">
-            MASCOTAPP
-        </div>
-        <div class="btn-menu-login">
-            <button class="btn-open-login" [routerLink]="['/auth/login']">
-                <mat-icon class="login">account_circle</mat-icon>
-            </button>
-        </div>
-    </header>
+                </button>
+            </div>
+            <div class="app-name">MASCOTAPP</div>
+            <div class="btn-menu-login">
+                <button mat-icon-button (click)="logout()">
+                <mat-icon>logout</mat-icon>
+                </button>
+            </div>
+        </header>
 
-    <main class="main">
-        <div class="contenedor-info">
-            <div class="tj-blog">
-                <div class="image">
-                    <button class="add"><mat-icon>add</mat-icon></button>
-                    <button class="delete"><mat-icon>delete</mat-icon></button>
+        <main class="main">
+            <!-- De momento sin contenido principal -->
+        
+            <!-- Menu lateral -->
+            <aside class="menu-lateral" *ngIf="isMenuOpen">
+                <button mat-button (click)="toggleMenu()">Cerrar menú</button>
+
+                <!-- Rutas comunes -->
+                <div class="group-btn">
+                    <a routerLink="/chat">ChatPet</a>
+                    <a routerLink="/diagnostico">Diagnóstico</a>
                 </div>
-                <div class="add-text">
-                    <textarea name="text" id="" placeholder="Escribe aqui..."></textarea>
+
+                <!-- Opciones de administrador -->
+                <div *ngIf="rol === 'admin'" class="admin-section">
+                    <h4>Admin</h4>
+                    <a routerLink="/admin/usuarios">Gestión de Usuarios</a>
+                    <a routerLink="/admin/blog">Gestión del Blog</a>
+                    <a routerLink="/admin/graficas">Gráficas</a>
                 </div>
-            </div>
-        </div>
 
-        <aside class="menu-lateral" *ngIf="isMenuOpen">
-            <button class="btn-close-menu" matTooltip="Cerrar menu" (click)="toggleMenu()">CLOSE</button>
-            <div class="group-btn">
-                <a href="#">ChatPet</a>
-                <a href="#">Diagnostico</a>
-                <a href="#">Configuracion</a>
-            </div>
-            <div class="group-history">
-                <!-- HISTORIAL -->
-            </div>
-        </aside>
+                <!-- Historial diagnóstico -->
+                <div class="group-history">
+                    <h4>Historial Diagnósticos</h4>
+                    <!-- HISTORIAL -->
+                    <div *ngFor="let item of historialDiagnosticos" class="history-card">
+                        <p>{{ item.fecha | date }}</p>
+                        <p>{{ item.mascota }}</p>
+                        <button mat-button (click)="verDetalle(item)">Ver</button>
+                    </div>
+                </div>
+            </aside>
+        </main>
 
-        <div class="btn-new">
-            <button class="btn-new-tj">+</button>
-        </div>
-    </main>
-    <footer class="footer">
-        <div class="links">
-            <a href="#"></a>
-            <a href="#"></a>
-            <a href="#"></a>
-        </div>
-    </footer>
+        <footer class="footer">
+            <div class="links">
+                <a href="#">Política</a>
+                <a href="#">Soporte</a>
+                <a href="#">Contacto</a>
+            </div>
+        </footer>
+    </ng-container>
+
+    <ng-template #redirectToLogin>
+        <p>No estás autenticado. <a routerLink="/auth/login">Iniciar sesión</a></p>
+    </ng-template>
 </body>
 </html>
