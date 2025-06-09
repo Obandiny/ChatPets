@@ -1,14 +1,9 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
-<<<<<<< HEAD
-import { RouterLink } from '@angular/router';
-import { AuthService } from '../services/auth.service';
-
-=======
 import { Router, RouterLink } from '@angular/router';
->>>>>>> 8007e33 (Ajustes graficos del menu)
+import { AuthService } from '../services/auth.service';
 
 @Component({
   selector: 'app-menu',
@@ -27,11 +22,8 @@ export class MenuComponent implements OnInit {
   rol: string | null = null;
   historialDiagnosticos: any[] = []; // Simulación por ahora
 
-<<<<<<< HEAD
-  constructor(public authService: AuthService) {}
-=======
-  constructor(private router: Router) {}
->>>>>>> 8007e33 (Ajustes graficos del menu)
+  // Inyectamos el AuthService y Router
+  constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.rol = this.authService.getRole();
@@ -42,9 +34,10 @@ export class MenuComponent implements OnInit {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
-<<<<<<< HEAD
   logout(): void {
     this.authService.logout();
+    // Si quieres navegar a login después del logout:
+    this.router.navigate(['/auth/login']);
   }
 
   loadHistorial(): void {
@@ -58,10 +51,5 @@ export class MenuComponent implements OnInit {
   verDetalle(item: any): void {
     console.log('Ver detalles del historial:', item);
     // Aquí podrías abrir un modal o navegar a detalle del diagnóstico
-=======
-  logout() {
-    localStorage.removeItem('token'); // o sessionStorage.clear(); si usas sesión
-    this.router.navigate(['/auth/login']);
->>>>>>> 8007e33 (Ajustes graficos del menu)
   }
 }
