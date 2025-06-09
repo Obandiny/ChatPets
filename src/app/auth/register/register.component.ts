@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { LoggerService } from '../../services/logger.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-register',
@@ -26,16 +28,32 @@ export class RegisterComponent {
     password: ['', Validators.required]
   })
 
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {}
+  constructor(
+    private fb: FormBuilder, 
+    private auth: AuthService, 
+    private router: Router,
+    private logger: LoggerService,
+    private snackbar: MatSnackBar
+  ) {}
 
   onSubmit() {
-    if (this.form.valid) {}
+    if (this.form.valid) {
+      this.snackbar.open('Por favor completa todos los campos correctamente.', 'Cerrar', { duration: 3000 });
+      this.logger.warn('Formulario inválido al registrar usuario', this.form.value);
+      return;
+    }
       this.auth.register(this.form.value).subscribe({
         next: res => {
-          alert('Registro exitosos. Revisa tu correo para verificar tu cuenta.');
+          this.snackbar.open('Registro exitoso. Revisa tu correo para verificar tu cuenta.', 'Cerrar', { duration: 3000 });
+          this.logger.info('Usuario registrado con éxito', this.form.value);
           this.router.navigate(['/auth/login']);
         },
-        error: err => alert(err.error?.message || 'Error en el registro' )
+        error: err => {
+          const mensaje = err.error?.message || 'Error en el registro';
+          this.snackbar.open(mensaje, 'Cerrar', { duration: 3000 });
+          this.logger.error('Error al registrar usuario', err);
+        }
+        
       });
   }
 }
