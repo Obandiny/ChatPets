@@ -1,4 +1,4 @@
- <header class="header">
+<header class="header">
   <div class="btn-menu-lateral">
     <button class="btn-open-menu" matTooltip="Abrir menú" (click)="toggleMenu()">
       <mat-icon>pets</mat-icon>
@@ -14,14 +14,15 @@
 
 <main class="main">
   <div class="contenedor-info">
+    <!-- Recomendación tipo noticia -->
     <div class="tj-blog">
-      <div class="image">
-        <button class="add" matTooltip="Agregar imagen"><mat-icon>add_a_photo</mat-icon></button>
-        <button class="delete" matTooltip="Eliminar imagen"><mat-icon>delete</mat-icon></button>
-      </div>
-      <div class="add-text">
-        <textarea name="text" placeholder="Comparte aquí tus tips sobre cuidado canino..."></textarea>
-      </div>
+      <h2 style="color: #1976d2; font-family: 'Arial Black';">🐾 Recomendación del día</h2>
+      <p style="font-size: 16px; line-height: 1.5;">
+        📰 <strong>¡Protege las patas de tu perro durante el paseo!</strong> <br>
+        En días calurosos, el asfalto puede alcanzar temperaturas peligrosas para las almohadillas de tu canino. 
+        Antes de salir, coloca tu mano sobre el suelo durante 5 segundos. Si está muy caliente para ti, también lo está para tu mascota. 
+        Opta por paseos temprano en la mañana o al final de la tarde para evitar quemaduras.
+      </p>
     </div>
   </div>
 
