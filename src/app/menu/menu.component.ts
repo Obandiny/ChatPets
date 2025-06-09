@@ -9,25 +9,27 @@ import { AuthService } from '../services/auth.service';
   selector: 'app-menu',
   standalone: true,
   imports: [
-    MatIconModule,
-    RouterLink,
     CommonModule,
-    MatTooltipModule
+    MatIconModule,
+    MatTooltipModule,
+    RouterLink
   ],
   templateUrl: './menu.component.html',
-  styleUrls: ['./menu.component.css']  
+  styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit {
-  isMenuOpen = true;
+  isMenuOpen: boolean = true;
   rol: string | null = null;
-  historialDiagnosticos: any[] = []; // Simulación por ahora
+  historialDiagnosticos: { fecha: Date, mascota: string }[] = [];
 
-  // Inyectamos el AuthService y Router
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
     this.rol = this.authService.getRole();
-    this.loadHistorial(); // Simulado
+    this.loadHistorial();
   }
 
   toggleMenu(): void {
@@ -36,20 +38,19 @@ export class MenuComponent implements OnInit {
 
   logout(): void {
     this.authService.logout();
-    // Si quieres navegar a login después del logout:
     this.router.navigate(['/auth/login']);
   }
 
   loadHistorial(): void {
-    // Aquí llamarías a tu backend para obtener el historial por usuario logueado
+    // Simulación: reemplaza esto por llamada a servicio real
     this.historialDiagnosticos = [
       { fecha: new Date(), mascota: 'Firulais' },
       { fecha: new Date(), mascota: 'Max' }
     ];
   }
 
-  verDetalle(item: any): void {
+  verDetalle(item: { fecha: Date, mascota: string }): void {
     console.log('Ver detalles del historial:', item);
-    // Aquí podrías abrir un modal o navegar a detalle del diagnóstico
+    // Aquí podrías abrir un modal o redirigir a otra vista
   }
 }
