@@ -1,23 +1,29 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Component, OnInit } from '@angular/core';
 
-import { MenuComponent } from './menu.component';
+@Component({
+  selector: 'app-menu',
+  templateUrl: './menu.component.html',
+  styleUrls: ['./menu.component.css']
+})
+export class MenuComponent implements OnInit {
+  esAdmin: boolean = false;
 
-describe('MenuComponent', () => {
-  let component: MenuComponent;
-  let fixture: ComponentFixture<MenuComponent>;
+  constructor() {}
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [MenuComponent]
-    })
-    .compileComponents();
+  ngOnInit(): void {
+    this.checkIfAdmin();
+  }
 
-    fixture = TestBed.createComponent(MenuComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+  checkIfAdmin() {
+    const role = localStorage.getItem('rolUsuario');
+    this.esAdmin = role === 'admin';
+  }
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+  toggleMenu() {
+    // lógica de apertura/cierre del menú
+  }
+
+  logout() {
+    // lógica de cierre de sesión
+  }
+}

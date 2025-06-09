@@ -33,12 +33,10 @@
       </button>
     </form>
 
-    <p class="registro-link">
-      ¿No tienes una cuenta?
-      <a routerLink="/auth/register">Regístrate aquí</a>
-      <br>
+    <div class="links">
+      <a [routerLink]="['/auth/register']">Registrarse</a>
       <a [routerLink]="['/menu']">Menu</a>
-    </p>
+    </div>
   </div>
 </body>
 </html>
