@@ -1,10 +1,4 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
-<body>
+<div class="background">
   <div class="login-container">
     <h2>Iniciar Sesión</h2>
 
@@ -28,15 +22,14 @@
         </mat-error>
       </mat-form-field>
 
-      <button mat-raised-button color="primary" class="btn-submit" type="submit" (click)="loginForm.invalid">
+      <button mat-raised-button color="primary" class="btn-submit" type="submit" [disabled]="loginForm.invalid">
         Iniciar sesión
       </button>
     </form>
 
     <div class="links">
-      <a [routerLink]="['/auth/register']">Registrarse</a>
-      <a [routerLink]="['/menu']">Menu</a>
+      <a mat-stroked-button color="primary" class="link-btn" [routerLink]="['/auth/register']">Registrarse</a>
+      <a mat-stroked-button color="primary" class="link-btn" [routerLink]="['/menu']">Menú</a>
     </div>
   </div>
-</body>
-</html>
+</div>

@@ -1,53 +1,49 @@
 <header class="header">
-  <div class="btn-menu-lateral">
-    <button class="btn-open-menu" matTooltip="Abrir menú" (click)="toggleMenu()">
-      <mat-icon>pets</mat-icon>
-    </button>
-  </div>
-  <div class="app-name">MASCOTAPP - Tips Caninos</div>
-  <div class="btn-menu-login">
-    <button class="btn-logout" (click)="logout()" matTooltip="Cerrar sesión">
-      <mat-icon class="logout">logout</mat-icon>
-    </button>
-  </div>
+  <button class="btn-open-menu" aria-label="Abrir/Cerrar menú" (click)="toggleMenu()">
+    <mat-icon>{{ isMenuOpen ? 'menu_open' : 'menu' }}</mat-icon>
+  </button>
+  <h1 class="app-name">MASCOTAPP</h1>
+  <button class="btn-logout" aria-label="Cerrar sesión" (click)="logout()">
+    <mat-icon class="logout" matTooltip="Cerrar sesión">logout</mat-icon>
+  </button>
 </header>
 
+<nav class="menu-lateral" *ngIf="isMenuOpen" role="navigation" aria-label="Menú lateral">
+  <button class="btn-close-menu" (click)="toggleMenu()">Cerrar Menú</button>
+
+  <div class="group-btn">
+    <a routerLink="/home" routerLinkActive="active">Inicio</a>
+    <a routerLink="/diagnosticos" routerLinkActive="active" *ngIf="rol === 'veterinario'">Diagnósticos</a>
+    <a routerLink="/perfil" routerLinkActive="active">Perfil</a>
+    <a routerLink="/configuracion" routerLinkActive="active">Configuración</a>
+  </div>
+
+  <section aria-label="Historial de diagnósticos">
+    <h2>Historial</h2>
+    <ul>
+      <li *ngFor="let item of historialDiagnosticos">
+        <button class="historial-item" (click)="verDetalle(item)">
+          {{ item.mascota }} - {{ item.fecha | date: 'mediumDate' }}
+        </button>
+      </li>
+    </ul>
+  </section>
+</nav>
+
 <main class="main">
-  <div class="contenedor-info">
-    <!-- Recomendación tipo noticia -->
-    <div class="tj-blog">
-      <h2 style="color: #1976d2; font-family: 'Arial Black';">🐾 Recomendación del día</h2>
-      <p style="font-size: 16px; line-height: 1.5;">
-        📰 <strong>¡Protege las patas de tu perro durante el paseo!</strong> <br>
-        En días calurosos, el asfalto puede alcanzar temperaturas peligrosas para las almohadillas de tu canino. 
-        Antes de salir, coloca tu mano sobre el suelo durante 5 segundos. Si está muy caliente para ti, también lo está para tu mascota. 
-        Opta por paseos temprano en la mañana o al final de la tarde para evitar quemaduras.
-      </p>
+  <section class="carousel-container" aria-label="Carrusel de tips para mascotas">
+    <div class="carousel" [style.transform]="getTransform()">
+      <article class="carousel-item" *ngFor="let tip of tips; let i = index" [attr.aria-hidden]="currentTipIndex !== i">
+        <h3>{{ tip.titulo }}</h3>
+        <p>{{ tip.descripcion }}</p>
+      </article>
     </div>
-  </div>
 
-  <!-- Menú lateral -->
-  <aside class="menu-lateral" *ngIf="isMenuOpen">
-    <button class="btn-close-menu" matTooltip="Cerrar menú" (click)="toggleMenu()">CERRAR</button>
-    <div class="group-btn">
-      <a routerLink="/chatpet">ChatPet</a>
-      <a routerLink="/diagnostico">Diagnóstico</a>
-      <a routerLink="/configuracion">Configuración</a>
-    </div>
-    <div class="group-history">
-      <!-- Espacio para historial de tips -->
-    </div>
-  </aside>
-
-  <div class="btn-new">
-    <button class="btn-new-tj" matTooltip="Nuevo Tip">+</button>
-  </div>
+    <button class="carousel-control prev" aria-label="Tip anterior" (click)="prevTip()">
+      <mat-icon>chevron_left</mat-icon>
+    </button>
+    <button class="carousel-control next" aria-label="Siguiente tip" (click)="nextTip()">
+      <mat-icon>chevron_right</mat-icon>
+    </button>
+  </section>
 </main>
-
-<footer class="footer">
-  <div class="links">
-    <a href="#">Instagram</a>
-    <a href="#">Facebook</a>
-    <a href="#">Contacto</a>
-  </div>
-</footer>

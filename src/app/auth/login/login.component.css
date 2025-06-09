@@ -1,17 +1,34 @@
-body {
+body, html {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  height: 100%;
+  background: linear-gradient(to right, #4facfe, #00f2fe);
+}
+
+.background {
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 }
 
 .login-container {
+  width: 100%;
   max-width: 400px;
-  margin: 80px auto;
   padding: 32px;
-  border-radius: 10px;
-  background-color: #f7f7f7;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  border-radius: 16px;
+  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
   text-align: center;
+  color: #000;
+}
+
+h2 {
+  margin-bottom: 20px;
+  color: #ffffff;
 }
 
 .login-form {
@@ -28,20 +45,14 @@ body {
 .btn-submit {
   width: 100%;
   font-weight: bold;
-  transition: background-color 0.3s;
 }
 
-.btn-submit[disabled] {
-  opacity: 0.5;
-  pointer-events: none;
+.links {
+  margin-top: 24px;
+  display: flex;
+  justify-content: space-between;
 }
 
-.registro-link {
-  margin-top: 16px;
-  font-size: 14px;
+.link-btn {
+  text-transform: none;
 }
-
-mat-form-field {
-  background-color: rgb(255, 255, 255);
-}
-

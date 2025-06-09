@@ -25,7 +25,7 @@ import { LoggerService } from '../../services/logger.service';
     RouterLink
   ],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrls: ['./login.component.css'] 
 })
 export class LoginComponent {
   hidePassword = true;
