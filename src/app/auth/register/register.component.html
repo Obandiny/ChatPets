@@ -5,37 +5,50 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-  <form [formGroup]="form">
+  <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div id="contenedor-principal">
-     <div class="contenedor-login">
-       <h1 class="titulo-label">Crear Cuenta</h1>
-  
-       <div class="input-group">
-         <input type="text" required>
-         <label>Nombre</label>
-       </div>
-  
-       <div class="input-group">
-         <input type="text" required>
-         <label>Apellido</label>
-       </div>
-  
-       <div class="input-group">
-         <input type="email" required>
-         <label>Correo electrónico</label>
-       </div>
-  
-       <div class="input-group">
-         <input type="password" required>
-         <label>Contraseña</label>
-       </div>
-  
-       <button class="send-user" (click)="onSubmit()">Registrarse</button>
-  
-       <div class="links">
-         <a [routerLink]="['/auth/login']">¿Ya tienes cuenta? Inicia sesión</a>
-       </div>
-     </div>
+      <div class="contenedor-login">
+        <h1 class="titulo-label">Crear Cuenta</h1>
+
+        <div class="input-group">
+          <input type="text" formControlName="nombre" required>
+          <label>Nombre</label>
+          <div class="error" *ngIf="form.get('nombre')?.touched && form.get('nombre')?.hasError('required')">
+            El nombre es obligatorio.
+          </div>
+        </div>
+
+        <div class="input-group">
+          <input type="text" formControlName="apellido" required>
+          <label>Apellido</label>
+          <div class="error" *ngIf="form.get('apellido')?.touched && form.get('apellido')?.hasError('required')">
+            El apellido es obligatorio.
+          </div>
+        </div>
+
+        <div class="input-group">
+          <input type="email" formControlName="correo" required>
+          <label>Correo electrónico</label>
+          <div class="error" *ngIf="form.get('correo')?.touched">
+            <div *ngIf="form.get('correo')?.hasError('required')">El correo es obligatorio.</div>
+            <div *ngIf="form.get('correo')?.hasError('email')">Correo inválido.</div>
+          </div>
+        </div>
+
+        <div class="input-group">
+          <input type="password" formControlName="password" required>
+          <label>Contraseña</label>
+          <div class="error" *ngIf="form.get('password')?.touched && form.get('password')?.hasError('required')">
+            La contraseña es obligatoria.
+          </div>
+        </div>
+
+        <button class="send-user" type="submit">Registrarse</button>
+
+        <div class="links">
+          <a [routerLink]="['/auth/login']">¿Ya tienes cuenta? Inicia sesión</a>
+        </div>
+      </div>
     </div>
   </form>
 </body>

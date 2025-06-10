@@ -57,6 +57,7 @@ export class LoginComponent {
 
     this.auth.login(this.loginForm.value).subscribe({
       next: res => {
+        console.log('Respuesta del login:', res);
         this.auth.saveToken(res.token);
         const rol = this.auth.getRole();
 

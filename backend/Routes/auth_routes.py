@@ -13,12 +13,17 @@ def register():
         return '', 200
 
     data = request.get_json()
-    nombre = data.get('nombre')
-    apellido = data.get('apellido')
-    correo = data.get('correo')
-    password = data.get('password')
+    print('Datos Requeridos:', data);
+
+    nombre = data.get('nombre', '').strip()
+    apellido = data.get('apellido', '').strip()
+    correo = data.get('correo', '').strip()
+    password = data.get('password', '').strip()
+
+    if not nombre or not apellido or not correo or not password:
+        return jsonify({'message': 'Todos los campos son obligatorios.'}), 400
     
-    if Usuario.query.filter_by(correo=correo).first():
+    if Usuario.query.filter_by(correo=data['correo']).first():
         return jsonify({'message': 'El correo ya esta registrado.'}), 400
     
     new_user = Usuario(nombre=nombre, apellido=apellido, correo=correo)
@@ -40,6 +45,8 @@ def login():
         token = jwt.encode({
             'user_id': user.id,
             'rol': user.rol,
+            'nombre': user.nombre,
+            'apellido': user.apellido,
             'exp': datetime.datetime.utcnow() + datetime.timedelta(hours=6)
         }, Config.SECRET_KEY, algorithm='HS256')  
         

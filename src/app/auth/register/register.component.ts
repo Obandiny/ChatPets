@@ -40,6 +40,7 @@ export class RegisterComponent {
     if (this.form.valid) {
       this.snackbar.open('Por favor completa todos los campos correctamente.', 'Cerrar', { duration: 3000 });
       this.logger.warn('Formulario inválido al registrar usuario', this.form.value);
+      this.form.markAllAsTouched();
       return;
     }
       this.auth.register(this.form.value).subscribe({

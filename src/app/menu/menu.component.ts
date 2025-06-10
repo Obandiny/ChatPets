@@ -29,6 +29,7 @@ interface Tip {
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit {
+  mensajeBienvenida: string = '';
   isMenuOpen = true;
   rol: string | null = null;
   historialDiagnosticos: Diagnostico[] = [];
@@ -48,7 +49,17 @@ export class MenuComponent implements OnInit {
   ];
   currentTipIndex = 0;
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router) {
+    const info = this.authService.getUserInfo();
+
+    if (info) {
+      if (info.rol === 'admin') {
+        this.mensajeBienvenida = `Bienvenido Administrador`;
+      } else {
+        this.mensajeBienvenida = `Bienvenido ${info.nombre} ${info.apellido}`;
+      }
+    }
+  }
 
   ngOnInit(): void {
     this.rol = this.authService.getRole(); // corrección
