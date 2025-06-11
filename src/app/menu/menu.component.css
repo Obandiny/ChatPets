@@ -35,6 +35,11 @@
   font-size: 24px;
 }
 
+.bienvenida {
+  font-weight: bold;
+  font-size: 20px;
+}
+
 /* MENÚ LATERAL */
 .menu-lateral {
   position: fixed;
@@ -114,15 +119,16 @@
 }
 
 /* Carrusel de tips */
+/* Carrusel de tips */
 .carousel-container {
   position: relative;
-  max-width: 600px;
-  margin: 0 auto;
+  max-width: 1000px;
+  margin: 40px auto;
   overflow: hidden;
-  border-radius: 10px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+  border-radius: 12px;
+  box-shadow: 0 3px 12px rgba(0,0,0,0.15);
   background: #fff;
-  padding: 20px;
+  padding: 30px 60px; /* ← AUMENTADO el padding lateral */
 }
 
 .carousel {
@@ -135,6 +141,7 @@
   min-width: 100%;
   box-sizing: border-box;
   padding: 10px 20px;
+  text-align: center; /* opcional: para centrar el texto */
 }
 
 .carousel-item h3 {
@@ -147,6 +154,40 @@
   font-size: 16px;
   color: #333;
 }
+
+/* Controles */
+.carousel-control {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(25, 118, 210, 0.8);
+  color: white;
+  border: none;
+  font-size: 28px;
+  padding: 10px;
+  cursor: pointer;
+  z-index: 10;
+  border-radius: 50%;
+  transition: background-color 0.3s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+}
+
+.carousel-control.prev {
+  left: 10px;
+}
+
+.carousel-control.next {
+  right: 10px;
+}
+
+.carousel-control:hover {
+  background-color: rgba(13, 71, 161, 0.9);
+}
+
 
 /* Controles */
 .carousel-control {
@@ -179,6 +220,22 @@
   background-color: rgba(13, 71, 161, 0.9);
 }
 
+/* Nueva sección informativa */
+.info-section {
+  background-color: #f7f9fc;
+  padding: 40px 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+}
+
+.section-title {
+  text-align: center;
+  font-size: 28px;
+  color: #0d47a1;
+  margin-bottom: 30px;
+  font-weight: bold;
+}
+
 /* RESPONSIVO */
 @media (max-width: 768px) {
   .header {
@@ -204,7 +261,11 @@
   }
 }
 
-.bienvenida {
+.section-title-white {
+  color: white;
+  text-align: center;
+  font-size: 28px;
+  margin: 40px 0 20px;
   font-weight: bold;
-  font-size: 20px;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }

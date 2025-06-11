@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, OnInit, OnDestroy, Inject, PLATFORM_ID } from '@angular/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
@@ -28,7 +28,7 @@ interface Tip {
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css']
 })
-export class MenuComponent implements OnInit {
+export class MenuComponent implements OnInit, OnDestroy {
   mensajeBienvenida: string = '';
   isMenuOpen = true;
   rol: string | null = null;
@@ -48,22 +48,35 @@ export class MenuComponent implements OnInit {
     }
   ];
   currentTipIndex = 0;
+  carouselInterval: any;
 
-  constructor(private authService: AuthService, private router: Router) {
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    @Inject(PLATFORM_ID) private platformId: Object
+  ) {
     const info = this.authService.getUserInfo();
 
     if (info) {
-      if (info.rol === 'admin') {
-        this.mensajeBienvenida = `Bienvenido Administrador`;
-      } else {
-        this.mensajeBienvenida = `Bienvenido ${info.nombre} ${info.apellido}`;
-      }
+      this.mensajeBienvenida = info.rol === 'admin'
+        ? `Bienvenido Administrador`
+        : `Bienvenido ${info.nombre} ${info.apellido}`;
     }
   }
 
   ngOnInit(): void {
-    this.rol = this.authService.getRole(); // corrección
+    this.rol = this.authService.getRole();
     this.loadHistorial();
+
+    if (isPlatformBrowser(this.platformId)) {
+      this.startCarousel();
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (isPlatformBrowser(this.platformId) && this.carouselInterval) {
+      clearInterval(this.carouselInterval);
+    }
   }
 
   toggleMenu(): void {
@@ -76,7 +89,6 @@ export class MenuComponent implements OnInit {
   }
 
   loadHistorial(): void {
-    // Validación para que solo acceda a localStorage en el navegador
     if (typeof window !== 'undefined' && window.localStorage) {
       const historialJSON = localStorage.getItem('historialDiagnosticos');
       if (historialJSON) {
@@ -86,7 +98,6 @@ export class MenuComponent implements OnInit {
         }));
       }
     } else {
-      // En caso de no tener localStorage (ej. SSR) cargar datos vacíos o simulados
       this.historialDiagnosticos = [];
     }
   }
@@ -105,5 +116,11 @@ export class MenuComponent implements OnInit {
 
   nextTip(): void {
     this.currentTipIndex = (this.currentTipIndex + 1) % this.tips.length;
+  }
+
+  startCarousel(): void {
+    this.carouselInterval = setInterval(() => {
+      this.nextTip();
+    }, 5000);
   }
 }

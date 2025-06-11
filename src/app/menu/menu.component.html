@@ -34,6 +34,9 @@
 </nav>
 
 <main class="main">
+  <!-- TÍTULO SIN CONTENEDOR BLANCO -->
+  <h2 class="section-title section-title-white">Consejos para el Cuidado de tu Mascota</h2>
+
   <section class="carousel-container" aria-label="Carrusel de tips para mascotas">
     <div class="carousel" [style.transform]="getTransform()">
       <article class="carousel-item" *ngFor="let tip of tips; let i = index" [attr.aria-hidden]="currentTipIndex !== i">
