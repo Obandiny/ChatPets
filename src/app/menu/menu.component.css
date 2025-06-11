@@ -7,9 +7,22 @@
   color: white;
   padding: 10px 20px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  position: relative;
+  transition: margin-left 0.3s ease;
+}
+
+.header.menu-open {
+  margin-left: 240px;
+}
+
+.header.menu-closed {
+  margin-left: 0;
 }
 
 .app-name {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
   font-size: 22px;
   font-weight: 700;
   font-family: 'Comic Sans MS', cursive, sans-serif;
@@ -53,8 +66,10 @@
   z-index: 1000;
   box-shadow: 2px 0 10px rgba(0,0,0,0.3);
   overflow-y: auto;
+  transition: transform 0.3s ease;
 }
 
+/* Botón cerrar menú */
 .btn-close-menu {
   background-color: white;
   color: #1565c0;
@@ -113,12 +128,20 @@
 
 /* CONTENEDOR PRINCIPAL */
 .main {
-  margin-left: 240px;
+  flex: 1;
+  transition: margin-left 0.3s ease;
   padding: 20px;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-/* Carrusel de tips */
+.main.menu-open {
+  margin-left: 240px;
+}
+
+.main.menu-closed {
+  margin-left: 0;
+}
+
 /* Carrusel de tips */
 .carousel-container {
   position: relative;
@@ -128,7 +151,7 @@
   border-radius: 12px;
   box-shadow: 0 3px 12px rgba(0,0,0,0.15);
   background: #fff;
-  padding: 30px 60px; /* ← AUMENTADO el padding lateral */
+  padding: 30px 60px;
 }
 
 .carousel {
@@ -141,7 +164,7 @@
   min-width: 100%;
   box-sizing: border-box;
   padding: 10px 20px;
-  text-align: center; /* opcional: para centrar el texto */
+  text-align: center;
 }
 
 .carousel-item h3 {
@@ -155,7 +178,7 @@
   color: #333;
 }
 
-/* Controles */
+/* Controles del carrusel */
 .carousel-control {
   position: absolute;
   top: 50%;
@@ -188,38 +211,6 @@
   background-color: rgba(13, 71, 161, 0.9);
 }
 
-
-/* Controles */
-.carousel-control {
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
-  background-color: rgba(25, 118, 210, 0.8);
-  color: white;
-  border: none;
-  font-size: 28px;
-  padding: 10px;
-  cursor: pointer;
-  z-index: 10;
-  border-radius: 50%;
-  transition: background-color 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.carousel-control.prev {
-  left: 10px;
-}
-
-.carousel-control.next {
-  right: 10px;
-}
-
-.carousel-control:hover {
-  background-color: rgba(13, 71, 161, 0.9);
-}
-
 /* Nueva sección informativa */
 .info-section {
   background-color: #f7f9fc;
@@ -236,6 +227,63 @@
   font-weight: bold;
 }
 
+.section-title-white {
+  color: white;
+  text-align: center;
+  font-size: 28px;
+  margin: 40px 0 20px;
+  font-weight: bold;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+}
+
+/* PIE DE PÁGINA */
+.footer {
+  background-color: #1976d2;
+  color: white;
+  padding: 20px 40px;
+  text-align: center;
+  margin-top: 40px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: margin-left 0.3s ease;
+}
+
+.footer.menu-open {
+  margin-left: 240px;
+}
+
+.footer.menu-closed {
+  margin-left: 0;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.footer-info p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.footer-social {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.footer-social a img {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(1);
+  transition: transform 0.2s ease;
+}
+
+.footer-social a:hover img {
+  transform: scale(1.2);
+}
+
 /* RESPONSIVO */
 @media (max-width: 768px) {
   .header {
@@ -245,6 +293,8 @@
   }
 
   .app-name {
+    position: static;
+    transform: none;
     text-align: center;
     width: 100%;
   }
@@ -259,13 +309,25 @@
   .main {
     margin-left: 0;
   }
+
+  .header.menu-open,
+  .footer.menu-open {
+    margin-left: 0;
+  }
 }
 
-.section-title-white {
-  color: white;
-  text-align: center;
-  font-size: 28px;
-  margin: 40px 0 20px;
-  font-weight: bold;
-  text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.page-wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1;
 }

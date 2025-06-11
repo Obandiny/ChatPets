@@ -1,55 +1,80 @@
-<header class="header">
-  <button class="btn-open-menu" aria-label="Abrir/Cerrar menú" (click)="toggleMenu()">
-    <mat-icon>{{ isMenuOpen ? 'menu_open' : 'menu' }}</mat-icon>
-  </button>
-  <h1 class="app-name">MASCOTAPP</h1>
-  <div class="bienvenida">
-    {{ mensajeBienvenida }}
-  </div>
-  <button class="btn-logout" aria-label="Cerrar sesión" (click)="logout()">
-    <mat-icon class="logout" matTooltip="Cerrar sesión">logout</mat-icon>
-  </button>
-</header>
+<body>
+  <div class="page-wrapper">
 
-<nav class="menu-lateral" *ngIf="isMenuOpen" role="navigation" aria-label="Menú lateral">
-  <button class="btn-close-menu" (click)="toggleMenu()">Cerrar Menú</button>
+    <header class="header" [class.menu-open]="isMenuOpen" [class.menu-closed]="!isMenuOpen">
+      <button class="btn-open-menu" aria-label="Abrir/Cerrar menú" (click)="toggleMenu()">
+        <mat-icon>{{ isMenuOpen ? 'menu_open' : 'menu' }}</mat-icon>
+      </button>
+      <h1 class="app-name">MASCOTAPP</h1>
+      <div class="bienvenida">
+        {{ mensajeBienvenida }}
+      </div>
+      <button class="btn-logout" aria-label="Cerrar sesión" (click)="logout()">
+        <mat-icon class="logout" matTooltip="Cerrar sesión">logout</mat-icon>
+      </button>
+    </header>
 
-  <div class="group-btn">
-    <a [routerLink]="['/menu']" routerLinkActive="active">Inicio</a>
-    <a [routerLink]="['/diagnostico']" routerLinkActive="active" *ngIf="rol === 'usuario'">Diagnósticos</a>
-    <a routerLink="/perfil" routerLinkActive="active">Perfil</a>
-    <a [routerLink]="['/admin-panel']" routerLinkActive="active" *ngIf="rol === 'admin'">Administrar</a>
-  </div>
+    <nav class="menu-lateral" *ngIf="isMenuOpen" role="navigation" aria-label="Menú lateral">
+      <button class="btn-close-menu" (click)="toggleMenu()">Cerrar Menú</button>
 
-  <section aria-label="Historial de diagnósticos">
-    <h2>Historial</h2>
-    <ul>
-      <li *ngFor="let item of historialDiagnosticos">
-        <button class="historial-item" (click)="verDetalle(item)">
-          {{ item.mascota }} - {{ item.fecha | date: 'mediumDate' }}
+      <div class="group-btn">
+        <a [routerLink]="['/menu']" routerLinkActive="active">Inicio</a>
+        <a [routerLink]="['/diagnostico']" routerLinkActive="active" *ngIf="rol === 'usuario'">Diagnósticos</a>
+        <a routerLink="/perfil" routerLinkActive="active">Perfil</a>
+        <a [routerLink]="['/admin-panel']" routerLinkActive="active" *ngIf="rol === 'admin'">Administrar</a>
+      </div>
+
+      <section aria-label="Historial de diagnósticos">
+        <h2>Historial</h2>
+        <ul>
+          <li *ngFor="let item of historialDiagnosticos">
+            <button class="historial-item" (click)="verDetalle(item)">
+              {{ item.mascota }} - {{ item.fecha | date: 'mediumDate' }}
+            </button>
+          </li>
+        </ul>
+      </section>
+    </nav>
+
+    <main [class.menu-open]="isMenuOpen" [class.menu-closed]="!isMenuOpen" class="main">
+      <h2 class="section-title section-title-white">Consejos para el Cuidado de tu Mascota</h2>
+
+      <section class="carousel-container" aria-label="Carrusel de tips para mascotas">
+        <div class="carousel" [style.transform]="getTransform()">
+          <article class="carousel-item" *ngFor="let tip of tips; let i = index" [attr.aria-hidden]="currentTipIndex !== i">
+            <h3>{{ tip.titulo }}</h3>
+            <p>{{ tip.descripcion }}</p>
+          </article>
+        </div>
+
+        <button class="carousel-control prev" aria-label="Tip anterior" (click)="prevTip()">
+          <mat-icon>chevron_left</mat-icon>
         </button>
-      </li>
-    </ul>
-  </section>
-</nav>
+        <button class="carousel-control next" aria-label="Siguiente tip" (click)="nextTip()">
+          <mat-icon>chevron_right</mat-icon>
+        </button>
+      </section>
+    </main>
 
-<main class="main">
-  <!-- TÍTULO SIN CONTENEDOR BLANCO -->
-  <h2 class="section-title section-title-white">Consejos para el Cuidado de tu Mascota</h2>
+    <footer class="footer" [class.menu-open]="isMenuOpen" [class.menu-closed]="!isMenuOpen">
+      <div class="footer-content">
+        <div class="footer-info">
+          <p><strong>Horarios de atención:</strong> Lunes a Viernes, 8:00 a.m. - 5:00 p.m.</p>
+          <p>© 2025 MASCOTAPP. Todos los derechos reservados.</p>
+        </div>
+        <div class="footer-social">
+          <a href="https://facebook.com" target="_blank" aria-label="Facebook">
+            <img src="assets/facebook-icon.svg" alt="Facebook" />
+          </a>
+          <a href="https://instagram.com" target="_blank" aria-label="Instagram">
+            <img src="assets/instagram-icon.svg" alt="Instagram" />
+          </a>
+          <a href="https://twitter.com" target="_blank" aria-label="Twitter">
+            <img src="assets/twitter-icon.svg" alt="Twitter" />
+          </a>
+        </div>
+      </div>
+    </footer>
 
-  <section class="carousel-container" aria-label="Carrusel de tips para mascotas">
-    <div class="carousel" [style.transform]="getTransform()">
-      <article class="carousel-item" *ngFor="let tip of tips; let i = index" [attr.aria-hidden]="currentTipIndex !== i">
-        <h3>{{ tip.titulo }}</h3>
-        <p>{{ tip.descripcion }}</p>
-      </article>
-    </div>
-
-    <button class="carousel-control prev" aria-label="Tip anterior" (click)="prevTip()">
-      <mat-icon>chevron_left</mat-icon>
-    </button>
-    <button class="carousel-control next" aria-label="Siguiente tip" (click)="nextTip()">
-      <mat-icon>chevron_right</mat-icon>
-    </button>
-  </section>
-</main>
+  </div>
+</body>
