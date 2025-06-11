@@ -17,5 +17,6 @@ class HistorialDiagnostico(db.Model):
 
     sintomas = db.Column(db.Text, nullable=False)
     recomendacion = db.Column(db.Text, nullable=False)
+    contexto_anterior = db.Column(db.Text, nullable=False)
     fecha = db.Column(db.DateTime, default=datetime.utcnow)
 

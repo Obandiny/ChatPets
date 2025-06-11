@@ -2,6 +2,7 @@ import google.generativeai as genai
 import os
 from Models.historial import HistorialDiagnostico
 from Models.relaciones import RelacionTablas
+from Models.relaciones import Sintoma
 from Models.mascota import Mascota
 from database import db
 
@@ -41,8 +42,8 @@ def construir_prompt(respuestas):
 
 def consultar_database(respuestas):
     for r in respuestas:
-        resultado = RelacionTablas.query.filter(
-            RelacionTablas.sintoma.ilike(f"%{r}")
+        resultado = RelacionTablas.query.join(Sintoma).filter(
+            Sintoma.sintomas.ilike(f"%{r}")
         ).first()
         
         if resultado:

@@ -10,7 +10,7 @@ class Mascota(db.Model):
     raza = db.Column(db.String(100))
     edad = db.Column(db.Integer)
     peso = db.Column(db.Float)
-    tamaño = db.Column(db.String(50))
+    tamano = db.Column(db.String(50))
 
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
     
