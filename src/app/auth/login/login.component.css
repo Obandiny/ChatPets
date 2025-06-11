@@ -3,7 +3,7 @@ body, html {
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   height: 100%;
-  background: linear-gradient(to right, #4facfe, #00f2fe);
+  background: linear-gradient(to right, #8EC5FC, #E0C3FC); 
 }
 
 .background {
@@ -42,17 +42,49 @@ h2 {
   width: 100%;
 }
 
+/* === CAMPOS DE TEXTO (EMAIL Y CONTRASEÑA) === */
+mat-form-field {
+  width: 100%;
+}
+
+mat-form-field .mat-form-field-flex {
+  background-color: white !important;
+  border-radius: 8px;
+  padding: 0 8px;
+}
+
+mat-form-field input {
+  color: black !important;
+  background-color: transparent; /* por si hay herencia */
+}
+
+.mat-form-field-label,
+.mat-placeholder,
+mat-label {
+  color: black !important;
+}
+
+mat-icon {
+  color: black !important;
+}
+
+/* === BOTÓN DE INICIAR SESIÓN === */
 .btn-submit {
   width: 100%;
   font-weight: bold;
+  background-color: #1976d2 !important;
+  color: white !important;
 }
 
+/* === BOTÓN DE REGISTRO === */
 .links {
   margin-top: 24px;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 .link-btn {
   text-transform: none;
+  color: #1976d2 !important;
+  border-color: #1976d2 !important;
 }

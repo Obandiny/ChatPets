@@ -2,8 +2,8 @@
 <header>
   <div class="options">
       <div class="back">
-        <button matTooltip="Volver" class="btn-back" [routerLink]="['/menu']">
-          <mat-icon>arrow_left</mat-icon>
+         <button mat-icon-button matTooltip="Volver" [routerLink]="['/menu']" class="icon-button blue-icon">
+        <mat-icon>arrow_back_ios_new</mat-icon>
         </button>
       </div>
   
@@ -11,9 +11,11 @@
           <p>ChatPET</p>   
       </div>
 
-      <div class="nuevo">
-        <button matTooltip="Nuevo chat" class="btn-nuevo" (click)="nuevoChat()">+</button>
-      </div>
+       <div class="nuevo">
+      <button mat-icon-button matTooltip="Nuevo chat" (click)="nuevoChat()" class="icon-button blue-icon">
+        <mat-icon>chat</mat-icon>
+      </button>
+    </div>
   </div>
 </header>
 
