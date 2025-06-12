@@ -13,7 +13,7 @@ def register():
         return '', 200
 
     data = request.get_json()
-    print('Datos Requeridos:', data);
+    print('Datos Requeridos:', data)
 
     nombre = data.get('nombre', '').strip()
     apellido = data.get('apellido', '').strip()

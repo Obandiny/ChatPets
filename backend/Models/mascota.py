@@ -6,7 +6,6 @@ class Mascota(db.Model):
     
     id = db.Column(db.Integer, primary_key=True)
     nombre = db.Column(db.String(100), nullable=False)
-    especie = db.Column(db.String(50), nullable=False, default="Perro")
     raza = db.Column(db.String(100))
     edad = db.Column(db.Integer)
     peso = db.Column(db.Float)
