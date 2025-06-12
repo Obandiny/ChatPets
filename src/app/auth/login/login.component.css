@@ -53,9 +53,19 @@ mat-form-field .mat-form-field-flex {
   padding: 0 8px;
 }
 
+mat-form-field input.mat-input-element {
+  background-color: white !important;
+  color: #000 !important;
+}
+
 mat-form-field input {
   color: black !important;
   background-color: transparent; /* por si hay herencia */
+}
+
+mat-form-field.mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: white !important;
+  border-radius: 8px;
 }
 
 .mat-form-field-label,

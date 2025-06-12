@@ -5,6 +5,7 @@ import { RouterLink, Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { LoggerService } from '../../services/logger.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-register',
@@ -14,7 +15,8 @@ import { MatSnackBar } from '@angular/material/snack-bar';
     CommonModule,
     ReactiveFormsModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MatInputModule
     
   ],
   templateUrl: './register.component.html',
@@ -33,7 +35,8 @@ export class RegisterComponent {
     private auth: AuthService, 
     private router: Router,
     private logger: LoggerService,
-    private snackbar: MatSnackBar
+    private snackbar: MatSnackBar,
+    private matInput: MatInputModule
   ) {}
 
   onSubmit() {

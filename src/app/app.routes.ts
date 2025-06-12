@@ -5,17 +5,20 @@ import { MenuComponent } from './menu/menu.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
 import { authGuard } from './guard/auth.guard';
+import { MascotaPerroComponent } from './diagnostico/mascota-perro/mascota-perro.component';
+import { RegistarMascotaComponent } from './registar-mascota/registar-mascota.component';
 
 
 export const routes: Routes = [
     { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
     { path: 'chatbot', component: ChatbotComponent },
-    { path: 'diagnostico', component: ConfiguracionComponent },
+    { path: 'diagnostico/mascota-perro', component: MascotaPerroComponent },
     { 
         path: 'menu', 
         component: MenuComponent,
         // canActivate: [authGuard] 
     },
     { path: 'auth/login', component: LoginComponent },
-    { path: 'auth/register', component: RegisterComponent }
+    { path: 'auth/register', component: RegisterComponent },
+    { path: 'registrar-mascota', component: RegistarMascotaComponent }
 ];

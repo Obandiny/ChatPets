@@ -19,7 +19,7 @@
 
       <div class="group-btn">
         <a [routerLink]="['/menu']" routerLinkActive="active">Inicio</a>
-        <a [routerLink]="['/diagnostico']" routerLinkActive="active" *ngIf="rol === 'usuario'">Diagnósticos</a>
+        <a [routerLink]="['/registrar-mascota']" routerLinkActive="active" *ngIf="rol === 'usuario'">Diagnósticos</a>
         <a routerLink="/perfil" routerLinkActive="active">Perfil</a>
         <a [routerLink]="['/admin-panel']" routerLinkActive="active" *ngIf="rol === 'admin'">Administrar</a>
       </div>

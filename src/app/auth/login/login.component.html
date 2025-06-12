@@ -4,7 +4,7 @@
 
     <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
       <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Correo*</mat-label>
+        <mat-label>Correo</mat-label>
         <input matInput formControlName="correo" type="email" required />
         <mat-error *ngIf="loginForm.get('correo')?.invalid && loginForm.get('correo')?.touched">
           Ingresa un correo válido
@@ -12,7 +12,7 @@
       </mat-form-field>
 
       <mat-form-field appearance="fill" class="full-width">
-        <mat-label>Contraseña*</mat-label>
+        <mat-label>Contraseña</mat-label>
         <input matInput [type]="hidePassword ? 'password' : 'text'" formControlName="password" required />
         <button mat-icon-button matSuffix (click)="togglePassword()" type="button">
           <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
@@ -28,7 +28,7 @@
     </form>
 
     <div class="links">
-      <a mat-stroked-button color="primary" class="link-btn" [routerLink]="['/auth/register']">Registrarse</a>
+      <a mat-stroked-button color="primary" class="link-btn" [routerLink]="['/auth/register']">No tienes cuenta. Crea una.</a>
     </div>
   </div>
 </div>

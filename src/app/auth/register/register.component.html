@@ -27,7 +27,7 @@
         </div>
 
         <div class="input-group">
-          <input type="email" formControlName="correo" required>
+          <input matInput type="email" formControlName="correo" required>
           <label>Correo electrónico</label>
           <div class="error" *ngIf="form.get('correo')?.touched">
             <div *ngIf="form.get('correo')?.hasError('required')">El correo es obligatorio.</div>

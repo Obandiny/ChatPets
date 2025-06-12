@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+<h2 class="titulo">Registrar Mascota</h2>
+
+<form [formGroup]="mascotaForm" (ngSubmit)="registrarMascota()">
+  <div class="form-grid">
+    <mat-form-field appearance="outline">
+      <mat-label>Nombre</mat-label>
+      <input matInput formControlName="nombre" required>
+      <mat-error *ngIf="mascotaForm.get('nombre')?.hasError('required')">Nombre es obligatorio</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Raza</mat-label>
+      <input matInput formControlName="raza" required>
+      <mat-error *ngIf="mascotaForm.get('raza')?.hasError('required')">Raza es obligatoria</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Edad</mat-label>
+      <input matInput type="number" formControlName="edad" required>
+      <mat-error *ngIf="mascotaForm.get('edad')?.hasError('required')">Edad es obligatoria</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Peso (kg)</mat-label>
+      <input matInput type="number" formControlName="peso" required>
+      <mat-error *ngIf="mascotaForm.get('peso')?.hasError('required')">Peso es obligatorio</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Tamaño</mat-label>
+      <mat-select formControlName="tamano" required>
+        <mat-option value="Pequeño">Pequeño</mat-option>
+        <mat-option value="Mediano">Mediano</mat-option>
+        <mat-option value="Grande">Grande</mat-option>
+      </mat-select>
+      <mat-error *ngIf="mascotaForm.get('tamano')?.hasError('required')">Tamaño es obligatorio</mat-error>
+    </mat-form-field>
+
+    <button mat-raised-button color="primary" type="submit" [disabled]="mascotaForm.invalid">
+      Registrar
+    </button>
+  </div>
+</form>
+</body>
+</html>
+
