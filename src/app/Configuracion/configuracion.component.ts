@@ -54,6 +54,8 @@ export class ConfiguracionComponent {
     if (respuesta !== '') {
       if (this.currentQuestionIndex < this.questions.length - 1) {
         this.currentQuestionIndex++;
+      } else {
+        this.finishDiagnosis();
       }
     }
   }

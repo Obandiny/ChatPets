@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -9,6 +9,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MascotaService } from '../services/mascota.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoggerService } from '../services/logger.service';
 
 @Component({
   selector: 'app-registar-mascota',
@@ -26,30 +28,39 @@ import { MascotaService } from '../services/mascota.service';
   styleUrl: './registar-mascota.component.css'
 })
 export class RegistarMascotaComponent {
-  mascotaForm: FormGroup;
+  mascotaForm = this.fb.group({
+    nombre: ['', Validators.required],
+    raza: ['', Validators.required],
+    edad: ['', Validators.required],
+    peso: ['', Validators.required]
+  });
 
-  constructor(private fb: FormBuilder, private mascotaService: MascotaService) {
-    this.mascotaForm = this.fb.group({
-      nombre: ['', Validators.required],
-      raza: ['', Validators.required],
-      edad: ['', Validators.required],
-      peso: ['', Validators.required],
-      tamano: ['', Validators.required]
-    });
-  }
+  constructor(
+    private fb: FormBuilder, 
+    private mascotaService: MascotaService,
+    private snackbar: MatSnackBar,
+    private router: Router,
+    private logger: LoggerService
+  ) {}
 
-  registrarMascota() {
+  onSubmit() {
     if (this.mascotaForm.valid) {
+      this.snackbar.open('Por favor registra a la mascota', 'Cerrar', { duration: 3000 });
+      this.logger.warn('Formulario invalido al registrar mascota', this.mascotaForm.value);
+      this.mascotaForm.markAllAsTouched();
+      return;
+    }
       this.mascotaService.registrarMascota(this.mascotaForm.value).subscribe({
-        next: (res: any) => {
-          alert('Mascota registrada correctamente');
-          this.mascotaForm.reset();
+        next: res => {
+          this.snackbar.open('Mascota registrada exitosmente', 'Cerrar', { duration: 3000 });
+          this.logger.info('Mascota registrada', this.mascotaForm.value);
+          this.router.navigate(['/diagnostico/mascota-perro']);
         },
-        error: (err: any) => {
-          alert('Error al registrar mascota');
-          console.error(err);
+        error: err => {
+          const mensaje = err.error?.message || 'Error en el registro';
+          this.snackbar.open(mensaje, 'Cerrar', { duration: 3000 });
+          this.logger.error('Error al registrar mascota', err);
         }
       });
-    }
   }
 }
