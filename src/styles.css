@@ -1,3 +1,4 @@
+
 /* You can add global styles to this file, and also import other style files */
 ::-webkit-scrollbar {
     width: 10px;
@@ -17,13 +18,22 @@
     background-color: #b6b6b6; /* Color al pasar el mouse */
 }
 
-body {
-    background: linear-gradient(135deg, #8EC5FC, #E0C3FC);
-    /* color: #000000; */
-    transition: background-color 0.3s, color 0.3s;
-    margin: 0; padding: 0; font-family: Roboto, "Helvetica Neue", sans-serif;
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  background: linear-gradient(to bottom right, #49a5f0, #c095f5);
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  font-family: Roboto, sans-serif;
 }
   
 aside {
     transition: background-color 0.3s;
 }
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: #f0f4f8 !important; /* fondo claro */
+}
+

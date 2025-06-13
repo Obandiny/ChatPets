@@ -5,49 +5,83 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-<h2 class="titulo">Registrar Mascota</h2>
 
-<form [formGroup]="mascotaForm" (ngSubmit)="registrarMascota()">
-  <div class="form-grid">
-    <mat-form-field appearance="outline">
-      <mat-label>Nombre</mat-label>
-      <input matInput formControlName="nombre" required>
-      <mat-error *ngIf="mascotaForm.get('nombre')?.hasError('required')">Nombre es obligatorio</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Raza</mat-label>
-      <input matInput formControlName="raza" required>
-      <mat-error *ngIf="mascotaForm.get('raza')?.hasError('required')">Raza es obligatoria</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Edad</mat-label>
-      <input matInput type="number" formControlName="edad" required>
-      <mat-error *ngIf="mascotaForm.get('edad')?.hasError('required')">Edad es obligatoria</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Peso (kg)</mat-label>
-      <input matInput type="number" formControlName="peso" required>
-      <mat-error *ngIf="mascotaForm.get('peso')?.hasError('required')">Peso es obligatorio</mat-error>
-    </mat-form-field>
-
-    <mat-form-field appearance="outline">
-      <mat-label>Tamaño</mat-label>
-      <mat-select formControlName="tamano" required>
-        <mat-option value="Pequeño">Pequeño</mat-option>
-        <mat-option value="Mediano">Mediano</mat-option>
-        <mat-option value="Grande">Grande</mat-option>
-      </mat-select>
-      <mat-error *ngIf="mascotaForm.get('tamano')?.hasError('required')">Tamaño es obligatorio</mat-error>
-    </mat-form-field>
-
-    <button mat-raised-button color="primary" type="submit" [disabled]="mascotaForm.invalid">
-      Registrar
+  <header class="header" [class.menu-open]="isMenuOpen" [class.menu-closed]="!isMenuOpen">
+    <button class="btn-open-menu" aria-label="Abrir/Cerrar menú" (click)="toggleMenu()">
+      <mat-icon>{{ isMenuOpen ? 'menu_open' : 'menu' }}</mat-icon>
     </button>
+    <h1 class="app-name">MASCOTAPP</h1>
+  </header>
+  
+  <nav class="menu-lateral" *ngIf="isMenuOpen" role="navigation" aria-label="Menú lateral">
+    <button class="btn-close-menu" (click)="toggleMenu()">Cerrar Menú</button>
+
+    <div class="group-btn">
+      <a [routerLink]="['/menu']" routerLinkActive="active">Inicio</a>
+      <!-- <a [routerLink]="['/registrar-mascota']" routerLinkActive="active">Diagnósticos</a> -->
+      <a routerLink="/perfil" routerLinkActive="active">Perfil</a>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <h2 class="titulo">Registrar Mascota</h2>
+  
+    <form [formGroup]="mascotaForm" (ngSubmit)="onSubmit()">
+      <div class="wizard-container">
+        <div class="wizard-slide" [style.transform]="'translateX(-' + step * 100 + '%)'">
+          <!-- PASO 1 -->
+          <div class="wizard-step">
+            <mat-form-field appearance="outline">
+              <mat-label>Nombre</mat-label>
+              <input matInput formControlName="nombre" required>
+              <mat-error *ngIf="mascotaForm.get('nombre')?.hasError('required')">Nombre es obligatorio</mat-error>
+            </mat-form-field>
+          </div>
+          <!-- PASO 2 -->
+          <div class="wizard-step">
+            <mat-form-field appearance="outline">
+              <mat-label>Raza</mat-label>
+              <input matInput formControlName="raza" required>
+              <mat-error *ngIf="mascotaForm.get('raza')?.hasError('required')">Raza es obligatoria</mat-error>
+            </mat-form-field>
+          </div>
+          <!-- PASO 3 -->
+          <div class="wizard-step">
+            <mat-form-field appearance="outline">
+              <mat-label>Edad</mat-label>
+              <input matInput type="number" formControlName="edad" required>
+              <mat-error *ngIf="mascotaForm.get('edad')?.hasError('required')">Edad es obligatoria</mat-error>
+            </mat-form-field>
+          </div>
+          <!-- PASO 4 -->
+          <div class="wizard-step">
+            <mat-form-field appearance="outline">
+              <mat-label>Peso (kg)</mat-label>
+              <input matInput type="number" formControlName="peso" required>
+              <mat-error *ngIf="mascotaForm.get('peso')?.hasError('required')">Peso es obligatorio</mat-error>
+            </mat-form-field>
+          </div>
+          <!-- PASO 5 -->
+          <div class="wizard-step">
+            <mat-form-field appearance="outline">
+              <mat-label>Tamaño</mat-label>
+              <mat-select formControlName="tamano" required>
+                <mat-option value="Pequeño">Pequeño</mat-option>
+                <mat-option value="Mediano">Mediano</mat-option>
+                <mat-option value="Grande">Grande</mat-option>
+              </mat-select>
+              <mat-error *ngIf="mascotaForm.get('tamano')?.hasError('required')">Tamaño es obligatorio</mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="wizard-buttons">
+          <button mat-stroked-button color="accent" type="button" (click)="prevStep()" [disabled]="step === 0">Anterior</button>
+          <button mat-flat-button color="primary" type="button" *ngIf="step < 4" (click)="nextStep()">Siguiente</button>
+          <button mat-raised-button color="primary" type="submit" *ngIf="step === 4" [disabled]="mascotaForm.invalid">Registrar</button>
+        </div>
+      </div>
+    </form>
   </div>
-</form>
 </body>
 </html>
 

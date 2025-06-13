@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
-import { Router } from '@angular/router';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -11,6 +11,8 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MascotaService } from '../services/mascota.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoggerService } from '../services/logger.service';
+import { MatIconModule } from '@angular/material/icon';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-registar-mascota',
@@ -19,21 +21,29 @@ import { LoggerService } from '../services/logger.service';
     CommonModule,
     FormsModule,
     MatFormFieldModule,
+    MatIconModule,
+    MatTooltipModule,
     MatInputModule,
     MatButtonModule,
     MatSelectModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    RouterLink
   ],
   templateUrl: './registar-mascota.component.html',
   styleUrl: './registar-mascota.component.css'
 })
 export class RegistarMascotaComponent {
+  isMenuOpen = true;
+
   mascotaForm = this.fb.group({
     nombre: ['', Validators.required],
-    raza: ['', Validators.required],
-    edad: ['', Validators.required],
-    peso: ['', Validators.required]
+    raza: [null, Validators.required],
+    edad: [null, Validators.required],
+    peso: ['', Validators.required],
+    tamano: ['', Validators.required]
   });
+
+  step = 0;
 
   constructor(
     private fb: FormBuilder, 
@@ -42,6 +52,18 @@ export class RegistarMascotaComponent {
     private router: Router,
     private logger: LoggerService
   ) {}
+
+  nextStep() {
+    if (this.step < 4) this.step++;
+  }
+
+  prevStep() {
+    if (this.step > 0) this.step--;
+  }
+
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
 
   onSubmit() {
     if (this.mascotaForm.valid) {
