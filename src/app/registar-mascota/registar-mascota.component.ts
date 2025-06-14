@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
@@ -66,7 +66,7 @@ export class RegistarMascotaComponent {
   }
 
   onSubmit() {
-    if (this.mascotaForm.valid) {
+    if (!this.mascotaForm.valid) {
       this.snackbar.open('Por favor registra a la mascota', 'Cerrar', { duration: 3000 });
       this.logger.warn('Formulario invalido al registrar mascota', this.mascotaForm.value);
       this.mascotaForm.markAllAsTouched();
@@ -76,7 +76,7 @@ export class RegistarMascotaComponent {
         next: res => {
           this.snackbar.open('Mascota registrada exitosmente', 'Cerrar', { duration: 3000 });
           this.logger.info('Mascota registrada', this.mascotaForm.value);
-          this.router.navigate(['/diagnostico/mascota-perro']);
+          this.router.navigate(['/menu']);
         },
         error: err => {
           const mensaje = err.error?.message || 'Error en el registro';
@@ -84,5 +84,18 @@ export class RegistarMascotaComponent {
           this.logger.error('Error al registrar mascota', err);
         }
       });
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+
+    if (
+      this.isMenuOpen &&
+      !target.closest('.menu-lateral') &&
+      !target.closest('.btn-open-menu')
+    ) {
+      this.isMenuOpen = false;
+    }
   }
 }

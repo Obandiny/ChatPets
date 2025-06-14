@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class MascotaService {
-  private readonly API_URL = 'http://localhost:5000/api/';
+  private readonly API_URL = 'http://localhost:5000/api/mascota';
 
   constructor(
     private http: HttpClient,
@@ -16,7 +16,9 @@ export class MascotaService {
 
   registrarMascota(data: any): Observable<any> {
     const token = localStorage.getItem('token');
-    return this.http.post(`${this.API_URL}/mascotas`, data, {
+    console.log('Token enviado:', token);
+
+    return this.http.post(`${this.API_URL}/registrar`, data, {
       headers: {
         Authorization: `Bearer ${token}`
       }

@@ -51,7 +51,8 @@
 .bienvenida {
   font-weight: bold;
   font-size: 15px;
-  margin-left: 70%;
+  margin-right: -70%;
+  white-space: nowrap;
 }
 
 /* MENÚ LATERAL */
@@ -60,26 +61,27 @@
   top: 0;
   left: 0;
   height: 100vh;
-  width: 220px;
+  width: 240px;
   background-color: #1565c0;
-  padding: 20px;
+  padding: 1rem;
   color: white;
   z-index: 1000;
-  box-shadow: 2px 0 10px rgba(0,0,0,0.3);
+  box-shadow: 2px 0 5px rgba(0,0,0,0.3);
   overflow-y: auto;
   transition: transform 0.3s ease;
 }
 
 /* Botón cerrar menú */
 .btn-close-menu {
+  display: block;
   background-color: white;
   color: #1565c0;
   border: none;
   padding: 10px;
   width: 100%;
-  border-radius: 5px;
+  border-radius: 8px;
   cursor: pointer;
-  margin-bottom: 20px;
+  margin-bottom: 1rem;
   font-weight: 600;
   transition: background-color 0.3s ease;
 }
@@ -93,8 +95,8 @@
   display: block;
   color: white;
   text-decoration: none;
-  padding: 12px;
-  margin: 8px 0;
+  padding: 0.75rem 1rem;
+  margin: 0.3rem 0;
   background-color: #1976d2;
   border-radius: 6px;
   text-align: center;
@@ -105,6 +107,12 @@
 .group-btn a.active,
 .group-btn a:hover {
   background-color: #0d47a1;
+}
+
+section h2 {
+  margin-top: 1rem;
+  font-size: 1.1rem;
+  font-weight: bold;
 }
 
 /* Historial */
@@ -130,13 +138,13 @@
 /* CONTENEDOR PRINCIPAL */
 .main {
   flex: 1;
-  transition: margin-left 0.3s ease;
-  padding: 20px;
+  transition: filter 0.3s ease-in-out;
+  padding: 1rem;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.main.menu-open {
-  margin-left: 240px;
+.main.main-open {
+  filter: blur(1px);
 }
 
 .main.menu-closed {
@@ -237,6 +245,36 @@
   text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
 }
 
+.submenu-toggle {
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  padding: 0.75rem 1rem;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  cursor: pointer;
+}
+
+.submenu {
+  display: flex;
+  flex-direction: column;
+  padding-left: 1rem;
+}
+
+.submenu a {
+  padding: 0.5rem 1rem;
+  color: #e3f2fd;
+  text-decoration: none;
+}
+
+.submenu a:hover {
+  background-color: #0d47a1;
+}
+
 /* PIE DE PÁGINA */
 .footer {
   background-color: #1976d2;
@@ -288,23 +326,28 @@
 /* RESPONSIVO */
 @media (max-width: 768px) {
   .header {
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
+    padding: 0 0.5rem;
   }
 
   .app-name {
-    position: static;
-    transform: none;
+    /* position: static; */
+    /* transform: none;
     text-align: center;
-    width: 100%;
+    width: 100%; */
+    font-size: 1.1rem;
+    margin-left: -1.5rem;
   }
 
   .menu-lateral {
-    width: 100%;
-    height: auto;
+    width: 94.8%;
+    height: 100vh;
     position: relative;
     box-shadow: none;
+    z-index: 1000;
+  }
+
+  .bienvenida {
+    display: none;
   }
 
   .main {

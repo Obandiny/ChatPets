@@ -31,6 +31,7 @@ interface Tip {
 export class MenuComponent implements OnInit, OnDestroy {
   mensajeBienvenida: string = '';
   isMenuOpen = true;
+  submenuAbierto: boolean = false;
   rol: string | null = null;
   historialDiagnosticos: Diagnostico[] = [];
   tips: Tip[] = [
@@ -81,6 +82,10 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  toggleSubmenu() {
+    this.submenuAbierto = !this.submenuAbierto;
   }
 
   logout(): void {

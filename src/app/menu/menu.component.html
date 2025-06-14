@@ -19,7 +19,17 @@
 
       <div class="group-btn">
         <a [routerLink]="['/menu']" routerLinkActive="active">Inicio</a>
-        <a [routerLink]="['/registrar-mascota']" routerLinkActive="active" *ngIf="rol === 'usuario'">Diagnósticos</a>
+
+        <button class="submenu-toggle" (click)="toggleSubmenu()" *ngIf="rol === 'usuario'">
+          Diagnosticos
+          <mat-icon>{{ submenuAbierto ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </button>
+        
+        <div *ngIf="submenuAbierto" class="submenu">
+          <a [routerLink]="['/registrar-mascota']">Registrar mascota</a>
+          <a [routerLink]="['/diagnostico/mascota-perro']">Perros</a>
+        </div>
+
         <a routerLink="/perfil" routerLinkActive="active">Perfil</a>
         <a [routerLink]="['/admin-panel']" routerLinkActive="active" *ngIf="rol === 'admin'">Administrar</a>
       </div>

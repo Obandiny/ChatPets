@@ -4,7 +4,7 @@ import os
 load_dotenv()
 
 class Config:
-    SECRET_KEY = os.getenv('SECRET_KEY')
+    SECRET_KEY = os.getenv('JWT_SECRET_KEY', 'dev_default')
     SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URI')
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_SECRET_KEY = os.getenv('JWT_SECRET_KEY')

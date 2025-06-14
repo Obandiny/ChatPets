@@ -7,10 +7,10 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 120vh;
+  height: 100vh;
   max-width: 100%;
   margin: 0 auto;
-  padding: 16px;
+  padding: 2rem;
   box-sizing: border-box;
 }
 
@@ -18,39 +18,46 @@ body {
   width: 100%;
   overflow: hidden;
   position: relative;
-  height: auto;
-  max-width: 500px;
+  margin: auto;
+  max-width: 600px;
 }
 
 .wizard-slide {
   display: flex;
   transition: transform 0.5s ease;
-  width: 512%;
+  width: 500%;
 }
 
 .wizard-step {
-  flex: 0 0 40%;
-  padding: 16px;
+  flex: 0 0 100%;
+  padding: 2rem;
   box-sizing: border-box;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 mat-form-field {
   width: 100%;
+  max-width: 150%;
+  margin-right: 60px;
+  border-top-right-radius: 10px;
 }
 
 .wizard-buttons {
-  margin-top: 16px;
+  margin-top: 2rem;
   display: flex;
-  width: 100%;
   justify-content: space-between;
-  max-width: 500px;
 }
 
 .titulo {
   text-align: center;
   font-weight: bold;
-  font-size: 30px;
+  font-size: 45px;
   margin: 20px 0;
+  font-family: 'Comic Sans MS', cursive, sans-serif;
+  color: white;
 }
 
 header.header {
@@ -144,4 +151,54 @@ header.header {
   font-family: 'Comic Sans MS', cursive, sans-serif;
   color: white;
   margin: 0;
+}
+
+.footer {
+  background-color: #1976d2;
+  color: white;
+  padding: 20px 40px;
+  text-align: center;
+  margin-top: 40px;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  transition: margin-left 0.3s ease;
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+}
+
+.footer.menu-open {
+  margin-left: 200px;
+}
+
+.footer.menu-closed {
+  margin-left: 0;
+}
+
+.footer-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+}
+
+.footer-info p {
+  margin: 0;
+  font-size: 14px;
+}
+
+.footer-social {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+}
+
+.footer-social a img {
+  width: 24px;
+  height: 24px;
+  filter: brightness(0) invert(1);
+  transition: transform 0.2s ease;
+}
+
+.footer-social a:hover img {
+  transform: scale(1.2);
 }

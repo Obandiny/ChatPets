@@ -7,7 +7,7 @@ import os
 from config import Config
 from database import db
 from Models import app_usuarios, mascota, historial, relaciones
-from Routes import auth_bp, chat_bp
+from Routes import auth_bp, chat_bp, mascota_bp
 
 # Cargar variables de entorno
 load_dotenv()
@@ -33,6 +33,7 @@ def create_app():
     # Registrar Blueprints
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
     app.register_blueprint(chat_bp, url_prefix="/api/chat")
+    app.register_blueprint(mascota_bp, url_prefix='/api/mascota')
 
     return app
 
