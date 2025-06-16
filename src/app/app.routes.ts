@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { ChatbotComponent } from './chatbot/chatbot.component';
-import { ConfiguracionComponent } from './Configuracion/configuracion.component';
 import { MenuComponent } from './menu/menu.component';
 import { LoginComponent } from './auth/login/login.component';
 import { RegisterComponent } from './auth/register/register.component';
@@ -16,7 +15,7 @@ export const routes: Routes = [
     { 
         path: 'menu', 
         component: MenuComponent,
-        // canActivate: [authGuard] 
+        canActivate: [authGuard] 
     },
     { path: 'auth/login', component: LoginComponent },
     { path: 'auth/register', component: RegisterComponent },

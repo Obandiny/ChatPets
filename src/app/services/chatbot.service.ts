@@ -7,8 +7,6 @@ import { Observable } from 'rxjs';
 })
 export class ChatbotService {
 
-  private isDarkTheme = false;
-
   private apiUrl = 'http://localhost:5000'
 
   constructor(private http: HttpClient) { }
@@ -20,14 +18,4 @@ export class ChatbotService {
   enviarDiagnostico(data: any) {
     return this.http.post(`${this.apiUrl}/api/diagnostico`, data);
   }
- 
-  toggleTheme() {
-    this.isDarkTheme = !this.isDarkTheme;
-    document.body.classList.toggle('dark-theme', this.isDarkTheme);
-  }
-
-  get currentThemeIsDark() {
-    return this.isDarkTheme;
-  }
-
 }

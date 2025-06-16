@@ -34,10 +34,6 @@ export class ChatbotComponent {
 
   constructor(public chatbotService: ChatbotService) { }
 
-  toggleTheme() {
-    this.chatbotService.toggleTheme();
-  }
-
   toggleAside() {
     this.isAsideOpen = !this.isAsideOpen;
   }
