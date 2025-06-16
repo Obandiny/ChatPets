@@ -1,44 +1,80 @@
-<div class="header">
-  <div class="titulo-p">
-    <h1>DIAGNOSTICO DE MASCOTA</h1>
-  </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body>
+  <header class="header" [class.menu-open]="isMenuOpen" [class.menu-closed]="!isMenuOpen">
+    <button class="btn-open-menu" aria-label="Abrir/Cerrar menú" (click)="toggleMenu()">
+      <mat-icon>{{ isMenuOpen ? 'menu_open' : 'menu' }}</mat-icon>
+    </button>
+    <h1 class="app-name">MASCOTAPP</h1>
+  </header>
   
-  <div class="titulo-s">
-    <h2>Por favor ingresar el estado de la mascota respondiendo las siguientes preguntas</h2>
+  <nav class="menu-lateral" *ngIf="isMenuOpen" role="navigation" aria-label="Menú lateral">
+    <button class="btn-close-menu" (click)="toggleMenu()">Cerrar Menú</button>
+
+    <div class="group-btn">
+      <a [routerLink]="['/menu']" routerLinkActive="active">Inicio</a>
+      <!-- <a [routerLink]="['/registrar-mascota']" routerLinkActive="active">Diagnósticos</a> -->
+      <a routerLink="/perfil" routerLinkActive="active">Perfil</a>
+    </div>
+  </nav>
+
+  <div class="page-wrapper">
+    <div class="header mat-elevation-z2">
+      <div class="titulo-p">
+        <h1>Diagnóstico de Mascota</h1>
+      </div>
+      <div class="titulo-s">
+        <h2>Por favor ingresa el estado de la mascota respondiendo las siguientes preguntas</h2>
+      </div>
+    </div>
+    <div class="diagnostico-container">
+      <mat-card class="question-card animate-slide">
+        <mat-card-title>{{ questions[currentQuestionIndex] }}</mat-card-title>
+  
+        <mat-form-field appearance="outline" class="full-width">
+          <mat-label>Respuesta</mat-label>
+          <input
+            matInput
+            [(ngModel)]="currentAnswer"
+            placeholder="Escribe tu respuesta"
+            [type]="getInputType(currentQuestionIndex)"
+          />
+        </mat-form-field>
+  
+        <div class="button-group">
+          <button
+            mat-raised-button
+            color="primary"
+            (click)="before()"
+            [disabled]="isFirstQuestion()"
+          >
+            Anterior
+          </button>
+  
+          <button
+            mat-raised-button
+            color="accent"
+            (click)="next()"
+            [disabled]="isAnswerEmpty()"
+          >
+            Siguiente
+          </button>
+  
+          <button
+            mat-raised-button
+            color="warn"
+            *ngIf="currentQuestionIndex === questions.length - 1 && !isAnswerEmpty()"
+            [routerLink]="['/chatbot']"
+          >
+            Chat
+          </button>
+        </div>
+      </mat-card>
+    </div>
   </div>
-</div>
-
-
-<div class="diagnostico">
-  <div class="question-card animate-slide">
-    <h3>{{ questions[currentQuestionIndex] }}</h3>
-
-    <input
-      [(ngModel)]="currentAnswer"
-      placeholder="Escribe tu respuesta"
-      [type]="getInputType(currentQuestionIndex)"
-    />
-
-    <button
-      (click)="before()"
-      [disabled]="isFirstQuestion()"
-    >
-      Anterior
-    </button>
-
-    <button
-      (click)="next()"
-      [disabled]="isAnswerEmpty()"
-    >
-      Siguiente
-    </button>
-
-    <button
-      *ngIf="currentQuestionIndex === questions.length - 1 && !isAnswerEmpty()"
-      [routerLink]="['/chatbot']"
-    >
-      Chat
-    </button>
-  </div>
-</div>
-
+</body>
+</html>

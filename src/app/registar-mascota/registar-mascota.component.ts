@@ -34,6 +34,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 })
 export class RegistarMascotaComponent {
   isMenuOpen = true;
+  isMobile = false;
 
   mascotaForm = this.fb.group({
     nombre: ['', Validators.required],
@@ -53,16 +54,42 @@ export class RegistarMascotaComponent {
     private logger: LoggerService
   ) {}
 
+  ngOnInit(): void {
+    this.checkIfMobile();
+  }
+
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+
+    if (
+      this.isMenuOpen &&
+      !target.closest('.menu-lateral') &&
+      !target.closest('.btn-open-menu')
+    ) {
+      this.isMenuOpen = false;
+    }
+  }
+
+  @HostListener('window:resize', [])
+  onResize() {
+    this.checkIfMobile();
+  }
+
+  checkIfMobile() {
+    this.isMobile = window.innerWidth < 600;
+  }
+
   nextStep() {
     if (this.step < 4) this.step++;
   }
 
   prevStep() {
     if (this.step > 0) this.step--;
-  }
-
-  toggleMenu(): void {
-    this.isMenuOpen = !this.isMenuOpen;
   }
 
   onSubmit() {
@@ -84,18 +111,5 @@ export class RegistarMascotaComponent {
           this.logger.error('Error al registrar mascota', err);
         }
       });
-  }
-
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent) {
-    const target = event.target as HTMLElement;
-
-    if (
-      this.isMenuOpen &&
-      !target.closest('.menu-lateral') &&
-      !target.closest('.btn-open-menu')
-    ) {
-      this.isMenuOpen = false;
-    }
   }
 }

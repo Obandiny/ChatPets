@@ -24,11 +24,16 @@
   </nav>
 
   <div class="page-wrapper">
-    <h2 class="titulo">Registrar Mascota</h2>
+    <div class="header-titulo">
+      <h1 class="titulo">Registrar Mascota</h1>
+    </div>
   
     <form [formGroup]="mascotaForm" (ngSubmit)="onSubmit()">
       <div class="wizard-container">
-        <div class="wizard-slide" [style.transform]="'translateX(-' + step * 100 + '%)'">
+        <div class="wizard-slide" 
+        [style.transform]="'translateX(-' + step * 100 + '%)'"
+        [style.transform]="!isMobile ? 'translateX(-' + step * 100 + '%)' : 'translateX(0)'"
+        >
           <!-- PASO 1 -->
           <div class="wizard-step">
             <mat-form-field appearance="fill">
@@ -75,9 +80,15 @@
           </div>
         </div>
         <div class="wizard-buttons">
-          <button mat-stroked-button color="primary" type="button" (click)="prevStep()" [disabled]="step === 0">Anterior</button>
-          <button mat-flat-button color="primary" type="button" *ngIf="step < 4" (click)="nextStep()">Siguiente</button>
-          <button mat-raised-button color="primary" type="submit" *ngIf="step === 4" [disabled]="mascotaForm.invalid">Registrar</button>
+          <ng-container *ngIf="!isMobile">
+            <button mat-stroked-button color="primary" type="button" (click)="prevStep()" [disabled]="step === 0">Anterior</button>
+            <button mat-flat-button color="primary" type="button" *ngIf="step < 4" (click)="nextStep()">Siguiente</button>
+            <button mat-raised-button color="primary" type="submit" *ngIf="step === 4" [disabled]="mascotaForm.invalid">Registrar</button>
+          </ng-container>
+
+          <button mat-raised-button color="primary" type="submit" *ngIf="isMobile" [disabled]="mascotaForm.invalid">
+            Registrar
+          </button>
         </div>
       </div>
     </form>

@@ -2,7 +2,7 @@ body {
   font-family: 'Comic Sans MS', cursive, sans-serif;
 }
 
-.page-wrapper {
+/* .page-wrapper {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -10,54 +10,128 @@ body {
   height: 100vh;
   max-width: 100%;
   margin: 0 auto;
-  padding: 2rem;
+  padding: 16px;
+  box-sizing: border-box;
+} */
+
+.header-titulo {
+  width: auto;
+  height: 100px;
+  background-color: #8f8f8f;
+  margin-bottom: 15px;
+  border-radius: 15px;
+  text-align: center;
+  color: #fff;
+  padding: 5px;
+  padding-top: 5px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 2px solid;
+  margin-left: 50px;
+  margin-right: 50px;
+}
+
+.header-titulo .titulo {
+  font-size: 50px;
+  font-weight: bold;
+  padding: 30px;
+}
+
+.page-wrapper {
+  padding: 16px;
   box-sizing: border-box;
 }
 
 .wizard-container {
-  width: 100%;
+  background: none;
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
-  position: relative;
-  margin: auto;
-  max-width: 600px;
+  margin: 0 auto;
+  margin-left: 50px;
+  margin-right: 50px;
 }
 
 .wizard-slide {
   display: flex;
   transition: transform 0.5s ease;
-  width: 500%;
+  width: 500%; /* 5 pasos */
 }
 
 .wizard-step {
-  flex: 0 0 100%;
-  padding: 2rem;
+  width: 100%;
+  flex-shrink: 0;
+  padding: 0 10px;
   box-sizing: border-box;
-
-  display: flex;
-  flex-direction: column;
-  align-items: center;
 }
 
 mat-form-field {
   width: 100%;
-  max-width: 150%;
-  margin-right: 60px;
-  border-top-right-radius: 10px;
+  /* max-width: 100%; */
+  margin-bottom: 5px;
 }
 
 .wizard-buttons {
-  margin-top: 2rem;
+  margin-top: 24px;
   display: flex;
   justify-content: space-between;
 }
 
-.titulo {
-  text-align: center;
-  font-weight: bold;
-  font-size: 45px;
-  margin: 20px 0;
-  font-family: 'Comic Sans MS', cursive, sans-serif;
-  color: white;
+@media (max-width: 600px) {
+  .wizard-container {
+    padding: 16px 12px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .wizard-slide {
+    flex-direction: column;
+    width: 100% !important;
+    transform: none !important;
+  }
+
+  .wizard-step {
+    width: 100%;
+    padding: 1rem 0;
+    display: block;
+  }
+
+  mat-form-field {
+    width: 100% !important;
+    margin-right: 0 !important;
+    max-width: 100% !important;
+  }
+
+  .wizard-buttons {
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+    margin-top: 1.5rem;
+  }
+
+  .wizard-buttons button {
+    width: 100%;
+  }
+
+  .titulo {
+    font-size: 28px;
+    text-align: center;
+  }
+
+  .header.menu-open {
+    margin-left: 240px;
+  }
+
+  .header-titulo {
+    margin-top: -120px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .header-titulo .titulo {
+    font-size: 35px;
+    padding-top: 25px;
+  }
 }
 
 header.header {
@@ -71,7 +145,8 @@ header.header {
   position: relative;
   transition: margin-left 0.3s ease;
   z-index: 10;
-  margin-bottom: -90px;
+  margin-bottom: 150px;
+  flex-wrap: nowrap;
 }
 
 .header.menu-open {
@@ -143,15 +218,15 @@ header.header {
 }
 
 .app-name {
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
-  font-size: 22px;
+  margin: 0 auto;
+  font-size: 20px;
   font-weight: 700;
   font-family: 'Comic Sans MS', cursive, sans-serif;
   color: white;
-  margin: 0;
+  flex: 1;
+  text-align: center;
 }
+
 
 .footer {
   background-color: #1976d2;

@@ -4,9 +4,13 @@ import { RouterLink } from '@angular/router';
 import { Router, ActivatedRoute } from '@angular/router';
 import { HttpClient } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { ChatbotService } from '../../services/chatbot.service';
-import { response } from 'express';
-
+import { DiagnosticoService } from '../../services/diagnostico.service';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card'
+import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule } from '@angular/material/form-field';
+ 
 @Component({
   selector: 'app-mascota-perro',
   standalone: true,
@@ -14,12 +18,17 @@ import { response } from 'express';
     ReactiveFormsModule,
     RouterLink,
     CommonModule,
-    FormsModule
+    FormsModule,
+    MatIconModule,
+    MatInputModule,
+    MatButtonModule,
+    MatCardModule,
   ],
   templateUrl: './mascota-perro.component.html',
   styleUrls: ['./mascota-perro.component.css']
 })
 export class MascotaPerroComponent {
+  isMenuOpen = false;
 
   questions = [
     '¿Cuál es el síntoma principal que presenta tu mascota?',
@@ -33,7 +42,7 @@ export class MascotaPerroComponent {
 
   currentQuestionIndex = 0;
 
-  constructor(private chatbotService: ChatbotService) {}
+  constructor(private diagnosticoService: DiagnosticoService) {}
 
   get currentAnswer(): string {
     return this.answers[this.currentQuestionIndex];
@@ -55,7 +64,7 @@ export class MascotaPerroComponent {
       if (this.currentQuestionIndex < this.questions.length - 1) {
         this.currentQuestionIndex++;
       } else {
-        this.finishDiagnosis();
+        // this.finishDiagnosis();
       }
     }
   }
@@ -75,15 +84,18 @@ export class MascotaPerroComponent {
     return 'text';
   }
 
-  finishDiagnosis() {
-    const mascota = JSON.parse(localStorage.getItem('mascota')!);
-    const diagnostico = {
-      ...mascota,
-      respuestas: this.answers
-    };
-    this.chatbotService.enviarDiagnostico(diagnostico).subscribe(response => {
-      console.log('Diagnostico enviado:', response);
-    });
-  }
+  // finishDiagnosis() {
+  //   const mascota = JSON.parse(localStorage.getItem('mascota')!);
+  //   const diagnostico = {
+  //     ...mascota,
+  //     respuestas: this.answers
+  //   };
+  //   this.diagnosticoService.enviarDiagnostico(diagnostico).subscribe(response => {
+  //     console.log('Diagnostico enviado:', response);
+  //   });
+  // }
 
+  toggleMenu(): void {
+    this.isMenuOpen = !this.isMenuOpen;
+  }
 }
