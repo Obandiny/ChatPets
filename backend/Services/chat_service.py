@@ -73,7 +73,8 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id):
             usuario_id=usuario_actual.id,
             mascota_id=mascota_id,
             sintomas=", ".join(respuestas),
-            recomendacion=texto_respuesta
+            recomendacion=texto_respuesta,
+            contexto_anterior=prompt
         )
         db.session.add(historial)
         db.session.commit()
@@ -88,7 +89,8 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id):
             usuario_id=usuario_actual.id,
             mascota_id=mascota_id,
             sintomas=", ".join(respuestas),
-            recomendacion=texto_fallback
+            recomendacion=texto_fallback,
+            contexto_anterior="Fallo Gemini. Respuesta generada desde base de datos."
         )
         db.session.add(historial)
         db.session.commit()

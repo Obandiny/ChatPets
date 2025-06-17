@@ -10,6 +10,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card'
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MensajeService } from '../../services/mensaje.service';
  
 @Component({
   selector: 'app-mascota-perro',
@@ -42,7 +43,15 @@ export class MascotaPerroComponent {
 
   currentQuestionIndex = 0;
 
-  constructor(private diagnosticoService: DiagnosticoService) {}
+  constructor(
+    private diagnosticoService: DiagnosticoService,
+    private mensajeService: MensajeService,
+    private router: Router
+  ) {}
+
+  ngOnInit(): void {
+    
+  }
 
   get currentAnswer(): string {
     return this.answers[this.currentQuestionIndex];
