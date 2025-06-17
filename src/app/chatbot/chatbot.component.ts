@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { ChatbotService } from '../services/chatbot.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -64,48 +64,70 @@ export class ChatbotComponent {
   sendMessage() {
     if (this.userInput.trim() === '') return;
 
+    const mensajeUsuario = this.userInput.trim();
     // Agregar el mensaje del usuario
-    this.messages.push({ text: this.userInput, isBot: false});
+    this.messages.push({ text: mensajeUsuario, isBot: false });
     this.userInput = '';
     this.isBotTyping = true;
 
-    // Enviar el mensaje al backend "python/Flask" a traves del servicio
-    this.chatbotService.obtenerRecomendacion(this.userInput).subscribe({
+    // Recuperar diagnostico base desde localstorage
+    const id = localStorage.getItem('diagnostico_id');
+    if (!id) {
+      this.messages.push({ text: 'No se encontro el diagnostico base', isBot: true });
+      this.isBotTyping = false;
+      return;
+    }
+
+    this.diagnosticoService.getDiagnosticoById(+id).subscribe(diagnostico => {
+      const contextoBase = `
+      🐾 Mascota: ${diagnostico.nombre_mascota}
+      🧬 Edad: ${diagnostico.edad}, Raza: ${diagnostico.raza}, Sexo: ${diagnostico.sexo}, Peso: ${diagnostico.peso}kg
+      🦠 Enfermedad detectada: ${diagnostico.enfermedad}
+      💊 Recomendación inicial: ${diagnostico.recomendacion}
+      `;
+
+      const promptCompleto = `
+      CONTEXTO DEL CASO:
+      ${contextoBase}
+
+
+      Pregunta del usuario:
+      ${mensajeUsuario}
+
+
+      Por favor responde en el mismo contexto de la enfermedad detectada para esta mascota.
+      `;
+
+      // Enviar el mensaje al backend "python/Flask" a traves del servicio
+      this.chatbotService.obtenerRecomendacion(promptCompleto).subscribe({
       next: response => {
         this.isBotTyping = false;
-        // this.messages.push({ text: response.response, isBot: true });
-        
-        if (response.respuesta_mejorada) {
-          this.messages.push({ text: response.respuesta_mejorada, isBot: true }); 
-        } else {
-          this.messages.push({ text: 'Lo siento, no pude encontrar una respuesta.', isBot: true });
-        }
-
-    },
+        const respuesta = response.respuesta_mejorada || 'Lo siento, no pude generar una respuesta clara.';
+        this.messages.push({ text: respuesta, isBot: true });
+      },
       error: (err) => {
         this.isBotTyping = false;
         // En caso de error, mostrar mensaje
         this.messages.push({ text: 'Lo siento, ha ocurrido un error.', isBot: true});
         console.error('Error al obtener la respuesta:', err);
-    }
+      }
+    });
+
+    this.scrollToBottom();
   }); 
 
   // Limpiar el input  
   this.userInput = '';
   }
 
-  typeBotResponse(response: string) {
-    let i = 0;
-    const botMessage = { text: '', isBot: true };
-    this.messages.push(botMessage);
-    const interval = setInterval(() => {
-      if (i < response.length) {
-        botMessage.text += response[i];
-        i++;
-      } else {
-        clearInterval(interval);
+  @ViewChild('scrollContainer') private scrollContainer!: ElementRef;
+
+  scrollToBottom(): void {
+    setTimeout(() => {
+      if (this.scrollContainer) {
+        this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
       }
-    }, 50);
+    }, 100);
   }
 
 }

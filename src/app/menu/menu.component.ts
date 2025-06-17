@@ -7,8 +7,11 @@ import { AuthService } from '../services/auth.service';
 import { DiagnosticoService } from '../services/diagnostico.service';
 
 interface Diagnostico {
-  fecha: Date;
-  mascota: string;
+  id: number;
+  fecha: string | Date;
+  nombre_mascota: string;
+  enfermedad: string;
+  recomendacion: string;
 }
 
 interface Tip {
@@ -34,8 +37,9 @@ export class MenuComponent implements OnInit, OnDestroy {
   isMenuOpen = true;
   submenuAbierto: boolean = false;
   rol: string | null = null;
-  historialDiagnosticos: Diagnostico[] = [];
+
   historial: any[] = [];
+
   tips: Tip[] = [
     {
       titulo: '¡Protege las patas de tu perro durante el paseo!',
@@ -57,7 +61,6 @@ export class MenuComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private router: Router,
     private diagnosticoService: DiagnosticoService,
-
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     const info = this.authService.getUserInfo();
@@ -71,15 +74,19 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.rol = this.authService.getRole();
-    this.loadHistorial();
+
+    this.diagnosticoService.getHistorial().subscribe(data => {
+      this.historial = data
+        .map((item: any) => ({
+          ...item,
+          fecha: new Date(item.fecha)
+        }))
+        .slice(0, 5);
+    });
 
     if (isPlatformBrowser(this.platformId)) {
       this.startCarousel();
     }
-
-    this.diagnosticoService.getHistorial().subscribe(data => {
-      this.historial = data.slice(0, 5);
-    })
   }
 
   ngOnDestroy(): void {
@@ -112,23 +119,23 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.router.navigate(['/auth/login']);
   }
 
-  loadHistorial(): void {
-    if (typeof window !== 'undefined' && window.localStorage) {
-      const historialJSON = localStorage.getItem('historialDiagnosticos');
-      if (historialJSON) {
-        this.historialDiagnosticos = JSON.parse(historialJSON).map((item: any) => ({
-          ...item,
-          fecha: new Date(item.fecha)
-        }));
-      }
-    } else {
-      this.historialDiagnosticos = [];
-    }
-  }
+  // loadHistorial(): void {
+  //   if (typeof window !== 'undefined' && window.localStorage) {
+  //     const historialJSON = localStorage.getItem('historialDiagnosticos');
+  //     if (historialJSON) {
+  //       this.historialDiagnosticos = JSON.parse(historialJSON).map((item: any) => ({
+  //         ...item,
+  //         fecha: new Date(item.fecha)
+  //       }));
+  //     }
+  //   } else {
+  //     this.historialDiagnosticos = [];
+  //   }
+  // }
 
-  verDetalle(item: Diagnostico): void {
-    console.log('Detalle del diagnóstico:', item);
-  }
+  // verDetalle(item: Diagnostico): void {
+  //   console.log('Detalle del diagnóstico:', item);
+  // }
 
   getTransform(): string {
     return `translateX(-${this.currentTipIndex * 100}%)`;

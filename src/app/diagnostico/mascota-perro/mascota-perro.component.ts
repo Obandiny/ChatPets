@@ -49,10 +49,6 @@ export class MascotaPerroComponent {
     private router: Router
   ) {}
 
-  ngOnInit(): void {
-    
-  }
-
   get currentAnswer(): string {
     return this.answers[this.currentQuestionIndex];
   }
