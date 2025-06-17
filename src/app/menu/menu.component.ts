@@ -4,6 +4,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../services/auth.service';
+import { DiagnosticoService } from '../services/diagnostico.service';
 
 interface Diagnostico {
   fecha: Date;
@@ -34,6 +35,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   submenuAbierto: boolean = false;
   rol: string | null = null;
   historialDiagnosticos: Diagnostico[] = [];
+  historial: any[] = [];
   tips: Tip[] = [
     {
       titulo: '¡Protege las patas de tu perro durante el paseo!',
@@ -54,6 +56,8 @@ export class MenuComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private router: Router,
+    private diagnosticoService: DiagnosticoService,
+
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     const info = this.authService.getUserInfo();
@@ -72,12 +76,27 @@ export class MenuComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       this.startCarousel();
     }
+
+    this.diagnosticoService.getHistorial().subscribe(data => {
+      this.historial = data.slice(0, 5);
+    })
   }
 
   ngOnDestroy(): void {
     if (isPlatformBrowser(this.platformId) && this.carouselInterval) {
       clearInterval(this.carouselInterval);
     }
+  }
+
+  verChat(id: number): void {
+    localStorage.setItem('diagnostico_id', id.toString());
+    this.router.navigate(['/chatbot']);
+  }
+
+  eliminar(id: number): void {
+    this.diagnosticoService.elimiarHistorial(id).subscribe(() => {
+      this.historial = this.historial.filter(h => h.id !== id);
+    });
   }
 
   toggleMenu(): void {

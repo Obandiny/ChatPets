@@ -40,4 +40,27 @@ def eliminar_historial(usuario_actual, id):
     db.session.commit()
     
     return jsonify({"mensaje": "Historial eliminado"}), 200
+
+@historial_bp.route('/historial/<int:id>', methods=['GET'])
+@token_required
+def obtener_diagnostico_por_id(usuario_actual, id):
+    historial = (
+        HistorialDiagnostico.query
+        .filter_by(id=id, usuario_actual=usuario_actual.id)
+        .first()
+    )
+    
+    if not historial:
+        return jsonify({"mensaje": "Diagnostico no encontrado"}), 404
+    
+    return jsonify({
+        "id": historial.id,
+        "mascota_id": historial.mascota_id,
+        "nombre_mascota": historial.mascota.nombre,
+        "imagen": historial.mascota.imagen_url,
+        "fecha": historial.fecha.isoformat(),
+        "enfermedad": historial.enfermedad,
+        "recomendacion": historial.recomendacion,
+        "respuestas": historial.respuestas
+    }), 200
     

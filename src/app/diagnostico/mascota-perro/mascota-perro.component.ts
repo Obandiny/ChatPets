@@ -93,18 +93,29 @@ export class MascotaPerroComponent {
     return 'text';
   }
 
-  // finishDiagnosis() {
-  //   const mascota = JSON.parse(localStorage.getItem('mascota')!);
-  //   const diagnostico = {
-  //     ...mascota,
-  //     respuestas: this.answers
-  //   };
-  //   this.diagnosticoService.enviarDiagnostico(diagnostico).subscribe(response => {
-  //     console.log('Diagnostico enviado:', response);
-  //   });
-  // }
-
   toggleMenu(): void {
     this.isMenuOpen = !this.isMenuOpen;
+  }
+
+  finishDiagnosis(): void {
+    const mascotaId = parseInt(localStorage.getItem('mascota_id') || '0');
+    if (!mascotaId) {
+      console.error('ID de mascota no encontrado en localstorage');
+      return;
+    }
+
+    this.diagnosticoService.enviarDiagnostico(this.answers, mascotaId)
+      .subscribe({
+        next: (res: any) => {
+          this.mensajeService.setMensajes([
+            { text: this.answers.join('\n'), isBot: false },
+            { text: res.respuesta, isBot: true }
+          ]);
+          this.router.navigate(['/chatbot']);
+        },
+        error: (err) => {
+          console.error('Error al enviar diagnostico:', err);
+        }
+      });
   }
 }

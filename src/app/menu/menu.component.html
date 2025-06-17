@@ -36,13 +36,15 @@
 
       <section aria-label="Historial de diagnósticos">
         <h2>Historial</h2>
-        <ul>
-          <li *ngFor="let item of historialDiagnosticos">
-            <button class="historial-item" (click)="verDetalle(item)">
-              {{ item.mascota }} - {{ item.fecha | date: 'mediumDate' }}
-            </button>
-          </li>
-        </ul>
+        <div *ngFor="let card of historial" class="card">
+          <img [src]="card.imagen || 'default.jpg'"  alt="Mascota" class="imagen-mascota">
+          <div class="info">
+            <h4>{{ card.nombre_mascota }}</h4>
+            <p>{{ card.fecha | date:'short' }}</p>
+            <button (click)="verChat(card.id)"></button>
+            <button (click)="eliminar(card.id)"></button>
+          </div>
+        </div>
       </section>
     </nav>
 

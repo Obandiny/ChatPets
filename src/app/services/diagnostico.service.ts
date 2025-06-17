@@ -34,4 +34,8 @@ export class DiagnosticoService {
   elimiarHistorial(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/historial/${id}`);
   }
+
+  getDiagnosticoById(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/historial/${id}`);
+  }
 }
