@@ -4,9 +4,9 @@ from Models.mascota import Mascota
 from database import db
 from utils import token_required
 
-historial_bp = Blueprint('/historial', __name__)
+historial_bp = Blueprint('historial', __name__)
 
-@historial_bp.route('/historial', methods=['GET'])
+@historial_bp.route('/', methods=['GET'])
 @token_required
 def obtener_historial(usuario_actual):
     historiales = (
@@ -28,7 +28,7 @@ def obtener_historial(usuario_actual):
     
     return jsonify(data), 200    
 
-@historial_bp.route('/historial/<int:id>', methods=['DELETE'])
+@historial_bp.route('/<int:id>', methods=['DELETE'])
 @token_required
 def eliminar_historial(usuario_actual, id):
     historial = HistorialDiagnostico.query.filter_by(id=id, usuario_id=usuario_actual).first()
@@ -41,12 +41,12 @@ def eliminar_historial(usuario_actual, id):
     
     return jsonify({"mensaje": "Historial eliminado"}), 200
 
-@historial_bp.route('/historial/<int:id>', methods=['GET'])
+@historial_bp.route('/<int:id>', methods=['GET'])
 @token_required
 def obtener_diagnostico_por_id(usuario_actual, id):
     historial = (
         HistorialDiagnostico.query
-        .filter_by(id=id, usuario_actual=usuario_actual.id)
+        .filter_by(id=id, usuario_id=usuario_actual.id)
         .first()
     )
     

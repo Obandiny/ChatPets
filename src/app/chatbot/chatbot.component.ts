@@ -10,6 +10,7 @@ import { MatDividerModule } from '@angular/material/divider';
 import { MatIconModule } from '@angular/material/icon'
 import { MensajeService } from '../services/mensaje.service';
 import { DiagnosticoService } from '../services/diagnostico.service';
+import { LoggerService } from '../services/logger.service';
 
 @Component({
   selector: 'app-chatbot',
@@ -37,21 +38,28 @@ export class ChatbotComponent {
   constructor(
     public chatbotService: ChatbotService,
     private mensajeServie: MensajeService,
-    private diagnosticoService: DiagnosticoService
+    private diagnosticoService: DiagnosticoService,
+    private logger: LoggerService
   ) { }
 
   ngOnInit(): void {
     const id = localStorage.getItem('diagnostico_id');
     this.messages = this.mensajeServie.getMensajes();
 
+    this.logger.debug('Mensajes iniciales:', this.messages);
+
     if (id) {
+      this.logger.info('Consultando diagnostico con ID:', id);
       this.diagnosticoService.getDiagnosticoById(+id).subscribe(data => {
+        this.logger.success('Diagnostico recuperado:', data);
         this.messages = [
           { text: `🐾 Mascota: ${data.nombre_mascota}`, isBot: true },
           { text: `🦠 Enfermedad: ${data.enfermedad}`, isBot: true },
           { text: `💊 Recomendación: ${data.recomendacion}`, isBot: true }
         ];
-      }); 
+      }, error => {
+        this.logger.error('Error al recuperar diagnostico por ID', error);
+      });   
     }
   }
   
@@ -67,6 +75,7 @@ export class ChatbotComponent {
     const mensajeUsuario = this.userInput.trim();
     // Agregar el mensaje del usuario
     this.messages.push({ text: mensajeUsuario, isBot: false });
+    this.logger.debug('Mensaje enviado por usuario', mensajeUsuario);
     this.userInput = '';
     this.isBotTyping = true;
 

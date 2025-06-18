@@ -323,6 +323,14 @@ section h2 {
   transform: scale(1.2);
 }
 
+.disabled-link {
+  pointer-events: none;
+  color: grey;
+  opacity: 0.6;
+  cursor: not-allowed;
+  text-decoration: none;
+}
+
 /* RESPONSIVO */
 @media (max-width: 768px) {
   .header {

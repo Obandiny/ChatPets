@@ -37,6 +37,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   isMenuOpen = true;
   submenuAbierto: boolean = false;
   rol: string | null = null;
+  mascotaRegistrada: boolean = false;
 
   historial: any[] = [];
 
@@ -87,6 +88,8 @@ export class MenuComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId)) {
       this.startCarousel();
     }
+
+    this.verificarMascotaRegistrada();
   }
 
   ngOnDestroy(): void {
@@ -153,5 +156,10 @@ export class MenuComponent implements OnInit, OnDestroy {
     this.carouselInterval = setInterval(() => {
       this.nextTip();
     }, 5000);
+  }
+
+  verificarMascotaRegistrada() {
+    const mascota = localStorage.getItem('mascota');
+    this.mascotaRegistrada = !mascota;
   }
 }

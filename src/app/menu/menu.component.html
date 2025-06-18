@@ -27,7 +27,13 @@
         
         <div *ngIf="submenuAbierto" class="submenu">
           <a [routerLink]="['/registrar-mascota']">Registrar mascota</a>
-          <a [routerLink]="['/diagnostico/mascota-perro']">Perros</a>
+          <a 
+            [routerLink]="['/diagnostico/mascota-perro']"
+            [class.disabled-link]="!mascotaRegistrada"
+            [attr.aria-disabled]="!mascotaRegistrada"
+            (click)="!mascotaRegistrada ? $event.preventDefault() : null"
+            >Ingresar Diagnostico
+          </a>
         </div>
 
         <a routerLink="/perfil" routerLinkActive="active">Perfil</a>
@@ -74,7 +80,7 @@
           <p><strong>Horarios de atención:</strong> Lunes a Viernes, 8:00 a.m. - 5:00 p.m.</p>
           <p>© 2025 MASCOTAPP. Todos los derechos reservados.</p>
         </div>
-        <div class="footer-social">
+        <!-- <div class="footer-social">
           <a href="https://facebook.com" target="_blank" aria-label="Facebook">
             <img src="assets/facebook-icon.svg" alt="Facebook" />
           </a>
@@ -84,7 +90,7 @@
           <a href="https://twitter.com" target="_blank" aria-label="Twitter">
             <img src="assets/twitter-icon.svg" alt="Twitter" />
           </a>
-        </div>
+        </div> -->
       </div>
     </footer>
 

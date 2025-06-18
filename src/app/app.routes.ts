@@ -9,7 +9,7 @@ import { RegistarMascotaComponent } from './registar-mascota/registar-mascota.co
 
 
 export const routes: Routes = [
-    { path: '', redirectTo: 'auth/login', pathMatch: 'full' },
+    { path: 'login', redirectTo: 'auth/login', pathMatch: 'full' },
     { path: 'chatbot', component: ChatbotComponent },
     { path: 'diagnostico/mascota-perro', component: MascotaPerroComponent },
     { 
