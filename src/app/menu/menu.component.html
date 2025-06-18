@@ -37,7 +37,18 @@
         </div>
 
         <a routerLink="/perfil" routerLinkActive="active">Perfil</a>
-        <a [routerLink]="['/admin-panel']" routerLinkActive="active" *ngIf="rol === 'admin'">Administrar</a>
+        <button class="submenu-toggle" (click)="toggleSubmenuAdmin()">
+          Administrar
+          <mat-icon>{{ submenuAbiertoAdmin ? 'expand_less' : 'expand_more' }}</mat-icon>
+        </button>
+
+        <div *ngIf="submenuAbiertoAdmin" class="submenu">
+          <!-- *ngIf="rol === 'admin'" -->
+          <a [routerLink]="['/admin/table-usuarios']" routerLinkActive="active" >Usuarios</a>
+          <a [routerLink]="['/admin/table-sintomas']" routerLinkActive="active">Relaciones</a>
+          <a [routerLink]="['/admin/table-mascotas']" routerLinkActive="active">Mascotas</a>
+        </div>
+
       </div>
 
       <section aria-label="Historial de diagnósticos">

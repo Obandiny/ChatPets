@@ -36,6 +36,7 @@ export class MenuComponent implements OnInit, OnDestroy {
   mensajeBienvenida: string = '';
   isMenuOpen = true;
   submenuAbierto: boolean = false;
+  submenuAbiertoAdmin: boolean = false;
   rol: string | null = null;
   mascotaRegistrada: boolean = false;
 
@@ -115,6 +116,10 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   toggleSubmenu() {
     this.submenuAbierto = !this.submenuAbierto;
+  }
+
+  toggleSubmenuAdmin() {
+    this.submenuAbiertoAdmin = !this.submenuAbiertoAdmin;
   }
 
   logout(): void {
