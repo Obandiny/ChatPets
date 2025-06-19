@@ -5,6 +5,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { AuthService } from '../services/auth.service';
 import { DiagnosticoService } from '../services/diagnostico.service';
+import { MascotaService } from '../services/mascota.service';
+import { LoggerService } from '../services/logger.service';
 
 interface Diagnostico {
   id: number;
@@ -37,8 +39,10 @@ export class MenuComponent implements OnInit, OnDestroy {
   isMenuOpen = true;
   submenuAbierto: boolean = false;
   submenuAbiertoAdmin: boolean = false;
+  submenuMascotasAbierto: boolean = false;
   rol: string | null = null;
   mascotaRegistrada: boolean = false;
+  mascotas: any[] = [];
 
   historial: any[] = [];
 
@@ -63,6 +67,8 @@ export class MenuComponent implements OnInit, OnDestroy {
     private authService: AuthService,
     private router: Router,
     private diagnosticoService: DiagnosticoService,
+    private mascotaService: MascotaService,
+    private logger: LoggerService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     const info = this.authService.getUserInfo();
@@ -102,6 +108,22 @@ export class MenuComponent implements OnInit, OnDestroy {
   verChat(id: number): void {
     localStorage.setItem('diagnostico_id', id.toString());
     this.router.navigate(['/chatbot']);
+  }
+
+  cargarMascotas() {
+    this.mascotaService.getMisMascotas().subscribe({
+      next: (data) => this.mascotas = data,
+      error: (err) => this.logger.error('Error cargando mascotas:', err)
+    });
+  }
+
+  toggleSubmenuMascotas() {
+    this.submenuMascotasAbierto = !this.submenuMascotasAbierto;
+    if (this.submenuMascotasAbierto) this.cargarMascotas();
+  }
+
+  irADiagnostico(mascotaId: number) {
+    this.router.navigate(['/diagnostico/mascota-perro'], { queryParams: { id: mascotaId } });
   }
 
   eliminar(id: number): void {

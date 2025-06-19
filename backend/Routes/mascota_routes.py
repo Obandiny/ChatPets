@@ -38,3 +38,36 @@ def registrar_mascota(current_user):
     db.session.commit()
 
     return jsonify({'message': 'Mascota registrado con exito.'})
+
+@mascota_bp.route('/mis-mascotas', methods=['GET'])
+@token_required
+def obtener_mis_mascotas(current_user):
+    mascotas = Mascota.query.filter_by(usuario_id=current_user.id).all()
+    resultado = [{
+        'id': m.id,
+        'nombre': m.nombre,
+        'raza': m.raza,
+        'edad': m.edad,
+        'tamano': m.tamano,
+        'peso': m.peso,
+        'imagen_url': m.imagen_url
+    } for m in mascotas]
+    return jsonify(resultado), 200
+
+@mascota_bp.route('/<int:id>', methods=['GET'])
+@token_required
+def obtener_mascota_por_id(current_user, id):
+    mascota = Mascota.query.filter_by(id=id, usuario_id=current_user.id).first()
+    
+    if not mascota:
+        return jsonify({"mensaje": "Mascota no encontrada"}), 404
+
+    return jsonify({
+        "id": mascota.id,
+        "nombre": mascota.nombre,
+        "raza": mascota.raza,
+        "edad": mascota.edad,
+        "tamano": mascota.tamano,
+        "peso": mascota.peso,
+        "imagen_url": mascota.imagen_url  # si tienes este campo
+    }), 200

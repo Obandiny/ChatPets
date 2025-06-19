@@ -11,6 +11,7 @@ import { MatCardModule } from '@angular/material/card'
 import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MensajeService } from '../../services/mensaje.service';
+import { MascotaService } from '../../services/mascota.service';
  
 @Component({
   selector: 'app-mascota-perro',
@@ -30,6 +31,7 @@ import { MensajeService } from '../../services/mensaje.service';
 })
 export class MascotaPerroComponent {
   isMenuOpen = false;
+  mascotaSeleccionada: any;
 
   questions = [
     '¿Cuál es el síntoma principal que presenta tu mascota?',
@@ -46,8 +48,26 @@ export class MascotaPerroComponent {
   constructor(
     private diagnosticoService: DiagnosticoService,
     private mensajeService: MensajeService,
-    private router: Router
+    private router: Router,
+    private routerActivate: ActivatedRoute,
+    private mascotaService: MascotaService
   ) {}
+
+  ngOnInit() {
+    this.routerActivate.queryParams.subscribe(param => {
+      const mascotaId = param['id'];
+      if (mascotaId) {
+        this.mascotaService.getMascotaById(mascotaId).subscribe(
+            data => {
+            this.mascotaSeleccionada = data;
+          },
+          error => {
+            console.error('Error', error);
+          }
+        );
+      }
+    });
+  }
 
   get currentAnswer(): string {
     return this.answers[this.currentQuestionIndex];
@@ -114,4 +134,6 @@ export class MascotaPerroComponent {
         }
       });
   }
+
+
 }

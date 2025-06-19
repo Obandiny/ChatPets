@@ -23,6 +23,16 @@
   </nav>
 
   <div class="page-wrapper">
+
+    <div *ngIf="mascotaSeleccionada" class="info-mascota-card">
+      <h3 class="nombre">Diagnostico para {{ mascotaSeleccionada.nombre }}</h3>
+      <div class="detalle">
+        <p>Raza: {{ mascotaSeleccionada.raza }}</p>
+        <p>Edad: {{ mascotaSeleccionada.edad }} años</p>
+        <p>Peso: {{ mascotaSeleccionada.peso }} kg</p>
+      </div>
+    </div>
+
     <div class="header mat-elevation-z2">
       <div class="titulo-p">
         <h1>Diagnóstico de Mascota</h1>
@@ -69,6 +79,7 @@
             color="warn"
             *ngIf="currentQuestionIndex === questions.length - 1 && !isAnswerEmpty()"
             [routerLink]="['/chatbot']"
+            (click)="finishDiagnosis()"
           >
             Chat
           </button>

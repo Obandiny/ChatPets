@@ -24,4 +24,22 @@ export class MascotaService {
       }
     });
   }
+
+  getMisMascotas(): Observable<any[]> {
+    const token = localStorage.getItem('token');
+    return this.http.get<any[]>(`${this.API_URL}/mis-mascotas`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  }
+
+  getMascotaById(id: number): Observable<any> {
+    const token = localStorage.getItem('token');
+    return this.http.get(`${this.API_URL}/${id}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  }
 }

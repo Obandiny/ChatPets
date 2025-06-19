@@ -28,12 +28,20 @@
         <div *ngIf="submenuAbierto" class="submenu">
           <a [routerLink]="['/registrar-mascota']">Registrar mascota</a>
           <a 
-            [routerLink]="['/diagnostico/mascota-perro']"
             [class.disabled-link]="!mascotaRegistrada"
             [attr.aria-disabled]="!mascotaRegistrada"
             (click)="!mascotaRegistrada ? $event.preventDefault() : null"
+            class="boton-principal"
+            (click)="toggleSubmenuMascotas()"
             >Ingresar Diagnostico
+             <mat-icon>{{ submenuMascotasAbierto ? 'expand_less' : 'expand_more' }}</mat-icon> 
           </a>
+        </div>
+
+        <div *ngIf="submenuMascotasAbierto" class="mascotas-grid">
+          <button class="card-mascota" *ngFor="let mascota of mascotas" (click)="irADiagnostico(mascota.id)"> 
+            {{ mascota.nombre }}
+          </button>
         </div>
 
         <a routerLink="/perfil" routerLinkActive="active">Perfil</a>

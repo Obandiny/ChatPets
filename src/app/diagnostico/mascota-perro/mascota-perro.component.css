@@ -150,3 +150,23 @@ header.header {
   color: white;
   margin: 0;
 }
+
+.info-mascota-card {
+  background-color: white;
+  padding: 20px;
+  margin: 0 auto 30px auto;
+  border-radius: 12px;
+  max-width: 600px;
+  text-align: center;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+.info-mascota-card .nombre {
+  font-size: 24px;
+  margin-bottom: 10px;
+}
+
+.info-mascota-card .detalles p {
+  margin: 4px 0;
+  font-size: 16px;
+}

@@ -11,6 +11,7 @@ class Mascota(db.Model):
     peso = db.Column(db.Float)
     tamano = db.Column(db.String(50))
 
+    imagen_url = db.Column(db.String(255))
+
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
-    
     historiales = db.relationship("HistorialDiagnostico", back_populates="mascota")

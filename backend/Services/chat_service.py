@@ -5,6 +5,10 @@ from Models.relaciones import RelacionTablas
 from Models.relaciones import Sintoma
 from Models.mascota import Mascota
 from database import db
+import logging
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 def configurar_gemini():
     genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
@@ -57,16 +61,23 @@ def consultar_database(respuestas):
 
 def procesar_diagnostico(usuario_actual, respuestas, mascota_id):
     try:
+        logger.info("Iniciando diagnostico para Mascota no encontrada o no pertenece al usuario_id=%s, mascota_id=%s", usuario_actual.id, mascota_id)
+
         # Validar existencia y pertenencia de la mascota
         mascota = Mascota.query.filter_by(id=mascota_id, usuario_id=usuario_actual.id).first()
         if not mascota:
+            logger.error("Mascota no encontrada o no pertence al usuario.")
             raise ValueError("Mascota no encontrada o no pertenece al usuario")
 
         prompt = construir_prompt(respuestas)
+        logger.debug("Prompt generado: %s", prompt)
+
         model = configurar_gemini()
         chat = model.start_chat(history=[])
         response = chat.send_message(prompt)
         texto_respuesta = response.text
+        logger.info("Respuesta de Gemini recibida.")
+
         
         # Guardar historial
         historial = HistorialDiagnostico(
@@ -78,21 +89,27 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id):
         )
         db.session.add(historial)
         db.session.commit()
+        logger.info("Historial guardado exitosamente: id=%s", historial.id)
         
         return texto_respuesta
+    
     except Exception as e:
-        print(f"Error al procesar diagnostico: {e}")
+        logger.exception("Error al procesar diagnostico con Gemini: %s", e)
         
         texto_fallback = consultar_database(respuestas)
         
-        historial = HistorialDiagnostico(
-            usuario_id=usuario_actual.id,
-            mascota_id=mascota_id,
-            sintomas=", ".join(respuestas),
-            recomendacion=texto_fallback,
-            contexto_anterior="Fallo Gemini. Respuesta generada desde base de datos."
-        )
-        db.session.add(historial)
-        db.session.commit()
+        try:
+            historial = HistorialDiagnostico(
+                usuario_id=usuario_actual.id,
+                mascota_id=mascota_id,
+                sintomas=", ".join(respuestas),
+                recomendacion=texto_fallback,
+                contexto_anterior="Fallo Gemini. Respuesta generada desde base de datos."
+            )
+            db.session.add(historial)
+            db.session.commit()
+            logger.warning("Respuesta alternativa guardada en historial.")
+        except Exception as db_error:
+            logger.exception("Error al guardar historial en modo fallback: %s", db_error)
         
         return texto_fallback
