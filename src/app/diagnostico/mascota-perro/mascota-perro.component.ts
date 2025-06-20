@@ -29,7 +29,7 @@ import { MatDividerModule } from '@angular/material/divider';
     MatInputModule,
     MatButtonModule,
     MatCardModule,
-    MatDividerModule,
+    MatDividerModule
   ],
   templateUrl: './mascota-perro.component.html',
   styleUrls: ['./mascota-perro.component.css']
