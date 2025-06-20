@@ -59,8 +59,8 @@ def obtener_diagnostico_por_id(usuario_actual, id):
         "nombre_mascota": historial.mascota.nombre,
         "imagen": historial.mascota.imagen_url,
         "fecha": historial.fecha.isoformat(),
-        "enfermedad": historial.enfermedad,
+        # "enfermedad": historial.enfermedad,
         "recomendacion": historial.recomendacion,
-        "respuestas": historial.respuestas
+        # "respuestas": historial.respuestas
     }), 200
     

@@ -34,7 +34,7 @@ def create_app():
     app.register_blueprint(auth_bp, url_prefix="/api/auth")
     app.register_blueprint(chat_bp, url_prefix="/api/chat")
     app.register_blueprint(mascota_bp, url_prefix='/api/mascota')
-    app.register_blueprint(diagnostico_bp, url_prefix='/api/dignostico')
+    app.register_blueprint(diagnostico_bp, url_prefix='/api/diagnostico')
     app.register_blueprint(historial_bp, url_prefix='/api/historial')
 
     return app

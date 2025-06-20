@@ -27,9 +27,9 @@
     <div *ngIf="mascotaSeleccionada" class="info-mascota-card">
       <h3 class="nombre">Diagnostico para {{ mascotaSeleccionada.nombre }}</h3>
       <div class="detalle">
-        <p>Raza: {{ mascotaSeleccionada.raza }}</p>
-        <p>Edad: {{ mascotaSeleccionada.edad }} años</p>
-        <p>Peso: {{ mascotaSeleccionada.peso }} kg</p>
+        <p><strong>Edad:</strong> {{ mascotaSeleccionada.edad }} años</p>
+        <p><strong>Raza:</strong> {{ mascotaSeleccionada.raza }}</p>
+        <p><strong>Peso:</strong> {{ mascotaSeleccionada.peso }} kg</p>
       </div>
     </div>
 
@@ -42,9 +42,9 @@
       </div>
     </div>
     <div class="diagnostico-container">
-      <mat-card class="question-card animate-slide">
+      <mat-card class="question-card animate-slide" *ngIf="!mostrarResumen">
         <mat-card-title>{{ questions[currentQuestionIndex] }}</mat-card-title>
-  
+
         <mat-form-field appearance="outline" class="full-width">
           <mat-label>Respuesta</mat-label>
           <input
@@ -54,35 +54,28 @@
             [type]="getInputType(currentQuestionIndex)"
           />
         </mat-form-field>
-  
+
         <div class="button-group">
-          <button
-            mat-raised-button
-            color="primary"
-            (click)="before()"
-            [disabled]="isFirstQuestion()"
-          >
-            Anterior
-          </button>
-  
-          <button
-            mat-raised-button
-            color="accent"
-            (click)="next()"
-            [disabled]="isAnswerEmpty()"
-          >
-            Siguiente
-          </button>
-  
-          <button
-            mat-raised-button
-            color="warn"
-            *ngIf="currentQuestionIndex === questions.length - 1 && !isAnswerEmpty()"
-            [routerLink]="['/chatbot']"
-            (click)="finishDiagnosis()"
-          >
-            Chat
-          </button>
+          <button mat-raised-button color="primary" (click)="before()" [disabled]="isFirstQuestion()">Anterior</button>
+          <button mat-raised-button color="accent" (click)="next()" [disabled]="isAnswerEmpty()" *ngIf="currentQuestionIndex < questions.length - 1">Siguiente</button>
+          <button mat-raised-button color="warn" *ngIf="currentQuestionIndex === questions.length - 1 && !isAnswerEmpty()" (click)="mostrarResumenFinal()">Finalizar</button>
+        </div>
+      </mat-card>
+
+      <!-- Resumen de respuestas -->
+      <mat-card class="question-card animate-slide" *ngIf="mostrarResumen">
+        <mat-card-title>📋 Revisión de tus respuestas</mat-card-title>
+        <mat-card-content>
+          <div *ngFor="let pregunta of questions; let i = index" class="resumen-item">
+              <p><strong>{{ pregunta }}</strong></p>
+              <p class="respuesta">👉 {{ answers[i] || 'Sin respuesta' }}</p>
+            <mat-divider></mat-divider>
+          </div>
+        </mat-card-content>
+
+        <div class="button-group mt-2">
+          <button mat-stroked-button color="primary" (click)="editarRespuestas()">Editar respuestas</button>
+          <button mat-raised-button color="accent" (click)="finishDiagnosis()">Confirmar y enviar</button>
         </div>
       </mat-card>
     </div>

@@ -5,7 +5,7 @@ from utils import token_required  # o el archivo donde está tu decorador
 
 diagnostico_bp = Blueprint('diagnostico', __name__)
 
-@diagnostico_bp.route('/diagnostico', methods=['POST'])
+@diagnostico_bp.route('', methods=['POST'])
 @token_required
 def realizar_diagnostico(current_user):
     try:

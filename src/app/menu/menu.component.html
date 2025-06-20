@@ -66,8 +66,8 @@
           <div class="info">
             <h4>{{ card.nombre_mascota }}</h4>
             <p>{{ card.fecha | date:'short' }}</p>
-            <button (click)="verChat(card.id)"></button>
-            <button (click)="eliminar(card.id)"></button>
+            <button (click)="verChat(card.id)">Abrir</button>
+            <button (click)="eliminar(card.id)">Eliminar</button>
           </div>
         </div>
       </section>

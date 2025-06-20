@@ -12,6 +12,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MensajeService } from '../../services/mensaje.service';
 import { MascotaService } from '../../services/mascota.service';
+import { isPlatformBrowser } from '@angular/common';
+import { Inject, PLATFORM_ID } from '@angular/core';
+import { LoggerService } from '../../services/logger.service';
+import { MatDividerModule } from '@angular/material/divider';
  
 @Component({
   selector: 'app-mascota-perro',
@@ -25,20 +29,30 @@ import { MascotaService } from '../../services/mascota.service';
     MatInputModule,
     MatButtonModule,
     MatCardModule,
+    MatDividerModule,
   ],
   templateUrl: './mascota-perro.component.html',
   styleUrls: ['./mascota-perro.component.css']
 })
 export class MascotaPerroComponent {
   isMenuOpen = false;
+  mostrarResumen = false;
   mascotaSeleccionada: any;
 
   questions = [
-    '¿Cuál es el síntoma principal que presenta tu mascota?',
-    '¿Desde hace cuánto presenta ese síntoma?',
-    '¿Ha tenido cambios en el apetito o comportamiento?',
-    '¿Tu mascota ha tenido fiebre o vómitos recientemente?',
-    '¿Ha estado en contacto con otros animales últimamente?'
+    '¿Qué síntomas ha presentado tu mascota y desde cuándo los notaste?',
+    '¿La condición de tu mascota ha empeorado, mejorado o se ha mantenido igual?',
+    '¿Cómo ha sido el apetito y el consumo de agua de tu mascota en los últimos días?',
+    '¿Tu mascota ha tenido cambios en el comportamiento?',
+    '¿Has notado secreciones o cambios en su pelaje o piel?',
+    '¿Cómo han sido sus heces y orina recientemente?',
+    '¿Ha vomitado? ¿Con qué frecuencia y qué tipo de contenido?',
+    '¿Tu mascota tiene antecedentes médicos importantes o enfermedades crónicas?',
+    '¿Está al día con sus vacunas y desparasitaciones?',
+    '¿Está tomando actualmente algún medicamento o suplemento?',
+    '¿Ha estado en contacto con otros animales recientemente?',
+    '¿Ha salido de viaje o ha estado en un lugar diferente al habitual?',
+    '¿Ha mostrado dificultades para moverse o signos de dolor físico?'
   ];
 
   answers: string[] = Array(this.questions.length).fill('');
@@ -50,7 +64,9 @@ export class MascotaPerroComponent {
     private mensajeService: MensajeService,
     private router: Router,
     private routerActivate: ActivatedRoute,
-    private mascotaService: MascotaService
+    private mascotaService: MascotaService,
+    private logger: LoggerService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   ngOnInit() {
@@ -60,6 +76,10 @@ export class MascotaPerroComponent {
         this.mascotaService.getMascotaById(mascotaId).subscribe(
             data => {
             this.mascotaSeleccionada = data;
+
+            if (isPlatformBrowser(this.platformId)) {
+              localStorage.setItem('mascota_id', mascotaId);
+            }
           },
           error => {
             console.error('Error', error);
@@ -114,18 +134,22 @@ export class MascotaPerroComponent {
   }
 
   finishDiagnosis(): void {
+    if (!isPlatformBrowser(this.platformId)) return;
+
     const mascotaId = parseInt(localStorage.getItem('mascota_id') || '0');
     if (!mascotaId) {
-      console.error('ID de mascota no encontrado en localstorage');
+      this.logger.error('ID de mascota no encontrado en localstorage');
       return;
     }
+
+    this.logger.info('Enviando respuestas:', this.answers);
 
     this.diagnosticoService.enviarDiagnostico(this.answers, mascotaId)
       .subscribe({
         next: (res: any) => {
           this.mensajeService.setMensajes([
-            { text: this.answers.join('\n'), isBot: false },
-            { text: res.respuesta, isBot: true }
+            { text: this.answers.map((q, i) => `Q${i + 1}: ${this.questions[i]}\nA: ${q}`).join('\n\n'), isBot: false },
+            { text: res.resultado?.respuesta || 'Diagnóstico generado', isBot: true }
           ]);
           this.router.navigate(['/chatbot']);
         },
@@ -135,5 +159,12 @@ export class MascotaPerroComponent {
       });
   }
 
+  mostrarResumenFinal(): void {
+    this.mostrarResumen = true;
+  }
 
+  editarRespuestas(): void {
+    this.mostrarResumen = false;
+    this.currentQuestionIndex = 0;
+  }
 }

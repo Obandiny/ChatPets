@@ -83,14 +83,19 @@ export class MenuComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.rol = this.authService.getRole();
 
-    this.diagnosticoService.getHistorial().subscribe(data => {
-      this.historial = data
-        .map((item: any) => ({
-          ...item,
-          fecha: new Date(item.fecha)
-        }))
-        .slice(0, 5);
-    });
+    if (isPlatformBrowser(this.platformId)) {
+      const token = localStorage.getItem('token');
+      if (token) {
+        this.diagnosticoService.getHistorial().subscribe(data => {
+          this.historial = data
+            .map((item: any) => ({
+              ...item,
+              fecha: new Date(item.fecha)
+            }))
+            .slice(0, 5);
+        });
+      }
+    }
 
     if (isPlatformBrowser(this.platformId)) {
       this.startCarousel();
@@ -186,7 +191,9 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   verificarMascotaRegistrada() {
-    const mascota = localStorage.getItem('mascota');
-    this.mascotaRegistrada = !mascota;
+    if (isPlatformBrowser(this.platformId)) {
+      const mascota = localStorage.getItem('mascota');
+      this.mascotaRegistrada = !mascota;
+    }
   }
 }
