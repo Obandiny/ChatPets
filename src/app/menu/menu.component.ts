@@ -146,9 +146,20 @@ export class MenuComponent implements OnInit, OnDestroy {
         });
       },
       error: (err) => {
+
+        let mensaje = 'Ocurrio un error al eliminar.';
+        if (err.status === 401) {
+          mensaje = 'No autorizado. Vuelve a iniciar sesion.';
+        } else if (err.status === 404) {
+          mensaje = 'Diagnostico no encontrado.';
+        } else if (err.status === 0) {
+          mensaje = 'No se puede conectar al servidor. Verifica tu red.';
+        }
+
+
         this.logger.error('Error al elimiar el historial:', err);
-        this.snackBar.open('Error al eliminar el historial.', 'Cerrar', {
-          duration: 3000,
+        this.snackBar.open(`⚠️ ${mensaje}`, 'Cerrar', {
+          duration: 4000,
           verticalPosition: 'bottom',
           horizontalPosition: 'center'
         });
