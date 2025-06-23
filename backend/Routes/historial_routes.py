@@ -30,8 +30,8 @@ def obtener_historial(usuario_actual):
 
 @historial_bp.route('/<int:id>', methods=['DELETE'])
 @token_required
-def eliminar_historial(usuario_actual, id):
-    historial = HistorialDiagnostico.query.filter_by(id=id, usuario_id=usuario_actual).first()
+def eliminar_historial(current_user, id):
+    historial = HistorialDiagnostico.query.filter_by(id=id, usuario_id=current_user.id).first()
     
     if not historial:
         return jsonify({"mensaje": "Historial no encontrado"}), 404

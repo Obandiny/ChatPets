@@ -8,14 +8,14 @@
       </div>
   
       <div class="logo">
-          <p>ChatPET</p>   
+          <p>MASCOTAPP</p>   
       </div>
 
-       <div class="nuevo">
-      <button mat-icon-button matTooltip="Nuevo chat" (click)="nuevoChat()" class="icon-button blue-icon">
+      <!-- <div class="nuevo">
+        <button mat-icon-button matTooltip="Nuevo chat" (click)="nuevoChat()" class="icon-button blue-icon">
         <mat-icon>chat</mat-icon>
-      </button>
-    </div>
+        </button>
+      </div> -->
   </div>
 </header>
 
@@ -23,21 +23,26 @@
     <div class="chat-box">
       <div class="chat-messages" #scrollContainer>
         <div *ngFor="let message of messages" [ngClass]="{ 'user-message': !message.isBot, 'bot-message': message.isBot }">
-          {{ message.text }}
+          <ng-container *ngIf="message.isBot; else userMsg">
+            <div class="bot-response" [innerHTML]="formatBotMessage(message.text)"></div>
+          </ng-container>
+          <ng-template #userMsg>
+            <div class="user-response">{{ message.text }}</div>
+          </ng-template>
         </div>
 
         <div class="saludo" *ngIf="messages.length === 0">
-          <span>¿En que te puedo ayudar?</span>
+          <span>¿En qué te puedo ayudar?</span>
         </div>
-        
-        <!-- Animcion de carga -->
+
+        <!-- Animación de carga -->
         <div *ngIf="isBotTyping" class="typing-indicator">
           <span>.</span><span>.</span><span>.</span><span>.</span>
         </div>
 
       </div>
       <div class="chat-input">
-        <textarea [(ngModel)]="userInput" placeholder="Escribe el sintoma"></textarea>
+        <textarea [(ngModel)]="userInput" placeholder="Escribe el síntoma"></textarea>
         <button (click)="sendMessage()">➤</button>
       </div>
     </div>

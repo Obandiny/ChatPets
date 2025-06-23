@@ -4,6 +4,7 @@ from .app_usuarios import *
 from .mascota import *
 from .historial import *
 from .relaciones import *
+from .seguimientoMascota import *
 
 __all__ = [
     "User",
@@ -12,5 +13,6 @@ __all__ = [
     "Enfermedad",
     "Recomendacion",
     "RelacionTablas",
-    "Mascota"
+    "Mascota",
+    "SeguimientoMascota"
 ]

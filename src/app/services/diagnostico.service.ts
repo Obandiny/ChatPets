@@ -64,8 +64,16 @@ export class DiagnosticoService {
   }
 
   elimiarHistorial(id: number): Observable<any> {
+    let headers = {};
+    if (isPlatformBrowser(this.platformId)) {
+      const token = localStorage.getItem('token');
+      headers = {
+        Authorization: `Bearer ${token}`
+      };
+    }
+
     this.logger.warn('Eliminando historial con ID:', id);
-    return this.http.delete(`${this.apiUrl}/historial/${id}`);
+    return this.http.delete(`${this.apiUrl}/historial/${id}`, { headers });
   }
 
   getDiagnosticoById(id: number): Observable<any> {

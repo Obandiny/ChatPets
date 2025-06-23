@@ -15,3 +15,4 @@ class Mascota(db.Model):
 
     usuario_id = db.Column(db.Integer, db.ForeignKey('usuarios.id'), nullable=False)
     historiales = db.relationship("HistorialDiagnostico", back_populates="mascota")
+    seguimientos = db.relationship('SeguimientoMascota', back_populates='mascota', cascade='all, delete-orphan')

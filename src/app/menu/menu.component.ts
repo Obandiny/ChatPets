@@ -7,6 +7,8 @@ import { AuthService } from '../services/auth.service';
 import { DiagnosticoService } from '../services/diagnostico.service';
 import { MascotaService } from '../services/mascota.service';
 import { LoggerService } from '../services/logger.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 interface Diagnostico {
   id: number;
@@ -29,7 +31,8 @@ interface Tip {
     MatIconModule,
     MatTooltipModule,
     RouterLink,
-    RouterLinkActive
+    RouterLinkActive,
+    MatSnackBarModule
   ],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css']
@@ -69,6 +72,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     private diagnosticoService: DiagnosticoService,
     private mascotaService: MascotaService,
     private logger: LoggerService,
+    private snackBar: MatSnackBar,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     const info = this.authService.getUserInfo();
@@ -132,8 +136,23 @@ export class MenuComponent implements OnInit, OnDestroy {
   }
 
   eliminar(id: number): void {
-    this.diagnosticoService.elimiarHistorial(id).subscribe(() => {
-      this.historial = this.historial.filter(h => h.id !== id);
+    this.diagnosticoService.elimiarHistorial(id).subscribe({
+      next: () => {
+        this.historial = this.historial.filter(h => h.id !== id);
+        this.snackBar.open('Historial eliminado correctamente.', 'Cerrar', {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center'
+        });
+      },
+      error: (err) => {
+        this.logger.error('Error al elimiar el historial:', err);
+        this.snackBar.open('Error al eliminar el historial.', 'Cerrar', {
+          duration: 3000,
+          verticalPosition: 'bottom',
+          horizontalPosition: 'center'
+        });
+      }
     });
   }
 

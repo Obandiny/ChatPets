@@ -27,19 +27,18 @@
         
         <div *ngIf="submenuAbierto" class="submenu">
           <a [routerLink]="['/registrar-mascota']">Registrar mascota</a>
-          <a 
-            [class.disabled-link]="!mascotaRegistrada"
-            [attr.aria-disabled]="!mascotaRegistrada"
-            (click)="!mascotaRegistrada ? $event.preventDefault() : null"
-            class="boton-principal"
+          <button 
+            class="submenu-toggle" 
+            [disabled]="!mascotaRegistrada"
             (click)="toggleSubmenuMascotas()"
-            >Ingresar Diagnostico
-             <mat-icon>{{ submenuMascotasAbierto ? 'expand_less' : 'expand_more' }}</mat-icon> 
-          </a>
+            >
+            Ingresar Diagnóstico
+            <mat-icon>{{ submenuMascotasAbierto ? 'expand_less' : 'expand_more' }}</mat-icon>
+          </button>
         </div>
 
-        <div *ngIf="submenuMascotasAbierto" class="mascotas-grid">
-          <button class="card-mascota" *ngFor="let mascota of mascotas" (click)="irADiagnostico(mascota.id)"> 
+        <div *ngIf="submenuMascotasAbierto" class="mascotas-columna">
+          <button class="mascota-btn" *ngFor="let mascota of mascotas" (click)="irADiagnostico(mascota.id)">
             {{ mascota.nombre }}
           </button>
         </div>
@@ -61,13 +60,17 @@
 
       <section aria-label="Historial de diagnósticos">
         <h2>Historial</h2>
-        <div *ngFor="let card of historial" class="card">
-          <img [src]="card.imagen || 'default.jpg'"  alt="Mascota" class="imagen-mascota">
-          <div class="info">
-            <h4>{{ card.nombre_mascota }}</h4>
-            <p>{{ card.fecha | date:'short' }}</p>
-            <button (click)="verChat(card.id)">Abrir</button>
-            <button (click)="eliminar(card.id)">Eliminar</button>
+        <div class="card-container">
+          <div *ngFor="let card of historial" class="historial-card">
+            <img [src]="card.imagen ? card.imagen : 'assets/image/dog.png'" alt="Mascota" class="imagen-mascota">
+            <div class="info">
+              <h4>{{ card.nombre_mascota }}</h4>
+              <p>{{ card.fecha | date:'short' }}</p>
+              <div class="acciones">
+                <button (click)="verChat(card.id)"><mat-icon>pets</mat-icon></button>
+                <button class="icono-borrar" (click)="eliminar(card.id)"><mat-icon>delete</mat-icon></button>
+              </div>
+            </div>
           </div>
         </div>
       </section>

@@ -11,28 +11,17 @@
     </button>
     <h1 class="app-name">MASCOTAPP</h1>
   </header>
-  
+
   <nav class="menu-lateral" *ngIf="isMenuOpen" role="navigation" aria-label="Menú lateral">
     <button class="btn-close-menu" (click)="toggleMenu()">Cerrar Menú</button>
 
     <div class="group-btn">
       <a [routerLink]="['/menu']" routerLinkActive="active">Inicio</a>
-      <!-- <a [routerLink]="['/registrar-mascota']" routerLinkActive="active">Diagnósticos</a> -->
       <a routerLink="/perfil" routerLinkActive="active">Perfil</a>
     </div>
   </nav>
 
   <div class="page-wrapper">
-
-    <div *ngIf="mascotaSeleccionada" class="info-mascota-card">
-      <h3 class="nombre">Diagnostico para {{ mascotaSeleccionada.nombre }}</h3>
-      <div class="detalle">
-        <p><strong>Edad:</strong> {{ mascotaSeleccionada.edad }} años</p>
-        <p><strong>Raza:</strong> {{ mascotaSeleccionada.raza }}</p>
-        <p><strong>Peso:</strong> {{ mascotaSeleccionada.peso }} kg</p>
-      </div>
-    </div>
-
     <div class="header mat-elevation-z2">
       <div class="titulo-p">
         <h1>Diagnóstico de Mascota</h1>
@@ -41,35 +30,39 @@
         <h2>Por favor ingresa el estado de la mascota respondiendo las siguientes preguntas</h2>
       </div>
     </div>
+
     <div class="diagnostico-container">
       <mat-card class="question-card animate-slide" *ngIf="!mostrarResumen">
-        <mat-card-title>{{ questions[currentQuestionIndex] }}</mat-card-title>
+        <mat-card-title>{{ preguntaActualTexto }}</mat-card-title>
 
-        <mat-form-field appearance="outline" class="full-width">
+        <mat-form-field appearance="outline" color="accent" class="full-width">
           <mat-label>Respuesta</mat-label>
           <input
             matInput
             [(ngModel)]="currentAnswer"
             placeholder="Escribe tu respuesta"
-            [type]="getInputType(currentQuestionIndex)"
+            [type]="getInputType(preguntaActual)"
           />
         </mat-form-field>
 
+        <button mat-stroked-button color="warn" (click)="abrirModal()">Ver datos de la mascota</button>
+
         <div class="button-group">
           <button mat-raised-button color="primary" (click)="before()" [disabled]="isFirstQuestion()">Anterior</button>
-          <button mat-raised-button color="accent" (click)="next()" [disabled]="isAnswerEmpty()" *ngIf="currentQuestionIndex < questions.length - 1">Siguiente</button>
-          <button mat-raised-button color="warn" *ngIf="currentQuestionIndex === questions.length - 1 && !isAnswerEmpty()" (click)="mostrarResumenFinal()">Finalizar</button>
+          <button mat-raised-button color="accent" (click)="next()" [disabled]="isAnswerEmpty()">Siguiente</button>
         </div>
       </mat-card>
 
-      <!-- Resumen de respuestas -->
       <mat-card class="question-card animate-slide" *ngIf="mostrarResumen">
         <mat-card-title>📋 Revisión de tus respuestas</mat-card-title>
         <mat-card-content>
-          <div *ngFor="let pregunta of questions; let i = index" class="resumen-item">
-              <p><strong>{{ pregunta }}</strong></p>
-              <p class="respuesta">👉 {{ answers[i] || 'Sin respuesta' }}</p>
-            <mat-divider></mat-divider>
+          <div *ngFor="let fase of answers; let f = index">
+            <p><strong>{{ fases[f].titulo }}</strong></p>
+            <div *ngFor="let respuesta of fase; let i = index" class="resumen-item">
+              <p><strong>{{ fases[f].preguntas[i] }}</strong></p>
+              <p class="respuesta">👉 {{ respuesta || 'Sin respuesta' }}</p>
+              <mat-divider></mat-divider>
+            </div>
           </div>
         </mat-card-content>
 
@@ -79,6 +72,55 @@
         </div>
       </mat-card>
     </div>
+  </div>
+
+  <div class="modal-backdrop" *ngIf="modalAbierto" (click)="cerrarModal()"></div>
+  <div class="modal" *ngIf="modalAbierto">
+    <mat-card class="modal-card">
+      <mat-card-title>🐶 Información de la Mascota</mat-card-title>
+      <br>
+      <mat-card-content>
+        <table class="mascota-table">
+          <tr>
+            <td><strong>Nombre:</strong></td>
+            <td *ngIf="!editandoMascota">{{ mascotaSeleccionada?.nombre }}</td>
+            <td *ngIf="editandoMascota">
+              <input [(ngModel)]="datosEditables.nombre" />
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Edad:</strong></td>
+            <td *ngIf="!editandoMascota">{{ mascotaSeleccionada?.edad }} años</td>
+            <td *ngIf="editandoMascota">
+              <input type="number" [(ngModel)]="datosEditables.edad" />
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Raza:</strong></td>
+            <td *ngIf="!editandoMascota">{{ mascotaSeleccionada?.raza }}</td>
+            <td *ngIf="editandoMascota">
+              <input [(ngModel)]="datosEditables.raza" />
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Peso:</strong></td>
+            <td *ngIf="!editandoMascota">{{ mascotaSeleccionada?.peso }} kg</td>
+            <td *ngIf="editandoMascota">
+              <input type="number" [(ngModel)]="datosEditables.peso" />
+            </td>
+          </tr>
+        </table>
+      </mat-card-content>
+      <div class="button-group mt-2">
+        <button mat-button color="warn" (click)="cerrarModal()">Cerrar</button>
+        <button *ngIf="!editandoMascota" mat-button color="primary" (click)="activarEdicion()">Editar</button>
+        <button *ngIf="editandoMascota" mat-button color="accent" (click)="guardarCambiosMascota()">Guardar cambios</button>
+      </div>
+    </mat-card>
+  </div>
+
+  <div class="fase-overlay" *ngIf="mostrarFaseOverlay">
+    <h1>{{ fases[faseActual].titulo }}</h1>
   </div>
 </body>
 </html>

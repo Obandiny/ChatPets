@@ -11,6 +11,8 @@ import { MatIconModule } from '@angular/material/icon'
 import { MensajeService } from '../services/mensaje.service';
 import { DiagnosticoService } from '../services/diagnostico.service';
 import { LoggerService } from '../services/logger.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-chatbot',
@@ -22,7 +24,8 @@ import { LoggerService } from '../services/logger.service';
     MatTooltipModule,
     MatButtonModule,
     MatDividerModule,
-    MatIconModule
+    MatIconModule,
+    MatSnackBarModule
 ],
   templateUrl: './chatbot.component.html',
   styleUrls: ['./chatbot.component.css']
@@ -39,7 +42,8 @@ export class ChatbotComponent {
     public chatbotService: ChatbotService,
     private mensajeServie: MensajeService,
     private diagnosticoService: DiagnosticoService,
-    private logger: LoggerService
+    private logger: LoggerService,
+    private snackBar: MatSnackBar
   ) { }
 
   ngOnInit(): void {
@@ -54,7 +58,7 @@ export class ChatbotComponent {
         this.logger.success('Diagnostico recuperado:', data);
         this.messages = [
           { text: `🐾 Mascota: ${data.nombre_mascota}`, isBot: true },
-          { text: `🦠 Enfermedad: ${data.enfermedad}`, isBot: true },
+          // { text: `🦠 Enfermedad: ${data.enfermedad}`, isBot: true },
           { text: `💊 Recomendación: ${data.recomendacion}`, isBot: true }
         ];
       }, error => {
@@ -137,6 +141,23 @@ export class ChatbotComponent {
         this.scrollContainer.nativeElement.scrollTop = this.scrollContainer.nativeElement.scrollHeight;
       }
     }, 100);
+  }
+
+  formatBotMessage(text: string): string {
+  // Negrita con **
+  let formatted = text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+
+  // Saltos de línea (si hay \n en el texto)
+  formatted = formatted.replace(/\n/g, '<br>');
+
+  // Reemplaza listas numeradas o con guion si existieran
+  formatted = formatted.replace(/(\d+)\.\s+/g, '<br><strong>$1.</strong> ');
+  formatted = formatted.replace(/•\s+/g, '<br>• '); // si usas bullets
+
+  // Opcional: resalta "Recomendaciones para el dueño"
+  formatted = formatted.replace(/(Recomendaciones para el dueño:)/g, '<u><strong>$1</strong></u>');
+
+  return formatted;
   }
 
 }

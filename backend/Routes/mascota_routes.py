@@ -1,6 +1,8 @@
 from flask import Blueprint,  request, jsonify
 from Models.mascota import Mascota
+from Models.seguimientoMascota import SeguimientoMascota
 from utils import token_required
+import logging as logger
 from database import db
 
 import jwt
@@ -71,3 +73,44 @@ def obtener_mascota_por_id(current_user, id):
         "peso": mascota.peso,
         "imagen_url": mascota.imagen_url  # si tienes este campo
     }), 200
+
+@mascota_bp.route('/seguimiento', methods=['POST'])
+@token_required
+def guardar_seguimiento(current_user):
+    try:
+        data = request.json
+        mascota_id = data.get('mascota_id')
+
+        # Buscar la mascota original
+        mascota = db.session.get(Mascota, mascota_id)
+        if not mascota:
+            return jsonify({"error": "Mascota no encontrada"}), 404
+        
+        # Validar que la mascota sea del usuario actual
+        if mascota.usuario_id != current_user.id:
+            return jsonify({"error": "No autorizado para modificar esta mascota"}), 403
+
+        # Guardar seguimiento
+        seguimiento = SeguimientoMascota(
+            mascota_id=mascota_id,
+            nombre=mascota.nombre,
+            edad=mascota.edad,
+            raza=mascota.raza,
+            peso=mascota.peso
+        )
+        db.session.add(seguimiento)
+
+        # Actualizar tabla mascota
+        mascota.nombre = data['nombre']
+        mascota.edad = data['edad']
+        mascota.raza = data['raza']
+        mascota.peso = data['peso']
+
+        db.session.commit()
+
+        return jsonify({"message": "Seguimiento guardado y mascota modificada"}), 200
+    
+    except Exception as e:
+        import traceback
+        print("Error", traceback.format_exc())
+        logger.error("Error al guardar seguimiento", e), 400    

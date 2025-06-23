@@ -1,7 +1,9 @@
-import { Injectable } from '@angular/core';
+import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
+import { isPlatformBrowser } from '@angular/common';
+import { LoggerService } from './logger.service';
 
 @Injectable({
   providedIn: 'root'
@@ -11,7 +13,9 @@ export class MascotaService {
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private logger: LoggerService,
+    @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
   registrarMascota(data: any): Observable<any> {
@@ -41,5 +45,22 @@ export class MascotaService {
         Authorization: `Bearer ${token}`
       }
     });
+  }
+
+  guardarSeguimiento(datos: any): Observable<any> {
+
+    try {
+      const token = localStorage.getItem('token');
+  
+      this.logger.info('Enviando modifcacion...');
+      return this.http.post(`${this.API_URL}/seguimiento`, datos, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+    } catch (error) {
+      this.logger.error('Error en guardar la modificacion.');
+      throw error;
+    }
   }
 }
