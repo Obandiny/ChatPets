@@ -91,43 +91,59 @@ export class ChatbotComponent {
       return;
     }
 
-    this.diagnosticoService.getDiagnosticoById(+id).subscribe(diagnostico => {
-      const contextoBase = `
-      🐾 Mascota: ${diagnostico.nombre_mascota}
-      🧬 Edad: ${diagnostico.edad}, Raza: ${diagnostico.raza}, Sexo: ${diagnostico.sexo}, Peso: ${diagnostico.peso}kg
-      🦠 Enfermedad detectada: ${diagnostico.enfermedad}
-      💊 Recomendación inicial: ${diagnostico.recomendacion}
-      `;
+    if (this.messages.filter(m => !m.isBot).length === 1) {
+      this.diagnosticoService.getDiagnosticoById(+id).subscribe(diagnostico => {
+        const contextoBase = `
+        🐾 Mascota: ${diagnostico.nombre_mascota}
+        🧬 Edad: ${diagnostico.edad}, Raza: ${diagnostico.raza}, Peso: ${diagnostico.peso}kg, Tamaño: ${diagnostico.Tamaño}
+        🦠 Enfermedad detectada: ${diagnostico.enfermedad}
+        💊 Recomendación inicial: ${diagnostico.recomendacion}
+        `;
+  
+        const promptCompleto = `
+        CONTEXTO DEL CASO:
+        ${contextoBase}
+  
+  
+        Pregunta del usuario:
+        ${mensajeUsuario}
+  
+  
+        Por favor responde en el mismo contexto de la enfermedad detectada para esta mascota.
+        `;
+  
+        // Enviar el mensaje al backend "python/Flask" a traves del servicio
+        this.chatbotService.obtenerRecomendacion(promptCompleto).subscribe({
+        next: response => {
+          this.isBotTyping = false;
+          const respuesta = response.respuesta_mejorada || 'Lo siento, no pude generar una respuesta clara.';
+          this.messages.push({ text: respuesta, isBot: true });
+        },
+        error: (err) => {
+          this.isBotTyping = false;
+          // En caso de error, mostrar mensaje
+          this.messages.push({ text: 'Lo siento, ha ocurrido un error.', isBot: true});
+          console.error('Error al obtener la respuesta:', err);
+        }
+      });
+    }); 
 
-      const promptCompleto = `
-      CONTEXTO DEL CASO:
-      ${contextoBase}
+    } else {
+      // Preguntas posteriores
+      this.chatbotService.continuarConversacion(+id, mensajeUsuario).subscribe({
+        next: (response) => {
+          this.isBotTyping = false;
+          this.messages.push({ text: response.respuesta, isBot: true });
+        },
+        error: (err) => {
+          this.isBotTyping = false;
+          this.messages.push({ text: 'Error al continuar conversacion.',  isBot: true});
+          this.logger.error('Error en la conversacion', err);
+        }
+      });
 
-
-      Pregunta del usuario:
-      ${mensajeUsuario}
-
-
-      Por favor responde en el mismo contexto de la enfermedad detectada para esta mascota.
-      `;
-
-      // Enviar el mensaje al backend "python/Flask" a traves del servicio
-      this.chatbotService.obtenerRecomendacion(promptCompleto).subscribe({
-      next: response => {
-        this.isBotTyping = false;
-        const respuesta = response.respuesta_mejorada || 'Lo siento, no pude generar una respuesta clara.';
-        this.messages.push({ text: respuesta, isBot: true });
-      },
-      error: (err) => {
-        this.isBotTyping = false;
-        // En caso de error, mostrar mensaje
-        this.messages.push({ text: 'Lo siento, ha ocurrido un error.', isBot: true});
-        console.error('Error al obtener la respuesta:', err);
-      }
-    });
-
-    this.scrollToBottom();
-  }); 
+      this.scrollToBottom();
+    }
 
   // Limpiar el input  
   this.userInput = '';
@@ -156,6 +172,12 @@ export class ChatbotComponent {
 
   // Opcional: resalta "Recomendaciones para el dueño"
   formatted = formatted.replace(/(Recomendaciones para el dueño:)/g, '<u><strong>$1</strong></u>');
+
+  // Enlaces WhatsApp
+  formatted = formatted.replace(
+    /(https:\/\/wa\.me\/[0-9]+(\?text=[^\s]*)?)/g,
+    '<a href="$1" target="_blank" style="color: #2ea44f; text-decoration: underline;">$1</a>'
+  );
 
   return formatted;
   }

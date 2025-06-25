@@ -78,7 +78,14 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id):
         texto_respuesta = response.text
         logger.info("Respuesta de Gemini recibida.")
 
-        
+        mensaje_final = (
+            "\n\n¿En qué más te puedo ayudar? 🐶🐾\n"
+            "📞 Si necesitas ayuda personalizada, contacta al veterinario de Clínica PetSalud: "
+            "[WhatsApp](https://wa.me/573001234567)"
+        )
+
+        texto_respuesta += mensaje_final
+
         # Guardar historial
         historial = HistorialDiagnostico(
             usuario_id=usuario_actual.id,
@@ -90,7 +97,7 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id):
         db.session.add(historial)
         db.session.commit()
         logger.info("Historial guardado exitosamente: id=%s", historial.id)
-        
+
         return texto_respuesta
     
     except Exception as e:
@@ -99,6 +106,15 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id):
         texto_fallback = consultar_database(respuestas)
         
         try:
+
+            mensaje_final = (
+                "\n\n¿En qué más te puedo ayudar? 🐶🐾\n"
+                "📞 Si necesitas ayuda personalizada, contacta al veterinario de Clínica PetSalud: "
+                "[WhatsApp](https://wa.me/573001234567)"
+            )
+
+            texto_fallback += mensaje_final
+
             historial = HistorialDiagnostico(
                 usuario_id=usuario_actual.id,
                 mascota_id=mascota_id,
@@ -133,7 +149,15 @@ def continuar_conversacion(usuario_actual, historial_id, nueva_pregunta):
     model = configurar_gemini()
     chat = model.start_chat(history=[])
     respuesta = chat.send_message(nuevo_prompt).text
+
+    mensaje_final = (
+        "\n\n¿En qué más te puedo ayudar? 🐶🐾\n"
+        "📞 Si necesitas ayuda personalizada, contacta al veterinario de Clínica PetSalud: "
+        "[WhatsApp](https://wa.me/573001234567)"
+    )
     
+    respuesta += mensaje_final
+
     nuevo_historial = HistorialDiagnostico(
         usuario_id=usuario_actual.id,
         mascota_id=historial.mascota_id,
