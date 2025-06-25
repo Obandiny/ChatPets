@@ -192,7 +192,7 @@ export class MascotaPerroComponent {
             { text: respuestasPlanas.map((q, i) => `Q${i + 1}: ${q}`).join('\n\n'), isBot: false },
             { text: res.resultado?.respuesta || 'Diagnóstico generado', isBot: true }
           ]);
-          this.router.navigate(['/chatbot']);
+          this.router.navigate(['/menu']);
         },
         error: (err) => {
           console.error('Error al enviar diagnostico:', err);

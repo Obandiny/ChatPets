@@ -27,3 +27,4 @@ def chat(usuario_actual):
         return jsonify({'error': str(e)}), 403
     except Exception:
         return jsonify({'error': 'Error interno al procesar diagnostico'}), 500
+    

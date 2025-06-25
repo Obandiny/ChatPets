@@ -113,3 +113,35 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id):
             logger.exception("Error al guardar historial en modo fallback: %s", db_error)
         
         return texto_fallback
+    
+def continuar_conversacion(usuario_actual, historial_id, nueva_pregunta):
+    historial = HistorialDiagnostico.query.filter_by(id=historial_id, usuario_id=usuario_actual.id).first()
+    
+    if not historial:
+        raise ValueError("Historial no encontrado")
+    
+    nuevo_prompt = f"""
+    CONTEXTO ANTERIOR:
+    {historial.contexto_anterior}
+
+    NUEVA PREGUNTA DEL USUARIO:
+    {nueva_pregunta}
+
+    ➤ IMPORTANTE: Responde únicamente en el contexto de salud veterinaria y para la mascota específica. Sé claro y sin lenguaje técnico.
+    """
+    
+    model = configurar_gemini()
+    chat = model.start_chat(history=[])
+    respuesta = chat.send_message(nuevo_prompt).text
+    
+    nuevo_historial = HistorialDiagnostico(
+        usuario_id=usuario_actual.id,
+        mascota_id=historial.mascota_id,
+        sintomas=nueva_pregunta,
+        recomendacion=respuesta,
+        contexto_anterior=nuevo_prompt
+    )
+    db.session.add(nuevo_historial)
+    db.session.commit()
+    
+    return respuesta
