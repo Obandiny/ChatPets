@@ -18,7 +18,19 @@ export class ChatbotService {
   ) { }
 
   obtenerRecomendacion(userInput: string): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/api/chat`, { sintomas: userInput });
+    const mascotaId = Number(localStorage.getItem('mascota_id'));
+    const token = localStorage.getItem('token');
+
+    const body = {
+      respuestas: [userInput],
+      mascota_id: mascotaId
+    };
+
+    const headers = {
+      Authorization: `Bearer ${token}`
+    };
+
+    return this.http.post<any>(`${this.apiUrl}/api/chat`, body, { headers });
   }
 
   enviarDiagnostico(data: any) {
@@ -42,7 +54,7 @@ export class ChatbotService {
     };  
 
     this.logger.info('Obteniendo conversacion adicional...');
-    return this.http.post(`${this.apiUrl}/continuar-chat`, body, { headers });
+    return this.http.post(`${this.apiUrl}/continuar`, body, { headers });
   }
 }
 

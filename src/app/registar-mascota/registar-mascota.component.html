@@ -5,114 +5,106 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
+  <div class="registro-container mat-elevation-z4">
+    <mat-card class="registro-card">
 
-  <header class="header" [class.menu-open]="isMenuOpen" [class.menu-closed]="!isMenuOpen">
-    <button class="btn-open-menu" aria-label="Abrir/Cerrar menú" (click)="toggleMenu()">
-      <mat-icon>{{ isMenuOpen ? 'menu_open' : 'menu' }}</mat-icon>
-    </button>
-    <h1 class="app-name">MASCOTAPP</h1>
-  </header>
-  
-  <nav class="menu-lateral" *ngIf="isMenuOpen" role="navigation" aria-label="Menú lateral">
-    <button class="btn-close-menu" (click)="toggleMenu()">Cerrar Menú</button>
+      <mat-card-header>
+        <mat-card-title>
+          <h1 class="titulo-principal">🐾 Registro de Mascota</h1>
+        </mat-card-title>
+      </mat-card-header>
 
-    <div class="group-btn">
-      <a [routerLink]="['/menu']" routerLinkActive="active">Inicio</a>
-      <!-- <a [routerLink]="['/registrar-mascota']" routerLinkActive="active">Diagnósticos</a> -->
-      <a routerLink="/perfil" routerLinkActive="active">Perfil</a>
-    </div>
-  </nav>
+      <mat-card-subtitle class="subtitulo">
+        Ingresa los datos de tu mascota paso a paso
+      </mat-card-subtitle>
 
-  <div class="page-wrapper">
-    <div class="header-titulo">
-      <h1 class="titulo">Registrar Mascota</h1>
-    </div>
-  
-    <form [formGroup]="mascotaForm" (ngSubmit)="onSubmit()">
-      <div class="wizard-container">
-        <div class="wizard-slide" 
-        [style.transform]="'translateX(-' + step * 100 + '%)'"
-        [style.transform]="!isMobile ? 'translateX(-' + step * 100 + '%)' : 'translateX(0)'"
+      <div class="stepper-visual">
+
+      <div
+          class="step"
+          *ngFor="let label of stepLabels; let i = index"
+          [class.active]="i === step"
+          [class.completed]="i < step"
         >
-          <!-- PASO 1 -->
-          <div class="wizard-step">
-            <mat-form-field appearance="fill">
+          <mat-icon class="step-icon">{{ getStepIcon(i) }}</mat-icon>
+          <span class="step-label">{{ label }}</span>
+        </div>
+      </div>
+
+      <form [formGroup]="mascotaForm" (ngSubmit)="onSubmit()">
+        <ng-container [ngSwitch]="step">
+          <!-- Paso 1 -->
+          <div *ngSwitchCase="0">
+            <mat-form-field appearance="outline" color="accent" class="full-width">
               <mat-label>Nombre</mat-label>
-              <input matInput formControlName="nombre" required>
-              <mat-error *ngIf="mascotaForm.get('nombre')?.hasError('required')">Nombre es obligatorio</mat-error>
+              <input matInput formControlName="nombre" required />
+              <mat-error *ngIf="mascotaForm.get('nombre')?.hasError('required')">Campo obligatorio</mat-error>
             </mat-form-field>
           </div>
-          <!-- PASO 2 -->
-          <div class="wizard-step">
-            <mat-form-field appearance="fill">
+
+          <!-- Paso 2 -->
+          <div *ngSwitchCase="1">
+            <mat-form-field appearance="outline" color="accent" class="full-width">
               <mat-label>Raza</mat-label>
-              <input matInput formControlName="raza" required>
-              <mat-error *ngIf="mascotaForm.get('raza')?.hasError('required')">Raza es obligatoria</mat-error>
+              <input matInput formControlName="raza" required />
+              <mat-error *ngIf="mascotaForm.get('raza')?.hasError('required')">Campo obligatorio</mat-error>
             </mat-form-field>
           </div>
-          <!-- PASO 3 -->
-          <div class="wizard-step">
-            <mat-form-field appearance="fill">
+
+          <!-- Paso 3 -->
+          <div *ngSwitchCase="2">
+            <mat-form-field appearance="outline" color="accent" class="full-width">
               <mat-label>Edad</mat-label>
-              <input matInput type="number" formControlName="edad" required>
-              <mat-error *ngIf="mascotaForm.get('edad')?.hasError('required')">Edad es obligatoria</mat-error>
+              <input matInput type="number" formControlName="edad" required />
+              <mat-error *ngIf="mascotaForm.get('edad')?.hasError('required')">Campo obligatorio</mat-error>
             </mat-form-field>
           </div>
-          <!-- PASO 4 -->
-          <div class="wizard-step">
-            <mat-form-field appearance="fill">
+
+          <!-- Paso 4 -->
+          <div *ngSwitchCase="3">
+            <mat-form-field appearance="outline" color="accent" class="full-width">
               <mat-label>Peso (kg)</mat-label>
-              <input matInput type="number" formControlName="peso" required>
-              <mat-error *ngIf="mascotaForm.get('peso')?.hasError('required')">Peso es obligatorio</mat-error>
+              <input matInput type="number" formControlName="peso" required />
+              <mat-error *ngIf="mascotaForm.get('peso')?.hasError('required')">Campo obligatorio</mat-error>
             </mat-form-field>
           </div>
-          <!-- PASO 5 -->
-          <div class="wizard-step">
-            <mat-form-field appearance="fill">
+
+          <!-- Paso 5 -->
+          <div *ngSwitchCase="4">
+            <mat-form-field appearance="outline" color="accent" class="full-width">
               <mat-label>Tamaño</mat-label>
               <mat-select formControlName="tamano" required>
                 <mat-option value="Pequeño">Pequeño</mat-option>
                 <mat-option value="Mediano">Mediano</mat-option>
                 <mat-option value="Grande">Grande</mat-option>
               </mat-select>
-              <mat-error *ngIf="mascotaForm.get('tamano')?.hasError('required')">Tamaño es obligatorio</mat-error>
+              <mat-error *ngIf="mascotaForm.get('tamano')?.hasError('required')">Campo obligatorio</mat-error>
             </mat-form-field>
           </div>
-        </div>
-        <div class="wizard-buttons">
-          <ng-container *ngIf="!isMobile">
-            <button mat-stroked-button color="primary" type="button" (click)="prevStep()" [disabled]="step === 0">Anterior</button>
-            <button mat-flat-button color="primary" type="button" *ngIf="step < 4" (click)="nextStep()">Siguiente</button>
-            <button mat-raised-button color="primary" type="submit" *ngIf="step === 4" [disabled]="mascotaForm.invalid">Registrar</button>
-          </ng-container>
+        </ng-container>
 
-          <button mat-raised-button color="primary" type="submit" *ngIf="isMobile" [disabled]="mascotaForm.invalid">
+        <div class="button-group">
+          <button mat-stroked-button color="primary" type="button" (click)="prevStep()" [disabled]="step === 0">
+            Anterior
+          </button>
+
+          <button mat-flat-button color="accent" type="button" *ngIf="step < 4" (click)="nextStep()">
+            Siguiente
+          </button>
+
+          <button mat-raised-button color="primary" type="submit" *ngIf="step === 4" [disabled]="mascotaForm.invalid">
             Registrar
           </button>
+
+          <button mat-button color="warn" type="button" routerLink="/menu">
+            <mat-icon>arrow_back</mat-icon>
+            Volver al menú
+          </button>
         </div>
-      </div>
-    </form>
+      </form>
+    </mat-card>
   </div>
 
-  <!-- <footer class="footer" [class.menu-open]="isMenuOpen" [class.menu-closed]="!isMenuOpen">
-    <div class="footer-content">
-      <div class="footer-info">
-        <p><strong>Horarios de atención:</strong> Lunes a Viernes, 8:00 a.m. - 5:00 p.m.</p>
-        <p>© 2025 MASCOTAPP. Todos los derechos reservados.</p>
-      </div>
-      <div class="footer-social">
-        <a href="https://facebook.com" target="_blank" aria-label="Facebook">
-          <img src="assets/facebook-icon.svg" alt="Facebook" />
-        </a>
-        <a href="https://instagram.com" target="_blank" aria-label="Instagram">
-          <img src="assets/instagram-icon.svg" alt="Instagram" />
-        </a>
-        <a href="https://twitter.com" target="_blank" aria-label="Twitter">
-          <img src="assets/twitter-icon.svg" alt="Twitter" />
-        </a>
-      </div>
-    </div>
-  </footer> -->
 </body>
 </html>
 

@@ -6,7 +6,7 @@ from utils.decorators import token_required
 
 chat_bp = Blueprint('chat', __name__)
 
-@chat_bp.route('/api/chat', methods=['POST'])
+@chat_bp.route('/', methods=['POST'])
 @token_required
 def chat(usuario_actual):
     data = request.get_json()
@@ -29,7 +29,7 @@ def chat(usuario_actual):
     except Exception:
         return jsonify({'error': 'Error interno al procesar diagnostico'}), 500
     
-@chat_bp.route('/api/continuar-chat', methods=['POST'])
+@chat_bp.route('/continuar', methods=['POST'])
 @token_required
 def continuar_chat(usuario_actual):
     try:

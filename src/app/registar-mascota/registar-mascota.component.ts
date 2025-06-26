@@ -13,6 +13,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoggerService } from '../services/logger.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatCardModule } from '@angular/material/card';
 
 @Component({
   selector: 'app-registar-mascota',
@@ -27,7 +28,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     MatButtonModule,
     MatSelectModule,
     ReactiveFormsModule,
-    RouterLink
+    RouterLink,
+    MatCardModule
   ],
   templateUrl: './registar-mascota.component.html',
   styleUrl: './registar-mascota.component.css'
@@ -35,6 +37,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 export class RegistarMascotaComponent {
   isMenuOpen = true;
   isMobile = false;
+
+  stepLabels = ['Nombre', 'Raza', 'Edad', 'Peso', 'Tamaño'];
 
   mascotaForm = this.fb.group({
     nombre: ['', Validators.required],
@@ -111,5 +115,10 @@ export class RegistarMascotaComponent {
           this.logger.error('Error al registrar mascota', err);
         }
       });
+  }
+
+  getStepIcon(index: number): string {
+    const icons = ['pets', 'assignment_ind', 'calendar_today', 'fitness_center', 'straighten'];
+    return icons[index] || 'info';
   }
 }

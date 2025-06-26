@@ -92,7 +92,7 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id):
             mascota_id=mascota_id,
             sintomas=", ".join(respuestas),
             recomendacion=texto_respuesta,
-            contexto_anterior=prompt
+            contexto_anterior=texto_respuesta
         )
         db.session.add(historial)
         db.session.commit()
@@ -120,7 +120,7 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id):
                 mascota_id=mascota_id,
                 sintomas=", ".join(respuestas),
                 recomendacion=texto_fallback,
-                contexto_anterior="Fallo Gemini. Respuesta generada desde base de datos."
+                contexto_anterior=texto_fallback
             )
             db.session.add(historial)
             db.session.commit()
@@ -163,7 +163,7 @@ def continuar_conversacion(usuario_actual, historial_id, nueva_pregunta):
         mascota_id=historial.mascota_id,
         sintomas=nueva_pregunta,
         recomendacion=respuesta,
-        contexto_anterior=nuevo_prompt
+        contexto_anterior=historial.recomendacion
     )
     db.session.add(nuevo_historial)
     db.session.commit()

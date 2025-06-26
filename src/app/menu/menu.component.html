@@ -20,7 +20,7 @@
       <div class="group-btn">
         <a [routerLink]="['/menu']" routerLinkActive="active">Inicio</a>
 
-        <button class="submenu-toggle" (click)="toggleSubmenu()" *ngIf="rol === 'usuario'">
+        <button class="submenu-toggle" (click)="toggleSubmenu()" *ngIf="rol === 'admin'">
           Diagnosticos
           <mat-icon>{{ submenuAbierto ? 'expand_less' : 'expand_more' }}</mat-icon>
         </button>
@@ -52,8 +52,8 @@
 
         <div *ngIf="submenuAbiertoAdmin" class="submenu">
           <!-- *ngIf="rol === 'admin'" -->
-          <a [routerLink]="['/admin/table-usuarios']" routerLinkActive="active" >Usuarios</a>
-          <a [routerLink]="['/admin/table-sintomas']" routerLinkActive="active">Relaciones</a>
+          <a [routerLink]="['/admin/table-usuarios']" routerLinkActive="active">Usuarios</a>
+          <a [routerLink]="['/admin/table-sintomas']" routerLinkActive="active">Sintomas</a>
           <a [routerLink]="['/admin/table-mascotas']" routerLinkActive="active">Mascotas</a>
         </div>
 

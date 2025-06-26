@@ -1,0 +1,30 @@
+.p-4 {
+    padding: 24px;
+}
+
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 24px;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.search-field {
+    width: 100%;
+    max-width: 400px;
+    margin-bottom: 20px;
+}
+
+.full-width-table {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.user-count {
+    margin-top: 16px;
+    text-align: center;
+    font-size: 14px;
+    color: gray;
+}
