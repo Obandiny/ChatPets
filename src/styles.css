@@ -24,7 +24,7 @@ body, html {
   margin: 0;
   padding: 0;
   height: 100%;
-  background: linear-gradient(to bottom right, #49a5f0, #c095f5);
+  background: #f5f4f4;
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;

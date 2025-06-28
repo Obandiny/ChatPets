@@ -9,6 +9,8 @@ import { MascotaService } from '../services/mascota.service';
 import { LoggerService } from '../services/logger.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { Noticia, NoticiasService } from '../services/noticias.service';
+import { MatCardModule } from '@angular/material/card';
 
 interface Diagnostico {
   id: number;
@@ -32,7 +34,8 @@ interface Tip {
     MatTooltipModule,
     RouterLink,
     RouterLinkActive,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatCardModule
   ],
   templateUrl: './menu.component.html',
   styleUrls: ['./menu.component.css']
@@ -45,9 +48,16 @@ export class MenuComponent implements OnInit, OnDestroy {
   submenuMascotasAbierto: boolean = false;
   rol: string | null = null;
   mascotaRegistrada: boolean = false;
+  cargandoNoticias = false;
+  pagina = 1;
+  clicsCargar = 0;
+  maxClics = 3;
+  mostrarBoton = true;
   mascotas: any[] = [];
 
   historial: any[] = [];
+
+  noticias: Noticia[] = [];
 
   tips: Tip[] = [
     {
@@ -73,6 +83,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     private mascotaService: MascotaService,
     private logger: LoggerService,
     private snackBar: MatSnackBar,
+    private noticiasService: NoticiasService,
     @Inject(PLATFORM_ID) private platformId: Object
   ) {
     const info = this.authService.getUserInfo();
@@ -105,6 +116,8 @@ export class MenuComponent implements OnInit, OnDestroy {
       this.startCarousel();
     }
 
+    this.cargarNoticias();
+
     this.verificarMascotaRegistrada();
   }
 
@@ -112,6 +125,37 @@ export class MenuComponent implements OnInit, OnDestroy {
     if (isPlatformBrowser(this.platformId) && this.carouselInterval) {
       clearInterval(this.carouselInterval);
     }
+  }
+
+  cargarNoticias() {
+    if (this.clicsCargar >= this.maxClics) {
+      this.mostrarBoton = false;
+      return;
+    }
+
+    this.cargandoNoticias = true;
+    this.pagina++;
+    this.clicsCargar++;
+
+    this.noticiasService.obtenerNoticias(this.pagina).subscribe({
+      next: (res) => {
+        this.logger.info('Obteniendo noticias...');
+          const noticiasNuevas = res.noticias.filter((nueva: Noticia) => 
+            !this.noticias.some(actual => actual.url === nueva.url)
+          );
+
+          this.noticias.push(...noticiasNuevas);
+          this,this.cargandoNoticias = false;
+
+          if (this.clicsCargar >= this.maxClics) {
+            this.mostrarBoton = false;
+          }
+      },
+      error: err => {
+        this.logger.error('Error al obtener las noticias.', err);
+        this.cargandoNoticias = false;
+      }
+    });
   }
 
   verChat(id: number): void {

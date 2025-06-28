@@ -2,7 +2,7 @@
   <div class="page-wrapper">
 
     <header class="header" [class.menu-open]="isMenuOpen" [class.menu-closed]="!isMenuOpen">
-      <button class="btn-open-menu" aria-label="Abrir/Cerrar menú" (click)="toggleMenu()">
+      <button class="btn-open-menu" aria-label="Abrir/Cerrar menú" (click)="toggleMenu()" matTooltip="Abrir menu">
         <mat-icon>{{ isMenuOpen ? 'menu_open' : 'menu' }}</mat-icon>
       </button>
       <h1 class="app-name">MASCOTAPP</h1>
@@ -15,7 +15,7 @@
     </header>
 
     <nav class="menu-lateral" *ngIf="isMenuOpen" role="navigation" aria-label="Menú lateral">
-      <button class="btn-close-menu" (click)="toggleMenu()">Cerrar Menú</button>
+      <!-- <button class="btn-close-menu" (click)="toggleMenu()">Cerrar Menú</button> -->
 
       <div class="group-btn">
         <a [routerLink]="['/menu']" routerLinkActive="active">Inicio</a>
@@ -78,9 +78,36 @@
     </nav>
 
     <main [class.menu-open]="isMenuOpen" [class.menu-closed]="!isMenuOpen" class="main">
-      <h2 class="section-title section-title-white">Consejos para el Cuidado de tu Mascota</h2>
+      <h2 class="section-title section-title-white">NOTICIAS DE SALUD ANIMAL</h2>
 
-      <section class="carousel-container" aria-label="Carrusel de tips para mascotas">
+      <!-- <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-semibold">Noticias recientes</h2>
+        <button mat-stroked-button color="primary" (click)="cargarNoticias()">
+          🔄 Refrescar
+        </button>
+      </div> -->
+
+      <div class="noticias-grid">
+        <mat-card *ngFor="let noticia of noticias" class="noticia-card">
+          <img mat-card-image *ngIf="noticia.imagen" [src]="noticia.imagen" alt="Noticia" />
+          <mat-card-title class="titulo-noticia">{{ noticia.titulo }}</mat-card-title>
+          <mat-card-subtitle class="subtitulo-noticia">{{ noticia.fuente || 'Fuente desconocida' }} - {{ noticia.fecha | date:'short' }}</mat-card-subtitle>
+          <mat-card-content class="descripcion">
+            <p>{{ noticia.descripcion || 'Sin descripción disponible.' }}</p>
+          </mat-card-content>
+          <mat-card-actions class="accion">
+            <a mat-button color="primary" [href]="noticia.url" target="_blank">Leer mas</a>
+          </mat-card-actions>
+        </mat-card>
+      </div>
+
+      <div class="boton-cargar-wrapper" *ngIf="mostrarBoton">
+        <button mat-raised-button color="primary" (click)="cargarNoticias()">
+          Cargar más noticias
+        </button>
+      </div>
+
+      <!-- <section class="carousel-container" aria-label="Carrusel de tips para mascotas">
         <div class="carousel" [style.transform]="getTransform()">
           <article class="carousel-item" *ngFor="let tip of tips; let i = index" [attr.aria-hidden]="currentTipIndex !== i">
             <h3>{{ tip.titulo }}</h3>
@@ -94,7 +121,8 @@
         <button class="carousel-control next" aria-label="Siguiente tip" (click)="nextTip()">
           <mat-icon>chevron_right</mat-icon>
         </button>
-      </section>
+      </section> -->
+
     </main>
 
     <footer class="footer" [class.menu-open]="isMenuOpen" [class.menu-closed]="!isMenuOpen">
@@ -116,6 +144,5 @@
         </div> -->
       </div>
     </footer>
-
   </div>
 </body>

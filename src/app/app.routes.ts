@@ -17,7 +17,7 @@ export const routes: Routes = [
     { 
         path: 'menu', 
         component: MenuComponent,
-        canActivate: [authGuard] 
+        // canActivate: [authGuard] 
     },
     { path: 'auth/login', component: LoginComponent },
     { path: 'auth/register', component: RegisterComponent },
