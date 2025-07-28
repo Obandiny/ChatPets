@@ -19,7 +19,56 @@
   </div>
 </header>
 
-<div class="chat-container">
+<div class="seguimiento-container">
+  <h2>Seguimiento de Diagnósticos</h2>
+
+  <table mat-table [dataSource]="diagnosticos" class="mat-elevation-z8">
+
+    <!-- Fecha -->
+    <ng-container matColumnDef="fecha">
+      <th mat-header-cell *matHeaderCellDef>Fecha</th>
+      <td mat-cell *matCellDef="let diag">{{ diag.fecha | date:'short' }}</td>
+    </ng-container>
+
+    <!-- Enfermedad / IA -->
+    <ng-container matColumnDef="sintomas">
+      <th mat-header-cell *matHeaderCellDef>Síntomas</th>
+      <td mat-cell *matCellDef="let diag">{{ diag.sintomas }}</td>
+    </ng-container>
+
+    <!-- Recomendación -->
+    <ng-container matColumnDef="recomendacion">
+      <th mat-header-cell *matHeaderCellDef>Recomendación</th>
+      <td mat-cell *matCellDef="let diag">{{ diag.recomendacion }}</td>
+    </ng-container>
+
+    <!-- Alerta -->
+    <ng-container matColumnDef="alerta">
+      <th mat-header-cell *matHeaderCellDef>Alerta</th>
+      <td mat-cell *matCellDef="let diag">
+        <span [ngClass]="getPrioridadClass(diag.prioridad)">
+          {{ diag.prioridad | uppercase }}
+        </span>
+      </td>
+    </ng-container>
+
+
+    <!-- Eliminar -->
+    <ng-container matColumnDef="acciones">
+      <th mat-header-cell *matHeaderCellDef>Acciones</th>
+      <td mat-cell *matCellDef="let diag">
+        <!-- <button mat-icon-button color="warn" (click)="eliminarDiagnostico(diag.id)">
+          <mat-icon>delete</mat-icon>
+        </button> -->
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="columnas"></tr>
+    <tr mat-row *matRowDef="let row; columns: columnas;"></tr>
+  </table>
+</div>
+
+<!-- <div class="chat-container">
     <div class="chat-box">
       <div class="chat-messages" #scrollContainer>
         <div *ngFor="let message of messages" [ngClass]="{ 'user-message': !message.isBot, 'bot-message': message.isBot }">
@@ -35,8 +84,8 @@
           <span>¿En qué te puedo ayudar?</span>
         </div>
 
-        <!-- Animación de carga -->
-        <div *ngIf="isBotTyping" class="typing-indicator">
+        Animación de carga -->
+        <!-- <div *ngIf="isBotTyping" class="typing-indicator">
           <span>.</span><span>.</span><span>.</span><span>.</span>
         </div>
 
@@ -46,7 +95,7 @@
         <button (click)="sendMessage()">➤</button>
       </div>
     </div>
-  </div>
+  </div> -->
 
   <footer>
     <span>ChaPET una app para mascotas</span>
