@@ -55,32 +55,32 @@ export class ChatbotComponent {
     // this.cargarDiagnosticos();
   }
 
-  // cargarDiagnosticos() {
-  //   this.diagnosticoService.getDiagnosticos().subscribe({
-  //     next: data => {
-  //       this.diagnosticos = data;
-  //     },
-  //     error: err => {
-  //       this.logger.error('Error al cargar diagnósticos', err);
-  //       this.snackBar.open('Error al cargar los diagnósticos', 'Cerrar', { duration: 3000 });
-  //     }
-  //   });
-  // }
+  cargarDiagnosticos() {
+    this.diagnosticoService.getHistorial().subscribe({
+      next: data => {
+        this.diagnosticos = data;
+      },
+      error: err => {
+        this.logger.error('Error al cargar diagnósticos', err);
+        this.snackBar.open('Error al cargar los diagnósticos', 'Cerrar', { duration: 3000 });
+      }
+    });
+  }
 
-  // eliminarDiagnostico(id: number): void {
-  //   if (!confirm('¿Estás seguro de eliminar este diagnóstico?')) return;
+  eliminarDiagnostico(id: number): void {
+    if (!confirm('¿Estás seguro de eliminar este diagnóstico?')) return;
 
-  //   this.diagnosticoService.deleteDiagnostico(id).subscribe({
-  //     next: () => {
-  //       this.snackBar.open('Diagnóstico eliminado', 'Cerrar', { duration: 2000 });
-  //       this.cargarDiagnosticos(); // refrescar tabla
-  //     },
-  //     error: err => {
-  //       this.logger.error('Error al eliminar diagnóstico', err);
-  //       this.snackBar.open('Error al eliminar diagnóstico', 'Cerrar', { duration: 3000 });
-  //     }
-  //   });
-  // }
+    this.diagnosticoService.elimiarHistorial(id).subscribe({
+      next: () => {
+        this.snackBar.open('Diagnóstico eliminado', 'Cerrar', { duration: 2000 });
+        this.cargarDiagnosticos(); // refrescar tabla
+      },
+      error: err => {
+        this.logger.error('Error al eliminar diagnóstico', err);
+        this.snackBar.open('Error al eliminar diagnóstico', 'Cerrar', { duration: 3000 });
+      }
+    });
+  }
 
   getPrioridadClass(prioridad: string): string {
     switch (prioridad?.toLowerCase()) {

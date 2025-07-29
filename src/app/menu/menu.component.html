@@ -19,6 +19,7 @@
 
       <div class="group-btn">
         <a [routerLink]="['/menu']" routerLinkActive="active">Inicio</a>
+        <a [routerLink]="['/chatbot']" routerLinkActive="active">Lista de Diagnosticos</a>
 
         <button class="submenu-toggle" (click)="toggleSubmenu()" *ngIf="rol === 'admin'">
           Diagnosticos
