@@ -6,9 +6,33 @@ from Models.relaciones import Sintoma
 from Models.mascota import Mascota
 from database import db
 import logging
+import re
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+def extraer_campos_ia(texto_respuesta):
+    """
+    Extrae los campos 'enfermedad', 'recomendacion' y 'alerta' desde el texto devuelto por Gemini.
+    """
+    
+    enfermedad = ""
+    recomendacion = ""
+    alerta = ""
+    
+    # Expresiones regulares para capturar los bloques
+    enfermedad_match = re.search(r"ENFERMEDAD PROBABLE:\s*(.+?)(?:\n|RECOMENDACION:)", texto_respuesta, re.DOTALL | re.IGNORECASE)
+    recomendacion_match = re.search(r"RECOMENDACION:\s*(.+?)(?:\n|ALERTA:)", texto_respuesta, re.DOTALL | re.IGNORECASE)
+    alerta_match = re.search(r"ALERTA:\s*(.+)", texto_respuesta, re.DOTALL | re.IGNORECASE)
+    
+    if enfermedad_match:
+        enfermedad = enfermedad_match.group(1).strip()
+    if recomendacion_match:
+        recomendacion = recomendacion_match.group(1).strip()
+    if alerta_match:
+        alerta = alerta_match.group(1).strip()
+    
+    return enfermedad, recomendacion, alerta
 
 def configurar_gemini():
     genai.configure(api_key=os.environ.get("GOOGLE_API_KEY"))
@@ -88,6 +112,9 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id, mascotas):
         chat = model.start_chat(history=[])
         response = chat.send_message(prompt)
         texto_respuesta = response.text
+
+        enfermedad, recomendacion, alerta = extraer_campos_ia(texto_respuesta)
+
         logger.info("Respuesta de Gemini recibida.")
 
         # enfermedad, prioridad = extraer_campos_ia(texto_respuesta)
@@ -97,10 +124,10 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id, mascotas):
             usuario_id=usuario_actual.id,
             mascota_id=mascota_id,
             sintomas=", ".join(respuestas),
-            recomendacion=texto_respuesta,
-            # enfermedad=enfermedad,
-            # prioridad=prioridad,
-            # contexto_anterior=texto_respuesta
+            recomendacion=recomendacion,
+            enfermedad=enfermedad,
+            prioridad=alerta,
+            contexto_anterior=texto_respuesta
         )
         db.session.add(historial)
         db.session.commit()
