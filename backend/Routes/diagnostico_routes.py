@@ -2,6 +2,7 @@ from flask import Blueprint, request, jsonify
 from Models.app_usuarios import Usuario
 from Services.chat_service import procesar_diagnostico
 from utils import token_required  # o el archivo donde está tu decorador
+from Models.mascota import Mascota
 
 diagnostico_bp = Blueprint('diagnostico', __name__)
 
@@ -15,9 +16,13 @@ def realizar_diagnostico(current_user):
 
         if not sintomas or not mascota_id:
             return jsonify({'error': 'Faltan síntomas o ID de mascota'}), 400
+        
+        mascotas = Mascota.query.filter_by(id=mascota_id, usuario_id=current_user.id).first()
+        if not mascotas:
+            return jsonify({'error': 'Mascota no encontrada'}), 404
 
         # Llama a la función principal con el usuario
-        resultado = procesar_diagnostico(current_user, sintomas, mascota_id)
+        resultado = procesar_diagnostico(current_user, sintomas, mascota_id, mascotas)
 
         return jsonify({
             'mensaje': 'Diagnóstico realizado correctamente',

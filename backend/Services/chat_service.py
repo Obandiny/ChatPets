@@ -97,15 +97,15 @@ def consultar_database(respuestas):
 
 def procesar_diagnostico(usuario_actual, respuestas, mascota_id, mascotas):
     try:
-        logger.info("Iniciando diagnostico para usuario_id=%s, mascota_id=%s", usuario_actual.id, mascota_id)
+        # Aquí, "mascotas" es el objeto de la mascota que pasas
+        logger.info("Iniciando diagnóstico para usuario_id=%s, mascota_id=%s", usuario_actual.id, mascota_id)
 
         # Validar existencia y pertenencia de la mascota
-        mascota = Mascota.query.filter_by(id=mascota_id, usuario_id=usuario_actual.id).first()
-        if not mascota:
-            logger.error("Mascota no encontrada o no pertence al usuario.")
+        if not mascotas:
+            logger.error("Mascota no encontrada o no pertenece al usuario.")
             raise ValueError("Mascota no encontrada o no pertenece al usuario")
 
-        prompt = construir_prompt(respuestas, mascotas)
+        prompt = construir_prompt(respuestas, mascotas)  # Se pasa el objeto mascota
         logger.debug("Prompt generado: %s", prompt)
 
         model = configurar_gemini()
@@ -116,8 +116,6 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id, mascotas):
         enfermedad, recomendacion, alerta = extraer_campos_ia(texto_respuesta)
 
         logger.info("Respuesta de Gemini recibida.")
-
-        # enfermedad, prioridad = extraer_campos_ia(texto_respuesta)
 
         # Guardar historial
         historial = HistorialDiagnostico(
@@ -136,10 +134,10 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id, mascotas):
         return texto_respuesta
     
     except Exception as e:
-        logger.exception("Error al procesar diagnostico con Gemini: %s", e)
-        
+        logger.exception("Error al procesar diagnóstico con Gemini: %s", e)
         texto_fallback = consultar_database(respuestas)
-        
+
+        # Guarda en historial con la respuesta fallback
         try:
             historial = HistorialDiagnostico(
                 usuario_id=usuario_actual.id,
@@ -153,8 +151,9 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id, mascotas):
             logger.warning("Respuesta alternativa guardada en historial.")
         except Exception as db_error:
             logger.exception("Error al guardar historial en modo fallback: %s", db_error)
-        
+
         return texto_fallback
+
     
 # def continuar_conversacion(usuario_actual, historial_id, nueva_pregunta):
 #     historial = HistorialDiagnostico.query.filter_by(id=historial_id, usuario_id=usuario_actual.id).first()

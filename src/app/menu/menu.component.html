@@ -21,7 +21,7 @@
         <a [routerLink]="['/menu']" routerLinkActive="active">Inicio</a>
         <a [routerLink]="['/chatbot']" routerLinkActive="active">Lista de Diagnosticos</a>
 
-        <button class="submenu-toggle" (click)="toggleSubmenu()" *ngIf="rol === 'admin'">
+        <button class="submenu-toggle" (click)="toggleSubmenu()" *ngIf="rol === 'usuario'">
           Diagnosticos
           <mat-icon>{{ submenuAbierto ? 'expand_less' : 'expand_more' }}</mat-icon>
         </button>
@@ -46,13 +46,12 @@
         </div>
 
         <a routerLink="/perfil" routerLinkActive="active">Perfil</a>
-        <button class="submenu-toggle" (click)="toggleSubmenuAdmin()">
+        <button class="submenu-toggle" (click)="toggleSubmenuAdmin()" *ngIf="rol === 'admin'">
           Administrar
           <mat-icon>{{ submenuAbiertoAdmin ? 'expand_less' : 'expand_more' }}</mat-icon>
         </button>
 
         <div *ngIf="submenuAbiertoAdmin" class="submenu">
-          <!-- *ngIf="rol === 'admin'" -->
           <a [routerLink]="['/admin/table-usuarios']" routerLinkActive="active">Usuarios</a>
           <a [routerLink]="['/admin/table-sintomas']" routerLinkActive="active">Sintomas</a>
           <a [routerLink]="['/admin/table-mascotas']" routerLinkActive="active">Mascotas</a>

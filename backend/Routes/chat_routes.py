@@ -1,7 +1,7 @@
 from flask import Blueprint, request, jsonify
 from Services.chat_service import procesar_diagnostico
 from Models import Mascota
-from Services.chat_service import continuar_conversacion
+# from Services.chat_service import continuar_conversacion
 from utils.decorators import token_required
 
 chat_bp = Blueprint('chat', __name__)
@@ -29,19 +29,19 @@ def chat(usuario_actual):
     except Exception:
         return jsonify({'error': 'Error interno al procesar diagnostico'}), 500
     
-@chat_bp.route('/continuar', methods=['POST'])
-@token_required
-def continuar_chat(usuario_actual):
-    try:
-        data = request.get_json()
-        pregunta = data.get('pregunta')
-        diagnotico_id = data.get('diagnostico_id')
+# @chat_bp.route('/continuar', methods=['POST'])
+# @token_required
+# def continuar_chat(usuario_actual):
+#     try:
+#         data = request.get_json()
+#         pregunta = data.get('pregunta')
+#         diagnotico_id = data.get('diagnostico_id')
         
-        if not pregunta or not diagnotico_id:
-            return jsonify({"error": "Faltan datos"}), 400
+#         if not pregunta or not diagnotico_id:
+#             return jsonify({"error": "Faltan datos"}), 400
         
-        respuesta = continuar_conversacion(usuario_actual, diagnotico_id, pregunta)
-        return jsonify({"respuesta": respuesta}), 200
-    except Exception as e:
-        return jsonify({"error": str(e)}), 500
+#         respuesta = continuar_conversacion(usuario_actual, diagnotico_id, pregunta)
+#         return jsonify({"respuesta": respuesta}), 200
+#     except Exception as e:
+#         return jsonify({"error": str(e)}), 500
     
