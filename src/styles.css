@@ -24,11 +24,11 @@ body, html {
   margin: 0;
   padding: 0;
   height: 100%;
-  background: #f5f4f4;
+  background: url("/assets/image/fondo-vector-tematico-mascota-canina_896973-11.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
-  font-family: Roboto, sans-serif;
+  font-family: "Poppins", sans-serif;
 }
   
 aside {

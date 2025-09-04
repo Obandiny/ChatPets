@@ -1,9 +1,50 @@
-body, html {
+* {
   margin: 0;
   padding: 0;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  height: 100%;
-  background: linear-gradient(to right, #8EC5FC, #E0C3FC); 
+  box-sizing: border-box;
+}
+
+body {
+  font-family: "Poppins", sans-serif;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+} 
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #147700;
+  color: #fff;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-container img {
+  width: 50px;
+  height: auto;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.logo-container .title-header {
+  font-size: 30px;
+  font-weight: bold;
+  margin: 0;
 }
 
 .background {
@@ -11,7 +52,7 @@ body, html {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 20px;
+  
 }
 
 .login-container {
@@ -28,7 +69,8 @@ body, html {
 
 h2 {
   margin-bottom: 20px;
-  color: #ffffff;
+  color: #147700;
+  font-weight: bold;
 }
 
 .login-form {
@@ -45,6 +87,7 @@ h2 {
 /* === CAMPOS DE TEXTO (EMAIL Y CONTRASEÑA) === */
 mat-form-field {
   width: 100%;
+  text-decoration: none;
 }
 
 mat-form-field .mat-form-field-flex {
@@ -82,8 +125,13 @@ mat-icon {
 .btn-submit {
   width: 100%;
   font-weight: bold;
-  background-color: #1976d2 !important;
+  background-color: #147700 !important;
   color: white !important;
+  cursor: pointer;
+}
+
+.btn-submit:hover {
+  background: #1caa00;
 }
 
 /* === BOTÓN DE REGISTRO === */
@@ -95,6 +143,7 @@ mat-icon {
 
 .link-btn {
   text-transform: none;
-  color: #1976d2 !important;
-  border-color: #1976d2 !important;
+  color: #147700 !important;
+  border-color: #147700 !important;
 }
+

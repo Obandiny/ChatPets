@@ -1,34 +1,35 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-</head>
 <body>
+  <header class="header">
+      <div class="logo-container">
+        <img src="/assets/image/87f1a3a2023330f396c805aa51e8ce43.jpg" alt="imagen.png">
+        <h1 class="title-header">PETS-APP</h1>
+      </div>
+  </header>
+
   <form [formGroup]="form" (ngSubmit)="onSubmit()">
     <div id="contenedor-principal">
       <div class="contenedor-login">
         <h1 class="titulo-label">Crear Cuenta</h1>
 
         <div class="input-group">
-          <input type="text" formControlName="nombre" required>
-          <label>Nombre</label>
+          <input type="text" formControlName="nombre" placeholder="Ingresar nombre" required>
+          <!-- <label>Nombre</label> -->
           <div class="error" *ngIf="form.get('nombre')?.touched && form.get('nombre')?.hasError('required')">
             El nombre es obligatorio.
           </div>
         </div>
 
         <div class="input-group">
-          <input type="text" formControlName="apellido" required>
-          <label>Apellido</label>
+          <input type="text" formControlName="apellido" placeholder="Ingresar apellido" required>
+          <!-- <label>Apellido</label> -->
           <div class="error" *ngIf="form.get('apellido')?.touched && form.get('apellido')?.hasError('required')">
             El apellido es obligatorio.
           </div>
         </div>
 
         <div class="input-group">
-          <input matInput type="email" formControlName="correo" required>
-          <label>Correo electrónico</label>
+          <input matInput type="email" formControlName="correo" placeholder="Ingresar correo" required>
+          <!-- <label>Correo electrónico</label> -->
           <div class="error" *ngIf="form.get('correo')?.touched">
             <div *ngIf="form.get('correo')?.hasError('required')">El correo es obligatorio.</div>
             <div *ngIf="form.get('correo')?.hasError('email')">Correo inválido.</div>
@@ -36,8 +37,8 @@
         </div>
 
         <div class="input-group">
-          <input type="password" formControlName="password" required>
-          <label>Contraseña</label>
+          <input type="password" formControlName="password" placeholder="Crear contraseña" required>
+          <!-- <label>Contraseña</label> -->
           <div class="error" *ngIf="form.get('password')?.touched && form.get('password')?.hasError('required')">
             La contraseña es obligatoria.
           </div>
@@ -52,5 +53,5 @@
     </div>
   </form>
 </body>
-</html>
+
 

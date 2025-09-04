@@ -1,17 +1,50 @@
-body {
+* {
   margin: 0;
   padding: 0;
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-  height: 100vh;
-    background: linear-gradient(to right, #8EC5FC, #E0C3FC); 
+  box-sizing: border-box;
 }
 
-#contenedor-principal {
+body {
+  height: 100vh;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background: #147700;
+  color: #fff;
+  padding: 10px 20px;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100%;
-  padding: 20px;
+  z-index: 1000;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+}
+
+.logo-container img {
+  width: 50px;
+  height: auto;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 20px;
+}
+
+.logo-container .title-header {
+  font-size: 30px;
+  font-weight: bold;
+  margin: 0;
 }
 
 .contenedor-login {
@@ -19,24 +52,26 @@ body {
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
   border-radius: 20px;
-  padding: 40px;
-  max-width: 400px;
+  padding: 50px;
   width: 100%;
   box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
   border: 1px solid rgba(255, 255, 255, 0.18);
   text-align: center;
   color: #000;
+  margin-top: 70px;
 }
 
 .titulo-label {
-  font-size: 32px;
+  font-size: 25px;
   margin-bottom: 30px;
-  color: #ffffff;
+  color: #147700;
+  font-weight: bold;
 }
 
 .input-group {
   position: relative;
   margin-bottom: 25px;
+  width: 300px;
 }
 
 .input-group input {
@@ -57,9 +92,9 @@ body {
 
 .input-group label {
   position: absolute;
-  top: -12px;
+  top: -20px;
   left: 10px;
-  font-size: 14px;
+  font-size: 15px;
   background: none;
   padding: 0 5px;
   padding-bottom: 10px;
@@ -69,7 +104,7 @@ body {
 .send-user {
   width: 100%;
   padding: 12px;
-  background-color: #1976d2;
+  background-color: #147700;
   color: white;
   border: none;
   border-radius: 8px;
@@ -80,7 +115,7 @@ body {
 }
 
 .send-user:hover {
-  background-color: #155a9d;
+  background-color: rgb(41, 170, 2);
 }
 
 .links {
@@ -88,7 +123,7 @@ body {
 }
 
 .links a {
-  color: #ffffff;
+  color: #147700;
   text-decoration: none;
   font-size: 14px;
 }
