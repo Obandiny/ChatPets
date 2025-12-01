@@ -7,18 +7,18 @@ from Models.mascota import Mascota
 from database import db
 import logging
 import re
-import pickle
+from modelo_learning.hybrid_engine import predecir_local, alimentar_db_gemini
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-def cargar_modelo():
-    try:
-        model, vectorizer = pickle.load(open("modelo_learning/ml/model.pkl", "rb"))
-        return model, vectorizer
-    except Exception as e:
-        print(f"[ERROR] No se pudo cargar el modelo: {e}")
-        return None, None
+# def cargar_modelo():
+#     try:
+#         model, vectorizer = pickle.load(open("modelo_learning/ml/model.pkl", "rb"))
+#         return model, vectorizer
+#     except Exception as e:
+#         print(f"[ERROR] No se pudo cargar el modelo: {e}")
+#         return None, None
 
 def extraer_campos_ia(texto_respuesta):
     """
@@ -104,20 +104,22 @@ def consultar_database(respuestas):
             )
     return "No se encontró una recomendación en la base de datos para los síntomas proporcionados."  
 
-def predecir_local(sintomas):
-    model, vectorizer = cargar_modelo()
-    if model is None:
-        return None
+# def predecir_local(sintomas):
+#     model, vectorizer = cargar_modelo()
+#     if model is None:
+#         return None
     
-    try:
-        X_vec = vectorizer.transform([sintomas])
-        prediccion = model.predict(X_vec)[0]
-        return prediccion
-    except Exception as e:
-        print(f"[ERROR] Fallo al predecir localmente: {e}")
-        return None  
+#     try:
+#         X_vec = vectorizer.transform([sintomas])
+#         prediccion = model.predict(X_vec)[0]
+#         return prediccion
+#     except Exception as e:
+#         print(f"[ERROR] Fallo al predecir localmente: {e}")
+#         return None  
 
 def procesar_diagnostico(usuario_actual, respuestas, mascota_id, mascotas):
+    sintomas_texto = ", ".join(respuestas)
+
     try:
         # Aquí, "mascotas" es el objeto de la mascota que pasas
         logger.info("Iniciando diagnóstico para usuario_id=%s, mascota_id=%s", usuario_actual.id, mascota_id)
@@ -126,37 +128,54 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id, mascotas):
         if not mascotas:
             logger.error("Mascota no encontrada o no pertenece al usuario.")
             raise ValueError("Mascota no encontrada o no pertenece al usuario")
+        
+        resultado_local = predecir_local(sintomas_texto)
 
-        prompt = construir_prompt(respuestas, mascotas)  # Se pasa el objeto mascota
-        logger.debug("Prompt generado: %s", prompt)
+        if resultado_local:
+            logger.info("Se uso el modelo local")
+            enfermedad = resultado_local["enfermedad"]
+            recomendacion = resultado_local["recomendacion"]
+            alerta = resultado_local["alerta"]
+            texto_respuesta = f"ENFERMEDAD PROBABLE: {enfermedad}\nRECOMENDACION: {recomendacion}\nALERTA: {alerta}"
+        else:
+            logger.info("Modelo local insuficiente. Consultando Gemini...")
+            prompt = construir_prompt(respuestas, mascotas)  # Se pasa el objeto mascota
+            logger.debug("Prompt generado: %s", prompt)
+            model = configurar_gemini()
+            chat = model.start_chat(history=[])
+            response = chat.send_message(prompt)
+            texto_respuesta = response.text
 
-        model = configurar_gemini()
-        chat = model.start_chat(history=[])
-        response = chat.send_message(prompt)
-        texto_respuesta = response.text
+            enfermedad, recomendacion, alerta = extraer_campos_ia(texto_respuesta)
 
-        enfermedad, recomendacion, alerta = extraer_campos_ia(texto_respuesta)
-
-        logger.info("Respuesta de Gemini recibida.")
-
+            logger.info("Respuesta de Gemini recibida.")
+            
+            # Alimentar la BD para mejorar el modelo
+            alimentar_db_gemini(
+                sintoma_texto=sintomas_texto,
+                enfermedad=enfermedad,
+                recomendacion=recomendacion
+            )
+                
         # Guardar historial
         historial = HistorialDiagnostico(
             usuario_id=usuario_actual.id,
             mascota_id=mascota_id,
-            sintomas=", ".join(respuestas),
+            sintomas=sintomas_texto,
             recomendacion=recomendacion,
             enfermedad=enfermedad,
-            prioridad=alerta,
+            alerta=alerta,
             contexto_anterior=texto_respuesta
         )
         db.session.add(historial)
         db.session.commit()
+
         logger.info("Historial guardado exitosamente: id=%s", historial.id)
 
         return texto_respuesta
     
     except Exception as e:
-        logger.exception("Error al procesar diagnóstico con Gemini: %s", e)
+        logger.exception("Error al procesar diagnóstico con modelo local: %s", e)
         texto_fallback = consultar_database(respuestas)
 
         # Guarda en historial con la respuesta fallback

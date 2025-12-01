@@ -56,5 +56,7 @@ export class ChatbotService {
     this.logger.info('Obteniendo conversacion adicional...');
     return this.http.post(`${this.apiUrl}/continuar`, body, { headers });
   }
+
+  
 }
 
