@@ -7,9 +7,18 @@ from Models.mascota import Mascota
 from database import db
 import logging
 import re
+import pickle
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+def cargar_modelo():
+    try:
+        model, vectorizer = pickle.load(open("modelo_learning/ml/model.pkl", "rb"))
+        return model, vectorizer
+    except Exception as e:
+        print(f"[ERROR] No se pudo cargar el modelo: {e}")
+        return None, None
 
 def extraer_campos_ia(texto_respuesta):
     """
@@ -93,7 +102,20 @@ def consultar_database(respuestas):
                 f"- Enfermedad: {resultado.enfermedad}\n"
                 f"- Recomendacion: {resultado.recomendacion}"
             )
-    return "No se encontró una recomendación en la base de datos para los síntomas proporcionados."    
+    return "No se encontró una recomendación en la base de datos para los síntomas proporcionados."  
+
+def predecir_local(sintomas):
+    model, vectorizer = cargar_modelo()
+    if model is None:
+        return None
+    
+    try:
+        X_vec = vectorizer.transform([sintomas])
+        prediccion = model.predict(X_vec)[0]
+        return prediccion
+    except Exception as e:
+        print(f"[ERROR] Fallo al predecir localmente: {e}")
+        return None  
 
 def procesar_diagnostico(usuario_actual, respuestas, mascota_id, mascotas):
     try:
@@ -154,43 +176,4 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id, mascotas):
 
         return texto_fallback
 
-    
-# def continuar_conversacion(usuario_actual, historial_id, nueva_pregunta):
-#     historial = HistorialDiagnostico.query.filter_by(id=historial_id, usuario_id=usuario_actual.id).first()
-    
-#     if not historial:
-#         raise ValueError("Historial no encontrado")
-    
-#     nuevo_prompt = f"""
-#     CONTEXTO ANTERIOR:
-#     {historial.contexto_anterior}
 
-#     NUEVA PREGUNTA DEL USUARIO:
-#     {nueva_pregunta}
-
-#     ➤ IMPORTANTE: Responde únicamente en el contexto de salud veterinaria y para la mascota específica. Sé claro y sin lenguaje técnico.
-#     """
-    
-#     model = configurar_gemini()
-#     chat = model.start_chat(history=[])
-#     respuesta = chat.send_message(nuevo_prompt).text
-
-#     mensaje_final = (
-#         "\n\n¿En qué más te puedo ayudar? 🐶🐾\n"
-#         "📞 Si necesitas ayuda personalizada, contacta al veterinario de Clínica PetSalud: "
-#         "[WhatsApp](https://wa.me/573001234567)"
-#     )
-    
-#     respuesta += mensaje_final
-
-#     nuevo_historial = HistorialDiagnostico(
-#         usuario_id=usuario_actual.id,
-#         mascota_id=historial.mascota_id,
-#         sintomas=nueva_pregunta,
-#         recomendacion=respuesta,
-#         contexto_anterior=historial.recomendacion
-#     )
-#     db.session.add(nuevo_historial)
-#     db.session.commit()
-    
-#     return respuesta
