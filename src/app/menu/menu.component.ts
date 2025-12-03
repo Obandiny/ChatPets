@@ -11,6 +11,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { Noticia, NoticiasService } from '../services/noticias.service';
 import { MatCardModule } from '@angular/material/card';
+import { ChatbotService } from '../services/chatbot.service';
 
 interface Diagnostico {
   id: number;
@@ -84,7 +85,7 @@ export class MenuComponent implements OnInit, OnDestroy {
     private logger: LoggerService,
     private snackBar: MatSnackBar,
     private noticiasService: NoticiasService,
-    @Inject(PLATFORM_ID) private platformId: Object
+    @Inject(PLATFORM_ID) private platformId: Object,
   ) {
     const info = this.authService.getUserInfo();
 

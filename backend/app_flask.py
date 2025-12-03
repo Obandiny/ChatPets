@@ -7,7 +7,7 @@ import os
 from config import Config
 from database import db
 from Models import app_usuarios, mascota, historial, relaciones
-from Routes import auth_bp, chat_bp, mascota_bp, diagnostico_bp, historial_bp, admin_user_bp, news_bp
+from Routes import auth_bp, chat_bp, mascota_bp, diagnostico_bp, historial_bp, admin_user_bp, news_bp, entrenamiento_bp
 
 # Cargar variables de entorno
 load_dotenv()
@@ -38,6 +38,7 @@ def create_app():
     app.register_blueprint(historial_bp, url_prefix='/api/historial')
     app.register_blueprint(admin_user_bp, url_prefix='/api/usuarios')
     app.register_blueprint(news_bp, url_prefix='/api/noticias')
+    app.register_blueprint(entrenamiento_bp, url_prefix='/api/entrenamiento')
 
     return app
 
