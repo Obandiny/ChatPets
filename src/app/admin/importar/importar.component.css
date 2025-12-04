@@ -1,0 +1,61 @@
+.contenedor-principal {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 40px;
+    color: #fff;
+}
+
+.titulo {
+    font-size: 26px;
+    margin-bottom: 25px;
+}
+
+.card {
+    background: #1e1e2f;
+    padding: 30px;
+    border-radius: 15px;
+    width: 420px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+    text-align: center;
+}
+
+.file-input-label {
+    background: #29293d;
+    padding: 12px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 20px;
+    color: #cfcfcf;
+    transition: 0.2s;
+}
+
+.file-input-label:hover {
+    background: #353552;
+}
+
+.btn-subir {
+    width: 100%;
+    padding: 12px;
+    font-size: 16px;
+    margin-bottom: 20px;
+}
+
+.spinner {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.toast-success {
+    background-color: #28a745 !important;
+    color: white !important;
+}
+
+.toast-error {
+    background-color: #dc3545 !important;
+    color: white !important;
+}

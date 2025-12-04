@@ -5,6 +5,7 @@ import os
 from database import db
 from Models.relaciones import RelacionTablas
 from Services.model_trainer import entrenar_modelo_bd
+from utils import token_required
 from dotenv import load_dotenv
 
 entrenamiento_bp = Blueprint('entrenamiento_bp', __name__)
@@ -14,6 +15,9 @@ ALLOWED_EXTENSIONS = os.getenv('ALLOWED_EXTENSIONS')
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+if not os.path.exists(UPLOAD_FOLDER):
+    os.makedirs(UPLOAD_FOLDER)
 
 @entrenamiento_bp.route('/importar-excel', methods=['POST'])
 def importar_excel():
@@ -31,19 +35,21 @@ def importar_excel():
         
         filename = secure_filename(archivo.filename)
         filepath = os.path.join(UPLOAD_FOLDER, filename)
-        
-        if not os.path.exists(UPLOAD_FOLDER):
-            os.makedirs(UPLOAD_FOLDER)
-        
         archivo.save(filepath)
+        
         df = pd.read_excel(filepath)
         
         columnas_requeridas = {"sintoma", "enfermedad", "recomendacion", "prioridad"}
+
         if not columnas_requeridas.issubset(df.columns):
             return jsonify({
                 "error": "El archivo no tiene las columnas requeridas",
-                "columnas_requeridad": list(columnas_requeridas)
+                "columnas_requeridad": list(columnas_requeridas),
+                "columnas_encontradas": list(df.columns)
             }), 400 
+        
+        RelacionTablas.query.delete()
+        db.session.commit()
         
         registros = []
         for _, fila in df.iterrows():
@@ -62,9 +68,10 @@ def importar_excel():
         
         return jsonify({
             "mensaje": "Archivo procesado, datos guardados y modelo reentrenado",
+            "filas_guardadas": len(registros),
             "modelo": resultado
         }), 200
     except Exception as e:
         db.session.rollback()
         print("Error al importar", e)
-        return jsonify({"error": "Error al procesar archivo"}), 500    
+        return jsonify({"error": "Error al procesar archivo", "detalle": str(e)}), 500    
