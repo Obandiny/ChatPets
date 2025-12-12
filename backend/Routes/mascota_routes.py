@@ -16,7 +16,7 @@ def registrar_mascota(current_user):
     if request.method == 'OPTIONS':
         return '', 200
     
-    data = request.get_json()
+    data = request.form
     print('Datos Requeridos:', data)
 
     nombre = data.get('nombre', '').strip()
@@ -25,8 +25,21 @@ def registrar_mascota(current_user):
     tamano = data.get('tamano', '').strip()
     peso = data.get('peso')
 
+    imagen = request.files.get('imagen')
+
     if not nombre or not raza or not edad or not tamano:
         return jsonify({'message': 'Todos los campos son obligatorios.'}), 400
+    
+    imagen_url = None
+
+    if imagen:
+        from datetime import datetime
+        filename = f"mascota_{current_user.id}_{datetime.now().timestamp()}.jpg"
+        
+        path = f"static/mascotas/{filename}"
+        imagen.save(path)
+        
+        imagen_url = f"/static/mascotas/{filename}"
     
     mascota = Mascota(
         nombre=nombre,
@@ -34,7 +47,8 @@ def registrar_mascota(current_user):
         edad=edad,
         tamano=tamano,
         peso=peso,
-        usuario_id=current_user.id
+        usuario_id=current_user.id,
+        imagen_url=imagen_url
     )
     db.session.add(mascota)
     db.session.commit()

@@ -9,8 +9,6 @@
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
   position: relative;
   transition: margin-left 0.3s ease;
-  border-bottom-left-radius: 10px;
-  border-bottom-right-radius: 10px;
 }
 
 .header.menu-open {
@@ -62,9 +60,9 @@
   position: fixed;
   top: 0;
   left: 0;
-  height: 100vh;
-  width: 240px;
-  background-color: #003f00;
+  height: 100%;
+  width: 249px;
+  background-color: #001f00;
   padding: 1rem;
   color: white;
   z-index: 1000;
@@ -118,7 +116,7 @@ section h2 {
 }
 
 /* Historial */
-.historial-item {
+/* .historial-item {
   background: none;
   border: none;
   color: white;
@@ -129,13 +127,13 @@ section h2 {
   border-radius: 4px;
   transition: background-color 0.2s ease;
   font-size: 14px;
-}
+} */
 
-.historial-item:hover,
+/* .historial-item:hover,
 .historial-item:focus {
   background-color: rgba(255,255,255,0.2);
   outline: none;
-}
+} */
 
 /* CONTENEDOR PRINCIPAL */
 .main {
@@ -544,11 +542,13 @@ mat-card img {
   }
 
   .menu-lateral {
-    width: 94.8%;
-    height: 100vh;
+    width: 95.4%;
+    /* height: 100vh; */
     position: relative;
     box-shadow: none;
     z-index: 1000;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
   }
 
   .bienvenida {

@@ -1,19 +1,24 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
-import { HttpClient } from '@angular/common/http';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MascotaService } from '../services/mascota.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { LoggerService } from '../services/logger.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatCardModule } from '@angular/material/card';
+import { from } from 'rxjs';
+
+interface ChatMessage {
+  from: 'user' | 'bot';
+  text?: string;
+  img?: string;
+}
 
 @Component({
   selector: 'app-registar-mascota',
@@ -34,91 +39,221 @@ import { MatCardModule } from '@angular/material/card';
   templateUrl: './registar-mascota.component.html',
   styleUrl: './registar-mascota.component.css'
 })
+
 export class RegistarMascotaComponent {
-  isMenuOpen = true;
-  isMobile = false;
+  
+  @ViewChild('chatWindow') chatWindow!: ElementRef;
 
-  stepLabels = ['Nombre', 'Raza', 'Edad', 'Peso', 'Tamaño'];
-
-  mascotaForm = this.fb.group({
-    nombre: ['', Validators.required],
-    raza: [null, Validators.required],
-    edad: [null, Validators.required],
-    peso: ['', Validators.required],
-    tamano: ['', Validators.required]
-  });
-
+  currentAnswer = '';
   step = 0;
+  isTyping = false;
+
+  selectedImageFile: File | null = null;
+  previewImageUrl: string | null = null;
+
+  mascotaData: any = {
+    nombre: '',
+    raza: '',
+    edad: '',
+    peso: '',
+    tamano: '',
+  };
+
+  steps = [
+    '¿Cuál es el nombre de tu mascota?',
+    'Perfecto 😊 ¿Qué raza es?',
+    '¿Cuántos años tiene?',
+    '¿Cuánto pesa? (kg)',
+    '¿de qué tamaño es? (Pequeño, Mediano o Grande)'
+  ];
+
+  messages: ChatMessage[] = [
+    { from: 'bot', text: '¡Hola! Vamos a registrar tu mascota 🐾' },
+    { from: 'bot', text: '¿Cuál es el nombre de tu mascota?' },
+  ];
 
   constructor(
-    private fb: FormBuilder, 
     private mascotaService: MascotaService,
-    private snackbar: MatSnackBar,
     private router: Router,
-    private logger: LoggerService
+    private snackbar: MatSnackBar
   ) {}
 
-  ngOnInit(): void {
-    this.checkIfMobile();
+
+  goBack() {
+    this.router.navigate(['/menu']);
   }
 
-  toggleMenu(): void {
-    this.isMenuOpen = !this.isMenuOpen;
-  }
+  sendMessage() {
+    let text = this.currentAnswer.trim();
+    if (!text) return;
 
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent) {
-    const target = event.target as HTMLElement;
+    text = this.limpiarRespuesta(text);
+    if (!text) return;
 
-    if (
-      this.isMenuOpen &&
-      !target.closest('.menu-lateral') &&
-      !target.closest('.btn-open-menu')
-    ) {
-      this.isMenuOpen = false;
+    // Mostrar burbuja usuario
+    this.messages.push({ from: 'user', text });
+    this.scrollToBottom();
+    this.currentAnswer = '';
+
+    // Validar según paso
+    if (!this.validateAnswer(text)) return;
+
+    // Guardar dato
+    const keys = ['nombre', 'raza', 'edad', 'peso', 'tamano'];
+    this.mascotaData[keys[this.step]] = text;
+
+    this.step++;
+
+    // Si aún hay preguntas
+    if (this.step < this.steps.length) {
+      this.showTyping(this.steps[this.step]);
+    } else {
+      this.finishRegistration();
     }
   }
 
-  @HostListener('window:resize', [])
-  onResize() {
-    this.checkIfMobile();
+  validateAnswer(answer: string): boolean {
+    // Validación edad
+    if (this.step === 2 && isNaN(Number(answer))) {
+      this.botReply('Por favor escribe un número válido para la edad.');
+      return false;
+    }
+
+    // Validación peso
+    if (this.step === 3 && isNaN(Number(answer))) {
+      this.botReply('El peso debe ser numérico en kg.');
+      return false;
+    }
+
+    // Validación tamaño
+    if (this.step === 4) {
+      const val = answer.toLowerCase();
+      if (!['pequeño', 'mediano', 'grande'].includes(val)) {
+        this.botReply('El tamaño debe ser: Pequeño, Mediano o Grande.');
+        return false;
+      }
+    }
+
+    return true;
   }
 
-  checkIfMobile() {
-    this.isMobile = window.innerWidth < 600;
+  botReply(text: string) {
+    this.showTyping(text);
   }
 
-  nextStep() {
-    if (this.step < 4) this.step++;
+  showTyping(nextMessage: string | ChatMessage) {
+    this.isTyping = true;
+    this.scrollToBottom();
+
+    setTimeout(() => {
+      this.isTyping = false;
+
+      if (typeof nextMessage === 'string') {
+        this.messages.push({ from: 'bot', text: nextMessage });
+      }
+      else {
+        this.messages.push({
+          from: 'bot',
+          text: nextMessage.text ?? undefined,
+          img: nextMessage.img ?? undefined
+        });
+      }
+
+      this.scrollToBottom();
+    }, 700);
   }
 
-  prevStep() {
-    if (this.step > 0) this.step--;
+  finishRegistration() {
+    this.botReply('Registrando mascota… 🐶✨');
+
+    const formData = new FormData();
+    formData.append('nombre', this.mascotaData.nombre);
+    formData.append('raza', this.mascotaData.raza);
+    formData.append('edad', this.mascotaData.edad);
+    formData.append('peso', this.mascotaData.peso);
+    formData.append('tamano', this.mascotaData.tamano);
+
+    if (this.selectedImageFile) {
+      formData.append('imagen', this.selectedImageFile);
+    }
+
+    this.mascotaService.registrarMascota(formData).subscribe({
+      next: () => {
+        this.showTyping('¡Mascota registrada con éxito! 🎉');
+        setTimeout(() => this.router.navigate(['/menu']), 1500);
+      },
+      error: () => {
+        this.botReply('Ocurrió un error al registrar la mascota 😿');
+      },
+    });
   }
 
-  onSubmit() {
-    if (!this.mascotaForm.valid) {
-      this.snackbar.open('Por favor registra a la mascota', 'Cerrar', { duration: 3000 });
-      this.logger.warn('Formulario invalido al registrar mascota', this.mascotaForm.value);
-      this.mascotaForm.markAllAsTouched();
+  scrollToBottom() {
+    setTimeout(() => {
+      if (this.chatWindow) {
+        const el = this.chatWindow.nativeElement;
+        el.scrollTop = el.scrollHeight;
+      }
+    }, 100);
+  }
+
+  limpiarRespuesta(texto: string): string {
+    if (!texto) return texto;
+
+    let t = texto.toLowerCase();
+
+    const filtros = [
+      'se llama',
+      'mi mascota se llama',
+      'mi perro se llama',
+      'nombre es',
+      'es',
+      'mi perro pesa',
+      'mi perro es raza',
+      ':',
+      'es raza',
+      'tiene años',
+      'pesa KG',
+      'es tamaño'
+    ];
+
+    filtros.forEach(f => {
+      t = t.replace(f, '');
+    });
+
+    t = t.replace(/[^a-zA-Z0-9áéíóúñ ]/g, '');
+
+    t = t.trim();
+
+    if (t.split(' ').length > 3 && this.step === 0) {
+      this.botReply('Solo necesito el nombre, por favor');
+      return '';
+    }
+
+    return t;
+  }
+
+  onImageSelected(event: any) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (!file.type.startsWith('image/')) {
+      this.botReply('Por favor selecciona una imagen valida');
       return;
     }
-      this.mascotaService.registrarMascota(this.mascotaForm.value).subscribe({
-        next: res => {
-          this.snackbar.open('Mascota registrada exitosmente', 'Cerrar', { duration: 3000 });
-          this.logger.info('Mascota registrada', this.mascotaForm.value);
-          this.router.navigate(['/menu']);
-        },
-        error: err => {
-          const mensaje = err.error?.message || 'Error en el registro';
-          this.snackbar.open(mensaje, 'Cerrar', { duration: 3000 });
-          this.logger.error('Error al registrar mascota', err);
-        }
-      });
-  }
 
-  getStepIcon(index: number): string {
-    const icons = ['pets', 'assignment_ind', 'calendar_today', 'fitness_center', 'straighten'];
-    return icons[index] || 'info';
+    this.selectedImageFile = file;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.previewImageUrl = reader.result as string;
+      this.messages.push({
+        from: 'user',
+        text: 'Foto cargada',
+        img: this.previewImageUrl
+      });
+      this.scrollToBottom();
+    };
+    reader.readAsDataURL(file);
   }
 }

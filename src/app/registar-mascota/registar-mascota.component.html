@@ -5,104 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-  <div class="registro-container mat-elevation-z4">
-    <mat-card class="registro-card">
+  <div class="wa-container">
 
-      <mat-card-header>
-        <mat-card-title>
-          <h1 class="titulo-principal">🐾 Registro de Mascota</h1>
-        </mat-card-title>
-      </mat-card-header>
+    <div class="wa-header">
+      <div class="wa-header-left">
+        <button mat-icon-button color="accent" (click)="goBack()">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <span class="wa-title">Registrar Mascota</span>
+      </div>
+    </div>
 
-      <mat-card-subtitle class="subtitulo">
-        Ingresa los datos de tu mascota paso a paso
-      </mat-card-subtitle>
+    <div class="wa-chat-window" #chatWindow>
+      <div *ngFor="let msg of messages" [ngClass]="msg.from">
 
-      <div class="stepper-visual">
+        <div class="msg-row">
+          <img 
+            *ngIf="msg.from === 'bot'"
+            src="/assets/image/Bot.png" 
+            alt="avatar.png"
+            class="avatar"
+          />
 
-      <div
-          class="step"
-          *ngFor="let label of stepLabels; let i = index"
-          [class.active]="i === step"
-          [class.completed]="i < step"
-        >
-          <mat-icon class="step-icon">{{ getStepIcon(i) }}</mat-icon>
-          <span class="step-label">{{ label }}</span>
-        </div>
+          <img
+            *ngIf="msg.from === 'user'"
+            [src]="mascotaData.imagen_url || 'assets/image/persona-logo.png'" 
+            alt="avatar.png"
+            class="avatar"
+          >
+
+          <div class="bubble">
+            <ng-container *ngIf="msg.text">{{ msg.text }}</ng-container>
+            <img *ngIf="msg.img" [src]="msg.img" class="bubble-img" />
+          </div> 
+        </div> 
       </div>
 
-      <form [formGroup]="mascotaForm" (ngSubmit)="onSubmit()">
-        <ng-container [ngSwitch]="step">
-          <!-- Paso 1 -->
-          <div *ngSwitchCase="0">
-            <mat-form-field appearance="outline" color="accent" class="full-width">
-              <mat-label>Nombre</mat-label>
-              <input matInput formControlName="nombre" required />
-              <mat-error *ngIf="mascotaForm.get('nombre')?.hasError('required')">Campo obligatorio</mat-error>
-            </mat-form-field>
-          </div>
+      <div class="typing-bubble" *ngIf="isTyping">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
 
-          <!-- Paso 2 -->
-          <div *ngSwitchCase="1">
-            <mat-form-field appearance="outline" color="accent" class="full-width">
-              <mat-label>Raza</mat-label>
-              <input matInput formControlName="raza" required />
-              <mat-error *ngIf="mascotaForm.get('raza')?.hasError('required')">Campo obligatorio</mat-error>
-            </mat-form-field>
-          </div>
-
-          <!-- Paso 3 -->
-          <div *ngSwitchCase="2">
-            <mat-form-field appearance="outline" color="accent" class="full-width">
-              <mat-label>Edad</mat-label>
-              <input matInput type="number" formControlName="edad" required />
-              <mat-error *ngIf="mascotaForm.get('edad')?.hasError('required')">Campo obligatorio</mat-error>
-            </mat-form-field>
-          </div>
-
-          <!-- Paso 4 -->
-          <div *ngSwitchCase="3">
-            <mat-form-field appearance="outline" color="accent" class="full-width">
-              <mat-label>Peso (kg)</mat-label>
-              <input matInput type="number" formControlName="peso" required />
-              <mat-error *ngIf="mascotaForm.get('peso')?.hasError('required')">Campo obligatorio</mat-error>
-            </mat-form-field>
-          </div>
-
-          <!-- Paso 5 -->
-          <div *ngSwitchCase="4">
-            <mat-form-field appearance="outline" color="accent" class="full-width">
-              <mat-label>Tamaño</mat-label>
-              <mat-select formControlName="tamano" required>
-                <mat-option value="Pequeño">Pequeño</mat-option>
-                <mat-option value="Mediano">Mediano</mat-option>
-                <mat-option value="Grande">Grande</mat-option>
-              </mat-select>
-              <mat-error *ngIf="mascotaForm.get('tamano')?.hasError('required')">Campo obligatorio</mat-error>
-            </mat-form-field>
-          </div>
-        </ng-container>
-
-        <div class="button-group">
-          <button mat-stroked-button color="primary" type="button" (click)="prevStep()" [disabled]="step === 0">
-            Anterior
-          </button>
-
-          <button mat-flat-button color="accent" type="button" *ngIf="step < 4" (click)="nextStep()">
-            Siguiente
-          </button>
-
-          <button mat-raised-button color="primary" type="submit" *ngIf="step === 4" [disabled]="mascotaForm.invalid">
-            Registrar
-          </button>
-
-          <button mat-button color="warn" type="button" routerLink="/menu">
-            <mat-icon>arrow_back</mat-icon>
-            Volver al menú
-          </button>
-        </div>
-      </form>
-    </mat-card>
+    <form (ngSubmit)="sendMessage()">
+      <div class="wa-input-bar">
+      
+      <label class="upload-btn">
+        <input type="file" accept="image/*" hidden (change)="onImageSelected($event)">
+        <mat-icon>photo_camera</mat-icon>
+      </label>
+      
+      <input 
+        type="text"
+        [(ngModel)]="currentAnswer"
+        name="answer"
+        placeholder="Escribe aqui..."
+        autocomplete="off"
+      />
+      <button type="submit" mat-icon-button color="primary">
+        <mat-icon>send</mat-icon>
+      </button>
+      </div>
+    </form>
   </div>
 
 </body>

@@ -18,7 +18,7 @@ export class MascotaService {
     @Inject(PLATFORM_ID) private platformId: Object
   ) {}
 
-  registrarMascota(data: any): Observable<any> {
+  registrarMascota(data: FormData): Observable<any> {
     const token = localStorage.getItem('token');
     console.log('Token enviado:', token);
 
