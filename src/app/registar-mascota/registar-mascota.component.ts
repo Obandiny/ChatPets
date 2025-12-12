@@ -33,7 +33,7 @@ interface ChatMessage {
     MatButtonModule,
     MatSelectModule,
     ReactiveFormsModule,
-    RouterLink,
+    // RouterLink,
     MatCardModule
   ],
   templateUrl: './registar-mascota.component.html',
