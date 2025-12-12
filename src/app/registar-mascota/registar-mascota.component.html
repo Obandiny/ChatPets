@@ -49,7 +49,7 @@
     <form (ngSubmit)="sendMessage()">
       <div class="wa-input-bar">
       
-      <label class="upload-btn">
+      <label class="upload-btn" [class.disable]="!imageRequired">
         <input type="file" accept="image/*" hidden (change)="onImageSelected($event)">
         <mat-icon>photo_camera</mat-icon>
       </label>
@@ -60,6 +60,7 @@
         name="answer"
         placeholder="Escribe aqui..."
         autocomplete="off"
+        [disabled]="imageRequired"
       />
       <button type="submit" mat-icon-button color="primary">
         <mat-icon>send</mat-icon>

@@ -39,10 +39,22 @@
         </div>
 
         <div *ngIf="submenuMascotasAbierto" class="mascotas-columna">
-          <button class="mascota-btn" *ngFor="let mascota of mascotas" (click)="irADiagnostico(mascota.id)">
-            {{ mascota.nombre }}
-            <button><mat-icon>delete</mat-icon></button>
-          </button>
+          <div class="mascota-item" *ngFor="let mascota of mascotas">
+
+            <button class="mascota-info" (click)="irADiagnostico(mascota.id)">
+              <img
+                class="mascota-imagen"
+                [src]="mascota.imagen_url || 'assets/image/dog.png'"
+                alt="Foto mascota"
+              >
+              <span>{{ mascota.nombre }}</span>
+            </button>
+
+            <button class="mascota-delete">
+              <mat-icon>delete</mat-icon>
+            </button>
+
+          </div>
         </div>
 
         <a routerLink="/perfil" routerLinkActive="active">Perfil</a>

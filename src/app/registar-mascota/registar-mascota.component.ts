@@ -47,6 +47,7 @@ export class RegistarMascotaComponent {
   currentAnswer = '';
   step = 0;
   isTyping = false;
+  imageRequired = false;
 
   selectedImageFile: File | null = null;
   previewImageUrl: string | null = null;
@@ -164,28 +165,8 @@ export class RegistarMascotaComponent {
   }
 
   finishRegistration() {
-    this.botReply('Registrando mascota… 🐶✨');
-
-    const formData = new FormData();
-    formData.append('nombre', this.mascotaData.nombre);
-    formData.append('raza', this.mascotaData.raza);
-    formData.append('edad', this.mascotaData.edad);
-    formData.append('peso', this.mascotaData.peso);
-    formData.append('tamano', this.mascotaData.tamano);
-
-    if (this.selectedImageFile) {
-      formData.append('imagen', this.selectedImageFile);
-    }
-
-    this.mascotaService.registrarMascota(formData).subscribe({
-      next: () => {
-        this.showTyping('¡Mascota registrada con éxito! 🎉');
-        setTimeout(() => this.router.navigate(['/menu']), 1500);
-      },
-      error: () => {
-        this.botReply('Ocurrió un error al registrar la mascota 😿');
-      },
-    });
+    this.botReply('Perfecto. Ahora sube una foto de tu mascota antes de continuar 📸🐶');
+    this.imageRequired = true;
   }
 
   scrollToBottom() {
@@ -247,13 +228,45 @@ export class RegistarMascotaComponent {
     const reader = new FileReader();
     reader.onload = () => {
       this.previewImageUrl = reader.result as string;
+
       this.messages.push({
         from: 'user',
         text: 'Foto cargada',
         img: this.previewImageUrl
       });
+
       this.scrollToBottom();
+
+      this.imageRequired = false;
+
+      this.registrarMascotaFinal();
     };
+    
     reader.readAsDataURL(file);
+  }
+
+  registrarMascotaFinal() {
+    this.botReply('Registrando mascota… 🐶✨');
+
+    const formData = new FormData();
+    formData.append('nombre', this.mascotaData.nombre);
+    formData.append('raza', this.mascotaData.raza);
+    formData.append('edad', this.mascotaData.edad);
+    formData.append('peso', this.mascotaData.peso);
+    formData.append('tamano', this.mascotaData.tamano);
+
+    if (this.selectedImageFile) {
+      formData.append('imagen', this.selectedImageFile);
+    }
+
+    this.mascotaService.registrarMascota(formData).subscribe({
+      next: () => {
+        this.showTyping('¡Mascota registrada con éxito! 🎉');
+        setTimeout(() => this.router.navigate(['/menu']), 1500);
+      },
+      error: () => {
+        this.botReply('Ocurrió un error al registrar la mascota 😿');
+      },
+    });
   }
 }
