@@ -1,5 +1,5 @@
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { isPlatformBrowser } from '@angular/common';
@@ -62,5 +62,16 @@ export class MascotaService {
       this.logger.error('Error en guardar la modificacion.');
       throw error;
     }
+  }
+
+  deleteMascota(id: number) {
+    let headers = new HttpHeaders();
+
+    const token = localStorage.getItem('token');
+    if (token) {
+      headers = headers.set('Authorization', `Bearer ${token}`);
+    }
+    
+    return this.http.delete(`${this.API_URL}/${id}`, { headers });
   }
 }

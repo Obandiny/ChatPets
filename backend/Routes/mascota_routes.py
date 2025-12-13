@@ -1,6 +1,7 @@
-from flask import Blueprint,  request, jsonify
+from flask import Blueprint,  request, jsonify, current_app
 from Models.mascota import Mascota
 from Models.seguimientoMascota import SeguimientoMascota
+from Models.mascota import Mascota
 from utils import token_required
 import logging as logger
 from database import db
@@ -128,3 +129,21 @@ def guardar_seguimiento(current_user):
         import traceback
         print("Error", traceback.format_exc())
         logger.error("Error al guardar seguimiento", e), 400    
+
+@mascota_bp.route('/<int:id>', methods=['DELETE'])
+@token_required
+def eliminar_mascota(current_user, id):
+    try:
+        mascota = Mascota.query.filter_by(id=id, usuario_id=current_user.id).first()
+        if not mascota:
+            return jsonify({"mensaje": "Mascota no encontrada o no autorizada"}), 404
+        
+        db.session.delete(mascota)
+        db.session.commit()
+        
+        return jsonify({"mensaje": "Mascota eliminada correctamente"}), 200
+    
+    except Exception as e:
+        db.session.rollback()
+        current_app.logger.exception("Error al eliminar mascota: %s", e)
+        return jsonify({"error": "Error interno al eliminar mascota"}), 500

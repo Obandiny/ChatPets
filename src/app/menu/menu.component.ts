@@ -42,6 +42,9 @@ interface Tip {
   styleUrls: ['./menu.component.css']
 })
 export class MenuComponent implements OnInit, OnDestroy {
+
+  readonly API_BASE = 'http://localhost:5000';
+
   mensajeBienvenida: string = '';
   isMenuOpen = true;
   submenuAbierto: boolean = false;
@@ -166,7 +169,14 @@ export class MenuComponent implements OnInit, OnDestroy {
 
   cargarMascotas() {
     this.mascotaService.getMisMascotas().subscribe({
-      next: (data) => this.mascotas = data,
+      next: (response) => {
+        this.mascotas = response.map((m: any) => ({
+          ...m,
+          imagen_url: m.imagen_url
+            ? this.API_BASE + m.imagen_url
+            : 'assests/image/dog.png'
+        }));
+      },
       error: (err) => this.logger.error('Error cargando mascotas:', err)
     });
   }
@@ -270,5 +280,25 @@ export class MenuComponent implements OnInit, OnDestroy {
       const mascota = localStorage.getItem('mascota');
       this.mascotaRegistrada = !mascota;
     }
+  }
+
+  eliminarMascota(id: number) {
+    const confirmar = confirm('¿Deseas eliminar esta mascota?');
+    if (!confirmar) return;
+
+    this.mascotaService.deleteMascota(id).subscribe({
+      next: (res) => {
+        this.mascotas = this.mascotas.filter(m => m.id !== id);
+
+        this.snackBar.open('Mascota eliminada correctamente', 'Cerrar', { duration: 3000 });
+        this.logger.info('Mascota eliminada', id);
+      },
+      error: (err) => {
+        console.error('Error al eliminar mascota', err);
+        const msg = err?.error?.mensaje || err?.error?.message || 'Error al eliminar mascota';
+        this.snackBar.open(msg, 'Cerrar', { duration: 4000 });
+        this.logger.error('Error eliminar mascota', err);
+      }
+    });
   }
 }
