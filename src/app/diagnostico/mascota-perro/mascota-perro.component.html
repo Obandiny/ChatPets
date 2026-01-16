@@ -5,7 +5,66 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 <body>
-  <header class="header" [class.menu-open]="isMenuOpen" [class.menu-closed]="!isMenuOpen">
+
+  <!-- <div class="wa-container">
+
+    <div class="wa-header">
+      <div class="wa-header-left">
+        <button mat-icon-button color="accent" (click)="goBack()">
+          <mat-icon>arrow_back</mat-icon>
+        </button>
+        <span class="wa-title">Diagnostico</span>
+      </div>
+    </div>
+
+    <div class="wa-chat-window" #chatWindow>
+      <div *ngFor="let msg of messages" [ngClass]="msg.from">
+        <div class="msg-row">
+
+          <img
+            *ngIf="msg.from === 'bot'"
+            src="/assets/image/Bot.png" 
+            class="avatar"
+          >
+
+          <img
+            *ngIf="msg.from === 'user'"
+            [src]="mascotaSeleccionada?.imagen_url || 'assets/image/dog.png'"
+            class="avatar"
+          >
+
+          <div class="bubble">
+            {{ msg.text }}
+          </div>
+
+        </div>
+      </div>
+
+      <div class="typing-bubble" *ngIf="isTyping">
+        <span></span><span></span><span></span>
+      </div>
+    </div>
+
+    <form (ngSubmit)="sendMessage()">
+      <div class="wa-input-bar">
+        <input
+          type="text"
+          [(ngModel)]="currentAnswer"
+          name="answer"
+          placeholder="Escribe tu respuesta…"
+          autocomplete="off"
+        />
+        <button mat-icon-button color="primary">
+          <mat-icon>send</mat-icon>
+        </button>
+      </div>
+    </form>
+
+  </div> -->
+
+
+
+  <!-- <header class="header" [class.menu-open]="isMenuOpen" [class.menu-closed]="!isMenuOpen">
     <button class="btn-open-menu" aria-label="Abrir/Cerrar menú" (click)="toggleMenu()">
       <mat-icon>{{ isMenuOpen ? 'menu_open' : 'menu' }}</mat-icon>
     </button>
@@ -121,6 +180,6 @@
 
   <div class="fase-overlay" *ngIf="mostrarFaseOverlay">
     <h1>{{ fases[faseActual].titulo }}</h1>
-  </div>
+  </div> -->
 </body>
 </html>

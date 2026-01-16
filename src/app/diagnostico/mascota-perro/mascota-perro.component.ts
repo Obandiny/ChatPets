@@ -17,7 +17,13 @@ import { Inject, PLATFORM_ID } from '@angular/core';
 import { LoggerService } from '../../services/logger.service';
 import { MatDividerModule } from '@angular/material/divider';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
- 
+
+
+interface ChatMessage {
+  from: 'user' | 'bot';
+  text: string;
+}
+
 @Component({
   selector: 'app-mascota-perro',
   standalone: true,
@@ -36,6 +42,7 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
   templateUrl: './mascota-perro.component.html',
   styleUrls: ['./mascota-perro.component.css']
 })
+
 export class MascotaPerroComponent {
   isMenuOpen = false;
   mostrarResumen = false;
