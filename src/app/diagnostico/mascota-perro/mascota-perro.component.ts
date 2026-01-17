@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -29,7 +29,7 @@ interface ChatMessage {
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    RouterLink,
+    // RouterLink,
     CommonModule,
     FormsModule,
     MatIconModule,
@@ -44,13 +44,23 @@ interface ChatMessage {
 })
 
 export class MascotaPerroComponent {
-  isMenuOpen = false;
-  mostrarResumen = false;
-  modalAbierto = false;
-  mostrarFaseOverlay = true;
-  editandoMascota = false;
-  datosEditables: any = {};
+
+  @ViewChild('chatWindow') chatWindow!: ElementRef;
+
   mascotaSeleccionada: any;
+
+  messages: ChatMessage[] = [];
+  currentAnswer: string = '';
+  isTyping = false;
+
+  faseIndex = 0;
+  preguntaIndex = 0;
+
+  respuestas: {
+    fase: string;
+    pregunta: string;
+    respuesta: string;
+  }[] = [];
 
   fases = [
     {
@@ -83,12 +93,6 @@ export class MascotaPerroComponent {
     }
   ];
 
-  faseActual = 0;
-  preguntaActual = 0;
-  answers: string[][] = [[], [], []];
-
-  currentQuestionIndex = 0;
-
   constructor(
     private diagnosticoService: DiagnosticoService,
     private mensajeService: MensajeService,
@@ -102,166 +106,167 @@ export class MascotaPerroComponent {
 
   ngOnInit() {
     this.routerActivate.queryParams.subscribe(param => {
-      const mascotaId = param['id'];
-      if (mascotaId) {
-        this.mascotaService.getMascotaById(mascotaId).subscribe(
-            data => {
-            this.mascotaSeleccionada = data;
 
-            if (isPlatformBrowser(this.platformId)) {
-              localStorage.setItem('mascota_id', mascotaId);
-            }
-          },
-          error => {
-            console.error('Error', error);
-          }
-        );
+      if (param['mascota']) {
+        this.mascotaSeleccionada = JSON.parse(param['mascota']);
+        this.mostrarMensajeInicial();
+        return;
       }
+
+      if (param['id']) {
+        this.mascotaService.getMascotaById(param['id']).subscribe(m => {
+          this.mascotaSeleccionada = m;
+          this.mostrarMensajeInicial();
+        });
+      }
+
     });
-
-    setTimeout(() => this.mostrarFaseOverlay = false, 2000);
   }
 
-  get preguntasFase(): string[] {
-    return this.fases[this.faseActual].preguntas;
+  mostrarMensajeInicial() {
+    const mascota = this.mascotaSeleccionada;
+
+    this.pushBotMessage(
+      `Vamos a iniciar el diagnostico de tu mascota
+      
+      Nombre: ${mascota.nombre}
+      Raza: ${mascota.raza}
+      Edad: ${mascota.edad} años
+      Peso: ${mascota.peso} Kg
+      
+      Te hare algunas preguntas para entender mejor su estado de salud.`
+    );
+
+    setTimeout(() => {
+      this.enviarPreguntaActual();
+    }, 800);
   }
 
-  get preguntaActualTexto(): string {
-    return this.preguntasFase[this.preguntaActual];
+  enviarPreguntaActual() {
+    const fase = this.fases[this.faseIndex];
+    const pregunta = fase.preguntas[this.preguntaIndex];
+
+    this.pushBotMessage(`(${fase.titulo})\n${pregunta}`);
   }
 
-  get currentAnswer(): string {
-    return this.answers[this.faseActual][this.preguntaActual] || '';
-  }
+  avanzarPregunta() {
+    this.preguntaIndex++;
 
-  set currentAnswer(value: string) {
-    this.answers[this.faseActual][this.preguntaActual] = value;
-  }
-
-  before(): void {
-    if (this.preguntaActual > 0) {
-      this.preguntaActual--;
-    } else if (this.faseActual > 0) {
-      this.faseActual--;
-      this.preguntaActual = this.preguntasFase.length - 1;
-      this.mostrarFaseTemporal();
-    }
-  }
-
-  next(): void {
-    const respuesta = this.currentAnswer?.trim();
-    if (respuesta !== '') {
-      if (this.preguntaActual < this.preguntasFase.length - 1) {
-        this.preguntaActual++;
-      } else if (this.faseActual < this.fases.length - 1) {
-        this.faseActual++;
-        this.preguntaActual = 0;
-        this.mostrarFaseTemporal();
-      } else {
-        this.mostrarResumenFinal();
-      }
-    }
-  }
-
-  isFirstQuestion(): boolean {
-    return this.faseActual === 0 && this.preguntaActual === 0;
-  }
-
-  isAnswerEmpty(): boolean {
-    return this.currentAnswer.trim() === '';
-  }
-
-  getInputType(index: number): string {
-    return 'text';
-  }
-
-  toggleMenu(): void {
-    this.isMenuOpen = !this.isMenuOpen;
-  }
-
-  finishDiagnosis(): void {
-    if (!isPlatformBrowser(this.platformId)) return;
-
-    const mascotaId = parseInt(localStorage.getItem('mascota_id') || '0');
-    if (!mascotaId) {
-      this.logger.error('ID de mascota no encontrado en localstorage');
+    if (this.preguntaIndex < this.fases[this.faseIndex].preguntas.length) {
+      this.enviarPreguntaActual();
       return;
     }
 
-    const respuestasPlanas = this.answers.flat();
+    this.faseIndex++;
+    this.preguntaIndex = 0;
 
-    this.logger.info('Enviando respuestas:', respuestasPlanas);
+    if (this.faseIndex < this.fases.length) {
+      this.pushBotMessage(`Pasemos a la siguiente seccion`);
+      setTimeout(() => this.enviarPreguntaActual(), 700);
+    } else {
+      this.finishDiagnosis();
+    }
+  }
 
-    this.diagnosticoService.enviarDiagnostico(respuestasPlanas, mascotaId)
+  guardarRespuesta(respuesta: string) {
+    const fase = this.fases[this.faseIndex];
+    const pregunta = fase.preguntas[this.preguntaIndex];
+
+    this.respuestas.push({
+      fase: fase.titulo,
+      pregunta,
+      respuesta
+    });
+  }
+
+  sendMessage() {
+    const texto = this.currentAnswer.trim();
+    if (!texto) return;
+
+    this.messages.push({ from: 'user', text: texto });
+
+    this.guardarRespuesta(texto);
+
+    this.currentAnswer = '';
+
+    this.avanzarPregunta();
+
+    this.scrollToBottom();
+  }
+
+  finishDiagnosis() {
+    this.pushBotMessage('Gracias. Estoy analizando la informacion...');
+
+    const sintomas: string[] = this.respuestas.map(r =>
+      `${r.pregunta} - ${r.respuesta}`
+    );
+
+    const mascotaId = this.mascotaSeleccionada.id;
+
+    this.diagnosticoService.enviarDiagnostico(sintomas, mascotaId)
       .subscribe({
-        next: (res: any) => {
-          this.mensajeService.setMensajes([
-            { text: respuestasPlanas.map((q, i) => `Q${i + 1}: ${q}`).join('\n\n'), isBot: false },
-            { text: res.resultado?.respuesta || 'Diagnóstico generado', isBot: true }
-          ]);
-          this.router.navigate(['/menu']);
+        next: (res) => {
+          this.pushBotMessage(res.recomendacion || 'Diagnostico generado correctamente.');
         },
         error: (err) => {
-          console.error('Error al enviar diagnostico:', err);
+          this.logger.error(err);
+          this.pushBotMessage('Ocurrio un error al generar el diagnostico.');
         }
       });
   }
 
-  activarEdicion() {
-    this.editandoMascota = true;
-    this.datosEditables = { ...this.mascotaSeleccionada };
+  pushBotMessage(text: string) {
+    this.isTyping = true;
+
+    setTimeout(() => {
+      this.messages = [...this.messages, { from: 'bot', text}];
+      this.isTyping = false;
+
+      this.scrollToBottom();
+    }, 300);
   }
 
-  guardarCambiosMascota() {
-    const seguimiento = {
-      mascota_id: this.datosEditables.id,
-      nombre: this.datosEditables.nombre,
-      edad: this.datosEditables.edad,
-      raza: this.datosEditables.raza,
-      peso: this.datosEditables.peso
-    };
-
-    this.mascotaService.guardarSeguimiento(seguimiento).subscribe({
-      next: () => {
-        this.editandoMascota = false;
-        this.mascotaSeleccionada = { ...this.datosEditables };
-
-        this.snackBar.open('✅ Cambios guardados correctamente', 'cerrar', {
-          duration: 3000,
-          panelClass: ['snackbar-success']
-        });
-      },
-      error: err => {
-        this.logger.error('Error al guardar seguimiento.', err);
-
-        this.snackBar.open('❌ Error al guardar los cambios', 'Cerrar', {
-          duration: 3000,
-          panelClass: ['snackbar-error']
-        });
+  scrollToBottom() {
+    setTimeout(() => {
+      if (this.chatWindow) {
+        this.chatWindow.nativeElement.scrollTop =
+          this.chatWindow.nativeElement.scrollHeight;
       }
-    });
+    }, 100);
   }
 
-  mostrarResumenFinal(): void {
-    this.mostrarResumen = true;
+  goBack() {
+    this.router.navigate(['/menu']);
   }
 
-  editarRespuestas(): void {
-    this.mostrarResumen = false;
-    this.faseActual = 0;
-    this.preguntaActual = 0;
-  }
+  // guardarCambiosMascota() {
+  //   const seguimiento = {
+  //     mascota_id: this.datosEditables.id,
+  //     nombre: this.datosEditables.nombre,
+  //     edad: this.datosEditables.edad,
+  //     raza: this.datosEditables.raza,
+  //     peso: this.datosEditables.peso
+  //   };
 
-  abrirModal(): void {
-    this.modalAbierto = true;
-  }
+  //   this.mascotaService.guardarSeguimiento(seguimiento).subscribe({
+  //     next: () => {
+  //       this.editandoMascota = false;
+  //       this.mascotaSeleccionada = { ...this.datosEditables };
 
-  cerrarModal(): void {
-    this.modalAbierto = false;
-  }
+  //       this.snackBar.open('✅ Cambios guardados correctamente', 'cerrar', {
+  //         duration: 3000,
+  //         panelClass: ['snackbar-success']
+  //       });
+  //     },
+  //     error: err => {
+  //       this.logger.error('Error al guardar seguimiento.', err);
 
-  mostrarFaseTemporal(): void {
-    this.mostrarFaseOverlay = true;
-    setTimeout(() => this.mostrarFaseOverlay = false, 2000);
-  }
+  //       this.snackBar.open('❌ Error al guardar los cambios', 'Cerrar', {
+  //         duration: 3000,
+  //         panelClass: ['snackbar-error']
+  //       });
+  //     }
+  //   });
+  // }
+
 }

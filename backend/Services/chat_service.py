@@ -20,6 +20,26 @@ logger = logging.getLogger(__name__)
 #         print(f"[ERROR] No se pudo cargar el modelo: {e}")
 #         return None, None
 
+def normalizar_alerta(alerta):
+    if not alerta:
+        return "baja"
+    
+    alerta = alerta.lower()
+    
+    if "alta" in alerta:
+        return "alta"
+    if "media" in alerta:
+        return "mediaa"
+    
+    return "baja"
+
+def asegurar_campos(enfermedad, recomendacion, alerta):
+    return {
+        "enfermedad": enfermedad if enfermedad else "No determina",
+        "recomendacion": recomendacion if recomendacion else "Se recomienda evaluacion veterinaria.",
+        "alerta": normalizar_alerta(alerta)
+    }
+
 def extraer_campos_ia(texto_respuesta):
     """
     Extrae los campos 'enfermedad', 'recomendacion' y 'alerta' desde el texto devuelto por Gemini.
@@ -55,7 +75,7 @@ def configurar_gemini():
     }
     
     model = genai.GenerativeModel(
-        model_name="gemini-1.5-flash-002",
+        model_name="gemini-1.5-flash",
         generation_config=generation_config
     )
     
@@ -133,10 +153,16 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id, mascotas):
 
         if resultado_local:
             logger.info("Se uso el modelo local")
-            enfermedad = resultado_local["enfermedad"]
-            recomendacion = resultado_local["recomendacion"]
-            alerta = resultado_local["alerta"]
-            texto_respuesta = f"ENFERMEDAD PROBABLE: {enfermedad}\nRECOMENDACION: {recomendacion}\nALERTA: {alerta}"
+
+            enfermedad = resultado_local.get["enfermedad"]
+            recomendacion = resultado_local.get["recomendacion"]
+            alerta = resultado_local.get["alerta"]
+
+            texto_respuesta = (
+                f"ENFERMEDAD PROBABLE: {enfermedad}\n"
+                f"RECOMENDACION: {recomendacion}\n"
+                f"ALERTA: {alerta}"
+            )
         else:
             logger.info("Modelo local insuficiente. Consultando Gemini...")
             prompt = construir_prompt(respuestas, mascotas)  # Se pasa el objeto mascota
@@ -144,8 +170,8 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id, mascotas):
             model = configurar_gemini()
             chat = model.start_chat(history=[])
             response = chat.send_message(prompt)
-            texto_respuesta = response.text
 
+            texto_respuesta = response.text
             enfermedad, recomendacion, alerta = extraer_campos_ia(texto_respuesta)
 
             logger.info("Respuesta de Gemini recibida.")
@@ -156,26 +182,26 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id, mascotas):
                 enfermedad=enfermedad,
                 recomendacion=recomendacion
             )
-                
+        campos = asegurar_campos(enfermedad, recomendacion, alerta)
         # Guardar historial
         historial = HistorialDiagnostico(
             usuario_id=usuario_actual.id,
             mascota_id=mascota_id,
             sintomas=sintomas_texto,
-            recomendacion=recomendacion,
-            enfermedad=enfermedad,
-            alerta=alerta,
+            recomendacion=campos["recomendacion"],
+            enfermedad=campos["enfermedad"],
+            alerta=campos["alerta"],
             contexto_anterior=texto_respuesta
         )
         db.session.add(historial)
         db.session.commit()
 
         logger.info("Historial guardado exitosamente: id=%s", historial.id)
-
         return texto_respuesta
     
     except Exception as e:
         logger.exception("Error al procesar diagnóstico con modelo local: %s", e)
+
         texto_fallback = consultar_database(respuestas)
 
         # Guarda en historial con la respuesta fallback
@@ -185,6 +211,8 @@ def procesar_diagnostico(usuario_actual, respuestas, mascota_id, mascotas):
                 mascota_id=mascota_id,
                 sintomas=", ".join(respuestas),
                 recomendacion=texto_fallback,
+                enfermedad="No determinada",
+                alerta="baja",
                 contexto_anterior=texto_fallback
             )
             db.session.add(historial)

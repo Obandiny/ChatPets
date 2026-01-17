@@ -1,9 +1,15 @@
 /* CABECERA */
+.fixed {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
 .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  background-color: #007400;
+  background-color: #003500;
   color: white;
   padding: 10px 20px;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
@@ -182,9 +188,9 @@ section h2 {
   color: #fff;
 }
 
-.noticia-card:hover {
+/* .noticia-card:hover {
   transform: translateY(-5px);
-}
+} */
 
 .noticia-card .titulo-noticia {
   font-size: 16px;
@@ -219,6 +225,7 @@ mat-card img {
   display: flex;
   justify-content: center;
   margin-top: 20px;
+  padding: 5px;
 }
 
 /* Nueva sección informativa */

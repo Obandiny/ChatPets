@@ -1,18 +1,20 @@
 <body>
   <div class="page-wrapper">
-
-    <header class="header" [class.menu-open]="isMenuOpen" [class.menu-closed]="!isMenuOpen">
-      <button class="btn-open-menu" aria-label="Abrir/Cerrar menú" (click)="toggleMenu()" matTooltip="Abrir menu">
-        <mat-icon>{{ isMenuOpen ? 'menu_open' : 'menu' }}</mat-icon>
-      </button>
-      <h1 class="app-name">MASCOTAPP</h1>
-      <div class="bienvenida">
-        {{ mensajeBienvenida }}
-      </div>
-      <button class="btn-logout" aria-label="Cerrar sesión" (click)="logout()">
-        <mat-icon class="logout" matTooltip="Cerrar sesión">logout</mat-icon>
-      </button>
-    </header>
+  
+    <div class="fixed">
+      <header class="header" [class.menu-open]="isMenuOpen" [class.menu-closed]="!isMenuOpen">
+        <button class="btn-open-menu" aria-label="Abrir/Cerrar menú" (click)="toggleMenu()" matTooltip="Abrir menu">
+          <mat-icon>{{ isMenuOpen ? 'menu_open' : 'menu' }}</mat-icon>
+        </button>
+        <h1 class="app-name">MASCOTAPP</h1>
+        <div class="bienvenida">
+          {{ mensajeBienvenida }}
+        </div>
+        <button class="btn-logout" aria-label="Cerrar sesión" (click)="logout()">
+          <mat-icon class="logout" matTooltip="Cerrar sesión">logout</mat-icon>
+        </button>
+      </header>
+    </div>
 
     <nav class="menu-lateral" *ngIf="isMenuOpen" role="navigation" aria-label="Menú lateral">
       <!-- <button class="btn-close-menu" (click)="toggleMenu()">Cerrar Menú</button> -->
@@ -93,7 +95,7 @@
     </nav>
 
     <main [class.menu-open]="isMenuOpen" [class.menu-closed]="!isMenuOpen" class="main">
-      <h2 class="section-title section-title-white">NOTICIAS DE SALUD ANIMAL</h2>
+      <!-- <h2 class="section-title section-title-white">NOTICIAS DE SALUD ANIMAL</h2> -->
 
       <!-- <div class="flex justify-between items-center mb-4">
         <h2 class="text-xl font-semibold">Noticias recientes</h2>
