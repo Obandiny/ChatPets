@@ -8,6 +8,7 @@ import { MascotaPerroComponent } from './diagnostico/mascota-perro/mascota-perro
 import { RegistarMascotaComponent } from './registar-mascota/registar-mascota.component';
 import { TableUsuariosComponent } from './admin/table-usuarios/table-usuarios.component';
 import { TableMascotasComponent } from './admin/table-mascotas/table-mascotas.component';
+import { ImportarComponent } from './admin/importar/importar.component';
 
 
 export const routes: Routes = [
@@ -23,5 +24,6 @@ export const routes: Routes = [
     { path: 'auth/register', component: RegisterComponent },
     { path: 'registrar-mascota', component: RegistarMascotaComponent },
     { path: 'admin/table-usuarios', component: TableUsuariosComponent },
-    { path: 'admin/table-mascotas', component: TableMascotasComponent }
+    { path: 'admin/table-mascotas', component: TableMascotasComponent },
+    { path: 'admin/importar', component: ImportarComponent }
 ];

@@ -1,0 +1,21 @@
+version: '3.9'
+
+services:
+
+  backend:
+    build: ./backend
+    container_name: flask_backend
+    env_file:
+      - .env
+    volumes:
+      - ./backend/instance:/app/instance
+      - ./backend/uploads:/app/uploads
+    ports:
+      - "5000:5000"
+  frontend:
+    build: ./src
+    container_name: angular_frontend
+    ports:
+      - "4200:80"
+    depends_on:
+      - backend

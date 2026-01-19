@@ -53,6 +53,6 @@ if __name__ == '__main__':
         if request.method == 'OPTIONS':
             return '', 200
 
-    app.run(debug=True)    
+    app.run(host="0.0.0.0", port=5000, debug=True)    
 
 # Usar con WSGI (gunicorn) o contenedor cuando sea en PRODUCCION. 
