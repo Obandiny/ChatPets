@@ -1,10 +1,11 @@
 <div class="contenedor-principal">
 
-    <h2 class="titulo">Importar datos desde Excel</h2>
-
     <div class="card">
 
+        <h2 class="titulo">Importar datos desde Excel</h2>
+
         <label class="file-input-label">
+
             <mat-icon>upload_file</mat-icon>
             <span>{{ archivoSeleccionado ? archivoSeleccionado.name : 'Seleccionar archivo Excel' }}</span>
             <input type="file" hidden (change)="onFileSelected($event)">

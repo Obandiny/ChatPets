@@ -33,17 +33,3 @@ class RelacionTablas(db.Model):
     sintoma = db.relationship("Sintoma", back_populates="relaciones")
     enfermedad = db.relationship("Enfermedad", back_populates="relaciones")
     recomendacion = db.relationship("Recomendacion", back_populates="relaciones")
-
-# class SintomaEnfermedad(db.Model):
-#     __tablename__ = 'sintomas_enfermedades'
-#     sintomas_id = db.Column(db.Integer, db.ForeignKey('sintomas.id_sintomas'), primary_key=True)
-#     enfermedad_id = db.Column(db.Integer, db.ForeignKey('enfermedades.id_enfermedad'), primary_key=True)
-#     sintoma = relationship('Sintoma', back_populates='enfermedades')
-#     enfermedad = relationship('Enfermedad', back_populates='sintomas')
-
-# class EnfermedadRecomendacion(db.Model):
-#     __tablename__ = 'enfermedades_recomendaciones'
-#     enfermedad_id = db.Column(db.Integer, db.ForeignKey('enfermedades.id_enfermedad'), primary_key=True)
-#     recomendacion_id = db.Column(db.Integer, db.ForeignKey('recomendaciones.id_recomendacion'), primary_key=True)
-#     enfermedad = relationship('Enfermedad', back_populates='recomendaciones')
-#     recomendacion = relationship('Recomendacion', back_populates='enfermedades_relacionadas')   

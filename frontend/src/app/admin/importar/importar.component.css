@@ -4,11 +4,14 @@
     align-items: center;
     margin-top: 40px;
     color: #fff;
+    justify-content: center;
+    height: 90vh;
 }
 
 .titulo {
     font-size: 26px;
     margin-bottom: 25px;
+    color: #fff;
 }
 
 .card {
@@ -43,6 +46,14 @@
     padding: 12px;
     font-size: 16px;
     margin-bottom: 20px;
+    cursor: pointer;
+    border: none;
+    border-radius: 10px;
+}
+
+.btn-subir:hover {
+    background: rgb(0, 170, 0);
+    color: #fff;
 }
 
 .spinner {
