@@ -5,6 +5,8 @@ from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from dotenv import load_dotenv
 
+load_dotenv()
+
 DB_PATH = os.getenv('DB_PATH')
 MODEL_PATH = os.getenv('MODEL_PATH')
 
@@ -16,7 +18,12 @@ def cargar_datos_sqlite():
     try:
         conn = sqlite3.connect(DB_PATH)
         cursor = conn.cursor()
-        cursor.execute("SELECT sintomas, enfermedades, recomendaciones FROM relacion_tablas WHERE enfermedades IS NOT NULL")
+        cursor.execute("""
+            SELECT s.sintomas, e.id_enfermedad
+            FROM relacion_tablas r
+            JOIN sintomas s ON r.sintoma_id = s.id_sintomas
+            JOIN enfermedades e ON r.enfermedad_id = e.id_enfermedad
+        """)
         data = cursor.fetchall()
         conn.close()
         
@@ -33,16 +40,17 @@ def entrenar_modelo():
     
     data_sqlite = cargar_datos_sqlite()
     
-    data_total = list(set(data_sqlite))
-    
-    if not data_total:
-        print(f"No hay datos suficientes para entrenar modelo")
+    if len(data_sqlite) < 10:
+        print("No hay suficientes datos para entrenar el modelo")
         return
     
-    X, y = zip(*data_total)
+    X, y = zip(*data_sqlite)
+
     vectorizer = CountVectorizer()
     X_vec = vectorizer.fit_transform(X)
-    model = MultinomialNB().fit(X_vec, y)
+
+    model = MultinomialNB()
+    model.fit(X_vec, y)
     
     with open(MODEL_PATH, "wb") as f:
         pickle.dump((model, vectorizer), f)
