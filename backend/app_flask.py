@@ -3,10 +3,8 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 from flask_migrate import Migrate
 import os
-
 from config import Config
 from database import db
-from Models import app_usuarios, mascota, historial, relaciones
 from Routes import auth_bp, chat_bp, mascota_bp, diagnostico_bp, historial_bp, admin_user_bp, news_bp, entrenamiento_bp
 
 # Cargar variables de entorno
@@ -29,6 +27,8 @@ def create_app():
     db.init_app(app)
 
     migrate.init_app(app, db)
+
+    from Models import app_usuarios, mascota, historial, relaciones
 
     # Registrar Blueprints
     app.register_blueprint(auth_bp, url_prefix="/api/auth")

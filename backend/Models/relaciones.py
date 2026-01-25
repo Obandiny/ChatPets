@@ -30,6 +30,8 @@ class RelacionTablas(db.Model):
     enfermedad_id = db.Column(db.Integer, db.ForeignKey('enfermedades.id_enfermedad'), nullable=False)
     recomendacion_id = db.Column(db.Integer, db.ForeignKey('recomendaciones.id_recomendacion'), nullable=False)
     
+    prioridad = db.Column(db.String(20), nullable=False) 
+    
     sintoma = db.relationship("Sintoma", back_populates="relaciones")
     enfermedad = db.relationship("Enfermedad", back_populates="relaciones")
     recomendacion = db.relationship("Recomendacion", back_populates="relaciones")
