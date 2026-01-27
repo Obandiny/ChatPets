@@ -2,22 +2,25 @@ from flask import Blueprint, request, jsonify
 from werkzeug.utils import secure_filename
 import pandas as pd
 import os
+
 from database import db
 from Models.relaciones import RelacionTablas
 from Services.model_trainer import entrenar_modelo_bd
 from utils import token_required
 from dotenv import load_dotenv
 
+load_dotenv()
+
 entrenamiento_bp = Blueprint('entrenamiento_bp', __name__)
 
 UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER')
 ALLOWED_EXTENSIONS = os.getenv('ALLOWED_EXTENSIONS')
 
-def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
-
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
 @entrenamiento_bp.route('/importar-excel', methods=['POST'])
 def importar_excel():
