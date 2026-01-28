@@ -51,30 +51,38 @@ def importar_excel():
                 "columnas_encontradas": list(df.columns)
             }), 400 
         
-        RelacionTablas.query.delete()
-        db.session.commit()
-        
-        registros = []
+        registros_nuevos = 0
+
         for _, fila in df.iterrows():
-            reg = RelacionTablas(
-                sintoma=fila["sintoma"],
-                enfermedad=fila["enfermedad"],
-                recomendacion=fila["recomendacion"],
-                prioridad=fila["prioridad"]
-            )
-            registros.append(reg)
+            existe = RelacionTablas.query.filter_by(
+                sintoma=str(fila["sintoma"]).strip(),
+                enfermedad=str(fila["enfermedad"]).strip()
+            ).first()
+
+            if not existe:
+                nuevo = RelacionTablas(
+                    sintomas=str(fila["sintoma"]).strip(),
+                    enfermedad=str(fila["enfermedad"]).strip(),
+                    recomendacion=str(fila["recomendacion"]).strip(),
+                    prioridad=str(fila["prioridad"]).strip().lower()
+                )
+                db.session.add(nuevo)
+                registros_nuevos += 1
         
-        db.session.bulk_save_objects(registros)
         db.session.commit()
         
-        resultado = entrenar_modelo_bd()
+        resultado_modelo = entrenar_modelo_bd()
         
         return jsonify({
-            "mensaje": "Archivo procesado, datos guardados y modelo reentrenado",
-            "filas_guardadas": len(registros),
-            "modelo": resultado
+            "mensaje": "Excel importado correctamente",
+            "registros_nuevos": registros_nuevos,
+            "modelo": resultado_modelo
         }), 200
+    
     except Exception as e:
         db.session.rollback()
         print("Error al importar", e)
-        return jsonify({"error": "Error al procesar archivo", "detalle": str(e)}), 500    
+        return jsonify({
+            "error": "Error al procesar archivo", 
+            "detalle": str(e)
+        }), 500    
