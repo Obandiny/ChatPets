@@ -6,6 +6,8 @@ header {
   padding: 0 10px;
   height: 60px;
   z-index: 1000;
+  background: #003500;
+  color: white;
 }
 
 .options {
@@ -22,14 +24,15 @@ header {
   flex: 1;
   display: flex;
   align-items: center;
-  justify-content: center;
-  text-align: center;
+  justify-content: left;
+  text-align: left;
+  margin-left: 10px;
 }
 
 .logo p {
   /* margin-left: -80%; */
   margin-left: -10%;
-  font-size: 2rem;
+  font-size: 1.3rem;
   font-family: 'Comic Sans MS', cursive, sans-serif;
   margin-top: 10px;
 }
@@ -81,185 +84,43 @@ header {
   line-height: 40px;
 }
 
-/* ======================== NUEVO BOTÓN ======================== */
-.nuevo {
-  height: 40px;
+.segumiento-container {
+  padding: 20px;
+}
+
+.mascota-cell {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  cursor: pointer;
+}
+
+.mascota-cell img {
   width: 40px;
-  margin-left: 15px;
-  border-radius: 5px;
-  position: relative;
-}
-
-.nuevo button {
-  background-color: #124cc1bc;
-  height: 100%;
-  width: 100%;
-  border-radius: 5px;
-  color: #fff;
-  border: none;
-  font-size: 24px;
-}
-
-.nuevo button:hover {
-  background-color: #212fab;
-}
-
-@media (max-width: 768px) {
-  .nuevo {
-    position: absolute;
-    right: 10px;
-  }
-}
-
-.nuevo .btn-nuevo {
-  margin: 3px;
-  background: none;
-  border: none;
-  font-size: 30px;
-  color: #fff;
-  cursor: pointer;
-}
-
-/* ======================== CHATBOT ======================== */
-.chat-container {
-  display: flex;
-  justify-content: center;
-  align-items: center; 
-  flex-direction: column;
-  height: 100vh;
-  margin-top: -18px;
-}
-
-.chat-box {
-  width: 100%;
-  max-width: 700px;
-  height: 78%;
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-}
-
-.chat-messages {
-  flex: 1;
-  padding: 15px;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  gap: 15px;
-  scrollbar-width: thin;
-  scrollbar-color: #ccc transparent;
-}
-
-.chat-messages::-webkit-scrollbar {
-  width: 6px;
-}
-
-.chat-messages::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 10px;
-}
-
-/* .bot-message {
-  background-color: #f1f1f1;
-  color: #333;
-  padding: 1rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-  white-space: pre-wrap;
-  line-height: 1.5;
-  align-self: flex-start;
-  max-width: 100%;
-} */
-
-.bot-message {
-  background-color: rgba(255, 255, 255, 0.30); /* Blanco con opacidad */
-  color: #333;
-  padding: 1rem;
-  border-radius: 12px;
-  margin-bottom: 1rem;
-  max-width: 600px;
-  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
-  line-height: 1.6;
-  font-size: 15px;
-  backdrop-filter: blur(4px); /* Opcional: efecto de desenfoque suave detrás */
-}
-
-.user-message {
-  background-color: #d1ecf1;
-  color: #0c5460;
-  padding: 0.75rem;
-  border-radius: 8px;
-  margin-bottom: 1rem;
-}
-
-.chat-input {
-  background-color: rgba(0, 0, 0, 0.85);
-  border-radius: 20px;
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  margin-top: 10px;
-}
-
-.chat-input textarea {
-  flex: 1;
-  border: none;
-  background: transparent;
-  resize: none;
-  color: #fff;
-  font-size: 16px;
-  padding: 10px;
-  border-radius: 10px;
-  outline: none;
-  font-family: 'Courier New', Courier, monospace;
-}
-
-.chat-input textarea::placeholder {
-  color: #ffffff;
-}
-
-.chat-input button {
-  background-color: white;
-  border: none;
+  height: 40px;
   border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  font-weight: bold;
-  cursor: pointer;
 }
 
-/* ======================== INDICADOR DE ESCRITURA ======================== */
-.typing-indicator {
-  display: flex;
-  justify-content: center;
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+}
+
+.badge.baja { background: #4caf50; }
+.badge.media { background: #ff9800; }
+.badge.alta { background: #f44336; }
+
+h2 {
   align-items: center;
-  font-size: 24px;
-  font-weight: bold;
-}
-
-.typing-indicator span {
-  animation: typing 1s infinite;
-  opacity: 0;
-}
-
-.typing-indicator span:nth-child(1) { animation-delay: 0s; }
-.typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
-.typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes typing {
-  0%, 100% { opacity: 0; }
-  50% { opacity: 1; }
-}
-
-
-@media (max-width: 768px) {
-  .btn-entrar-aside {
-    visibility: visible;
-  }
-}
-
-.btn-entrar-aside:hover {
-  background-color: #c5c5c5;
+  justify-content: center;
+  display: flex;
+  padding: 10px;
+  margin: 10px 100px 10px 100px;
+  background: #006800;
+  color: white;
+  border-radius: 5px;
 }
 
 footer {
