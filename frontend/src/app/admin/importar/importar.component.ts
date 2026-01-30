@@ -59,13 +59,13 @@ export class ImportarComponent {
     this.cargando = true;
 
     const formData = new FormData();
-    formData.append('file', this.archivoSeleccionado);
+    formData.append('archivo', this.archivoSeleccionado);
 
     const headers = new HttpHeaders({
       Authorization: 'Bearer ' + localStorage.getItem('token')
     });
 
-    this.http.post('http://localhost:5000/api/modelo/importar', formData, { headers })
+    this.http.post('http://localhost:5000/api/importar-excel', formData, { headers })
       .subscribe({
         next: () => {
           this.cargando = false;

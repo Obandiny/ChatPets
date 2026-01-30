@@ -14,7 +14,7 @@ load_dotenv()
 entrenamiento_bp = Blueprint('entrenamiento_bp', __name__)
 
 UPLOAD_FOLDER = os.getenv('UPLOAD_FOLDER')
-ALLOWED_EXTENSIONS = os.getenv('ALLOWED_EXTENSIONS')
+ALLOWED_EXTENSIONS = set(os.getenv('ALLOWED_EXTENSIONS', 'xlsx').split(','))
 
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
@@ -61,7 +61,7 @@ def importar_excel():
 
             if not existe:
                 nuevo = RelacionTablas(
-                    sintomas=str(fila["sintoma"]).strip(),
+                    sintoma=str(fila["sintoma"]).strip(),
                     enfermedad=str(fila["enfermedad"]).strip(),
                     recomendacion=str(fila["recomendacion"]).strip(),
                     prioridad=str(fila["prioridad"]).strip().lower()
