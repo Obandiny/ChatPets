@@ -1,24 +1,30 @@
-// import { Component, OnInit } from '@angular/core';
-// import { ActivatedRoute } from '@angular/router';
-// import { DiagnosticoService } from '../services/diagnostico.service';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { DiagnosticoService } from '../services/diagnostico.service';
+import { CommonModule } from '@angular/common';
 
-// @Component({
-//   selector: 'app-diagnostico-detalle',
-//   templateUrl: './diagnostico-detalle.component.html',
-//   styleUrls: ['./diagnostico-detalle.component.css']
-// })
-// export class DiagnosticoDetalleComponent implements OnInit {
+@Component({
+    selector: 'app-diagnostico-detalle',
+    standalone: true,
+    imports: [
+        CommonModule
+    ],
+    templateUrl: './diagnostico-detalle.component.html',
+    styleUrls: ['./diagnostico-detalle.component.css']
+})
+export class DiagnosticoDetalleComponent implements OnInit {
 
-//   diagnostico: any;
+    diagnostico: any;
 
-//   constructor(
-//     private route: ActivatedRoute,
-//     private diagnosticoService: DiagnosticoService
-//   ) {}
+    constructor(
+        private diagnosticoService: DiagnosticoService,
+        private router: ActivatedRoute
+    ) {}
 
-//   ngOnInit() {
-//     const id = this.route.snapshot.paramMap.get('id');
-//     this.diagnosticoService.obtenerDetalle(id!)
-//       .subscribe(res => this.diagnostico = res);
-//   }
-// }
+    ngOnInit(): void {
+        const id = Number(this.router.snapshot.paramMap.get('id'));
+        this.diagnosticoService.getDiagnosticoById(id)
+            .subscribe(data => this.diagnostico = data);
+    }
+
+}

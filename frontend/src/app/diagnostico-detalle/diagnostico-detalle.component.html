@@ -1,18 +1,14 @@
-<!-- <div class="documento" *ngIf="diagnostico">
+<div class="documento" *ngIf="diagnostico">
 
-    <header>
-        <h1>Informe de Diagnóstico</h1>
+
+    <h1>Informe de Diagnóstico</h1>
     <span>{{ diagnostico.fecha | date:'fullDate' }}</span>
-    </header>
 
-    <section class="mascota">
-        <img [src]="diagnostico.mascota.imagen_url || 'assets/pet.png'">
-        <div>
-            <h2>{{ diagnostico.mascota.nombre }}</h2>
-            <p>Raza: {{ diagnostico.mascota.raza }}</p>
-            <p>Edad: {{ diagnostico.mascota.edad }} años</p>
-        </div>
-    </section>
+
+    <div class="mascota">
+        <img [src]="diagnostico.imagen || 'assets/pet.png'">
+        <h2>{{ diagnostico.nombre_mascota }}</h2>
+    </div>
 
     <section class="diagnostico">
         <h3>Enfermedad Detectada</h3>
@@ -26,5 +22,5 @@
         <h3>Recomendación</h3>
         <p class="recomendacion">{{ diagnostico.recomendacion }}</p>
     </section>
-</div> -->
+</div>
 

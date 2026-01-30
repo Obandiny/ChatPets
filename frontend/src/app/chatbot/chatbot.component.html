@@ -21,10 +21,10 @@
     <!-- Mascota -->
     <ng-container matColumnDef="mascota">
       <th mat-header-cell *matHeaderCellDef="">Mascota</th>
-      <td mat-cell *matCellDef="let d">
-        <div class="mascota-cell" (click)="verDetalle(d.id)">
-          <img [src]="d.mascota.imagen_url || 'assets/pet.png'" />
-          <span>{{ d.mascota.nombre }}</span>
+      <td mat-cell *matCellDef="let h">
+        <div class="mascota-cell">
+          <img [src]="h.mascota.imagen_url || 'assets/pet.png'" />
+          <span>{{ h.mascota.nombre }}</span>
         </div>
       </td>
     </ng-container>
@@ -32,15 +32,15 @@
     <!-- Enfermedad -->
     <ng-container matColumnDef="enfermedad">
       <th mat-header-cell *matHeaderCellDef>Enfermedad</th>
-      <td mat-cell *matCellDef="let d">{{ d.enfermedad }}</td>
+      <td mat-cell *matCellDef="let h">{{ h.enfermedad }}</td>
     </ng-container>
 
     <!-- Prioridad -->
     <ng-container matColumnDef="prioridad">
       <th mat-header-cell *matHeaderCellDef>Prioridad</th>
-      <td mat-cell *matCellDef="let d">
-        <span class="badge" [ngClass]="d.prioridad">
-          {{ d.prioridad | uppercase }}
+      <td mat-cell *matCellDef="let h">
+        <span class="badge" [ngClass]="h.prioridad">
+          {{ h.prioridad | uppercase }}
         </span>
       </td>
     </ng-container>
@@ -48,19 +48,19 @@
     <!-- Fecha -->
     <ng-container matColumnDef="fecha">
       <th mat-header-cell *matHeaderCellDef>Fecha</th>
-      <td mat-cell *matCellDef="let d">
-        {{ d.fecha | date:'short' }}
+      <td mat-cell *matCellDef="let h">
+        {{ h.fecha | date:'short' }}
       </td>
     </ng-container>
 
     <!-- Acciones -->
     <ng-container matColumnDef="acciones">
       <th mat-header-cell *matHeaderCellDef>Accion</th>
-      <td mat-cell *matCellDef="let d">
-        <button mat-icon-button color="primary" (click)="verDetalle(d.id)">
+      <td mat-cell *matCellDef="let h">
+        <button mat-icon-button color="primary" (click)="verDetalle(h.id)">
           <mat-icon>visibility</mat-icon>
         </button>
-        <button mat-icon-button color="warn" (click)="eliminar(d.id)">
+        <button mat-icon-button color="warn" (click)="eliminar(h.id)">
           <mat-icon>delete</mat-icon>
         </button>
       </td>
