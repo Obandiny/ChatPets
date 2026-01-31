@@ -1,5 +1,5 @@
 import pickle
-from Models.relaciones import RelacionTablas, Sintoma, Enfermedad, Recomendacion
+from Models.relaciones import RelacionTablas, Sintoma, Enfermedad
 from database import db
 import os
 from dotenv import load_dotenv
@@ -38,18 +38,19 @@ def predecir_local(texto_sintomas):
         
         enfermedad_id = model.predict(X_vec)[0]
 
-        enfermedad = Enfermedad.query.get(enfermedad_id)
-        recomendacion = Recomendacion.query.filter_by(
+        relacion = RelacionTablas.query.filter_by(
             enfermedad_id=enfermedad_id
         ).first()
         
-        if not enfermedad or not recomendacion:
+        if not relacion:
             return None
+        
+        enfermedad = Enfermedad.query.get(enfermedad_id)
         
         return {
             "enfermedad": enfermedad.enfermedad,
-            "recomendacion": recomendacion.recomendacion,
-            "alerta": "MEDIA",
+            "recomendacion": relacion.recomendacion,
+            "alerta": relacion.prioridad.upper(),
             "confianza": round(float(mejor_prob), 2)
         }
     except Exception as e:
@@ -71,31 +72,31 @@ def alimentar_db_gemini(sintoma_texto, enfermedad_txt, recomendacion_txt):
         db.session.add(enfermedad)
         db.session.commit()
     
-    # Recomendacion
-    recomendacion = Recomendacion.query.filter_by(
-        recomendacion=recomendacion_txt
-    ).first()
+    # # Recomendacion
+    # recomendacion = Recomendacion.query.filter_by(
+    #     recomendacion=recomendacion_txt
+    # ).first()
 
-    if not recomendacion:
-        recomendacion = Recomendacion(
-            recomendacion=recomendacion_txt,
-            enfermedad_id=enfermedad.id_enfermedad
-        )
-        db.session.add(recomendacion)
-        db.session.commit()
+    # if not recomendacion:
+    #     recomendacion = Recomendacion(
+    #         recomendacion=recomendacion_txt,
+    #         enfermedad_id=enfermedad.id_enfermedad
+    #     )
+    #     db.session.add(recomendacion)
+    #     db.session.commit()
     
     # Relacion
     existe = RelacionTablas.query.filter_by(
         sintoma_id=sintoma.id_sintomas,
         enfermedad_id=enfermedad.id_enfermedad,
-        recomendacion_id=recomendacion.id_recomendacion
     ).first()
 
     if not existe:
         relacion = RelacionTablas(
             sintoma_id=sintoma.id_sintomas,
             enfermedad_id=enfermedad.id_enfermedad,
-            recomendacion_id=recomendacion.id_recomendacion
+            recomendacion_id=recomendacion_txt,
+            # prioridad=prioridad.lower()
         )
         db.session.add(relacion)
         db.session.commit()

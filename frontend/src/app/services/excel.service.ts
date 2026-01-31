@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
 })
 export class ExcelService {
 
-  private apiUrl = 'http://localhost:5000/';
+  private apiUrl = 'http://localhost:5000/api/entrenamiento';
 
   constructor(
     private http: HttpClient,

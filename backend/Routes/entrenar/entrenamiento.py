@@ -4,7 +4,7 @@ import pandas as pd
 import os
 
 from database import db
-from Models.relaciones import RelacionTablas
+from Models.relaciones import RelacionTablas, Sintoma, Enfermedad
 from Services.model_trainer import entrenar_modelo_bd
 from utils import token_required
 from dotenv import load_dotenv
@@ -54,15 +54,31 @@ def importar_excel():
         registros_nuevos = 0
 
         for _, fila in df.iterrows():
+
+            sintoma_texto = str(fila["sintoma"]).strip()
+            enfermedad_texto = str(fila["enfermedad"]).strip()
+
+            sintoma_obj = Sintoma.query.filter_by(sintomas=sintoma_texto).first()
+            if not sintoma_obj:
+                sintoma_obj = Sintoma(sintomas=sintoma_texto)
+                db.session.add(sintoma_obj)
+                db.session.flush()
+
+            enfermedad_obj = Enfermedad.query.filter_by(enfermedad=enfermedad_texto).first()
+            if not enfermedad_obj:
+                enfermedad_obj = Enfermedad(enfermedad=enfermedad_texto)
+                db.session.add(enfermedad_obj)
+                db.session.flush()    
+
             existe = RelacionTablas.query.filter_by(
-                sintoma=str(fila["sintoma"]).strip(),
-                enfermedad=str(fila["enfermedad"]).strip()
+                sintoma_id=sintoma_obj.id_sintomas,
+                enfermedad_id=enfermedad_obj.id_enfermedad
             ).first()
 
             if not existe:
                 nuevo = RelacionTablas(
-                    sintoma=str(fila["sintoma"]).strip(),
-                    enfermedad=str(fila["enfermedad"]).strip(),
+                    sintoma_id=sintoma_obj.id_sintomas,
+                    enfermedad_id=enfermedad_obj.id_enfermedad,
                     recomendacion=str(fila["recomendacion"]).strip(),
                     prioridad=str(fila["prioridad"]).strip().lower()
                 )

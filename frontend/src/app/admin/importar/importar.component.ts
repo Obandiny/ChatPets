@@ -65,7 +65,7 @@ export class ImportarComponent {
       Authorization: 'Bearer ' + localStorage.getItem('token')
     });
 
-    this.http.post('http://localhost:5000/api/importar-excel', formData, { headers })
+    this.http.post('http://localhost:5000/api/entrenamiento/importar-excel', formData, { headers })
       .subscribe({
         next: () => {
           this.cargando = false;
@@ -80,6 +80,7 @@ export class ImportarComponent {
           this.cargando = false;
 
           const msg = err?.error?.error ?? 'Error desconocido';
+          this.logger.error("Error Desconocido");
 
           this.snack.open('Error: ' + msg, 'Cerrar', {
             duration: 3500,
