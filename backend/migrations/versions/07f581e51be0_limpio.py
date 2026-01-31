@@ -1,8 +1,8 @@
-"""Migracion inicial limpia
+"""limpio
 
-Revision ID: 247baf76c7b5
+Revision ID: 07f581e51be0
 Revises: 
-Create Date: 2026-01-25 11:03:32.445305
+Create Date: 2026-01-31 09:20:36.204510
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '247baf76c7b5'
+revision = '07f581e51be0'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -22,11 +22,6 @@ def upgrade():
     sa.Column('id_enfermedad', sa.Integer(), nullable=False),
     sa.Column('enfermedad', sa.String(length=255), nullable=False),
     sa.PrimaryKeyConstraint('id_enfermedad')
-    )
-    op.create_table('recomendaciones',
-    sa.Column('id_recomendacion', sa.Integer(), nullable=False),
-    sa.Column('recomendacion', sa.Text(), nullable=False),
-    sa.PrimaryKeyConstraint('id_recomendacion')
     )
     op.create_table('sintomas',
     sa.Column('id_sintomas', sa.Integer(), nullable=False),
@@ -59,10 +54,9 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('sintoma_id', sa.Integer(), nullable=False),
     sa.Column('enfermedad_id', sa.Integer(), nullable=False),
-    sa.Column('recomendacion_id', sa.Integer(), nullable=False),
+    sa.Column('recomendacion', sa.Text(), nullable=False),
     sa.Column('prioridad', sa.String(length=20), nullable=False),
     sa.ForeignKeyConstraint(['enfermedad_id'], ['enfermedades.id_enfermedad'], ),
-    sa.ForeignKeyConstraint(['recomendacion_id'], ['recomendaciones.id_recomendacion'], ),
     sa.ForeignKeyConstraint(['sintoma_id'], ['sintomas.id_sintomas'], ),
     sa.PrimaryKeyConstraint('id')
     )
@@ -104,6 +98,5 @@ def downgrade():
     op.drop_table('mascotas')
     op.drop_table('usuarios')
     op.drop_table('sintomas')
-    op.drop_table('recomendaciones')
     op.drop_table('enfermedades')
     # ### end Alembic commands ###

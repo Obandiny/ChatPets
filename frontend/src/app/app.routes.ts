@@ -9,6 +9,7 @@ import { RegistarMascotaComponent } from './registar-mascota/registar-mascota.co
 import { TableUsuariosComponent } from './admin/table-usuarios/table-usuarios.component';
 import { TableMascotasComponent } from './admin/table-mascotas/table-mascotas.component';
 import { ImportarComponent } from './admin/importar/importar.component';
+import { DiagnosticoDetalleComponent } from './diagnostico-detalle/diagnostico-detalle.component';
 
 
 export const routes: Routes = [
@@ -25,5 +26,6 @@ export const routes: Routes = [
     { path: 'registrar-mascota', component: RegistarMascotaComponent },
     { path: 'admin/table-usuarios', component: TableUsuariosComponent },
     { path: 'admin/table-mascotas', component: TableMascotasComponent },
-    { path: 'admin/importar', component: ImportarComponent }
+    { path: 'admin/importar', component: ImportarComponent },
+    { path: 'diagnostico-detalle/:id', component: DiagnosticoDetalleComponent }
 ];

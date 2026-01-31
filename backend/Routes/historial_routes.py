@@ -19,11 +19,15 @@ def obtener_historial(usuario_actual):
     data = []
     for h in historiales:
         data.append({
-            "id": h.id,
-            "mascota_id": h.mascota.id,
-            "nombre_mascota": h.mascota.nombre,
-            "imagen": h.mascota.imagen_url,
-            "fecha": h.fecha.isoformat()
+            "historial_id": h.id,
+            "enfermedad": h.enfermedad,
+            "prioridad": h.prioridad,
+            "fecha": h.fecha.isoformat(),
+            "mascota": {
+                "id": h.mascota.id,
+                "nombre": h.mascota_nombre,
+                "imagen_url": h.mascota.imagen_url
+            }
         })
     
     return jsonify(data), 200    
@@ -54,13 +58,15 @@ def obtener_diagnostico_por_id(usuario_actual, id):
         return jsonify({"mensaje": "Diagnostico no encontrado"}), 404
     
     return jsonify({
-        "id": historial.id,
-        "mascota_id": historial.mascota_id,
-        "nombre_mascota": historial.mascota.nombre,
-        "imagen": historial.mascota.imagen_url,
+        "historial_id": historial.id,
         "fecha": historial.fecha.isoformat(),
-        # "enfermedad": historial.enfermedad,
+        "enfermedad": historial.enfermedad,
+        "prioridad": historial.prioridad,
         "recomendacion": historial.recomendacion,
-        # "respuestas": historial.respuestas
+        "mascota": {
+            "id": historial.mascota.id,
+            "nombre": historial.mascota.nombre,
+            "imagen_url": historial.mascota.imagen_url
+        }
     }), 200
     

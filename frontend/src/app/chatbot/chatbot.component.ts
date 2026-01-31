@@ -59,14 +59,24 @@ export class ChatbotComponent implements OnInit {
 
   cargarDiagnosticos() {
     this.diagnosticoService.getHistorial()
-      .subscribe(res => this.diagnosticos = res);
+      .subscribe(res => {
+        console.log('HISTORIAL', res);
+        this.diagnosticos = res;
+      });
   }
 
   verDetalle(id: number) {
+    if (!id) {
+      this.logger.error('ID de diagnostico invalido');
+      return;
+    }
     this.router.navigate(['/diagnostico-detalle', id]);
   }
 
   eliminar(id: number) {
+    if (!id) return;
+
+
     if (confirm('¿Eliminar diagnostico?')) {
       this.diagnosticoService.elimiarHistorial(id).subscribe(() => {
         this.cargarDiagnosticos();

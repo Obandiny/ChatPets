@@ -23,8 +23,11 @@
       <th mat-header-cell *matHeaderCellDef="">Mascota</th>
       <td mat-cell *matCellDef="let h">
         <div class="mascota-cell">
-          <img [src]="h.mascota.imagen_url || 'assets/pet.png'" />
-          <span>{{ h.mascota.nombre }}</span>
+          <img 
+            *ngIf="h.mascota"
+            [src]="h.mascota?.imagen_url || 'assets/image/dog.png'" 
+          />
+          <span>{{ h.mascota.nombre || 'Sin mascota' }}</span>
         </div>
       </td>
     </ng-container>
@@ -57,12 +60,22 @@
     <ng-container matColumnDef="acciones">
       <th mat-header-cell *matHeaderCellDef>Accion</th>
       <td mat-cell *matCellDef="let h">
-        <button mat-icon-button color="primary" (click)="verDetalle(h.id)">
-          <mat-icon>visibility</mat-icon>
+        <button 
+          mat-icon-button 
+          color="primary"
+          *ngIf="h.historial_id"
+          (click)="verDetalle(h.historial_id)">
+          <mat-icon>arrow_back</mat-icon>
         </button>
-        <button mat-icon-button color="warn" (click)="eliminar(h.id)">
+        <button 
+          mat-icon-button 
+          color="warn"
+          [disabled]="!h.historial_id"
+          matTooltip="Abrir"
+          (click)="eliminar(h.historial_id)">
           <mat-icon>delete</mat-icon>
         </button>
+        <pre>{{ h | json }}</pre>
       </td>
     </ng-container>
 

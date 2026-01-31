@@ -84,7 +84,7 @@ header {
   line-height: 40px;
 }
 
-.segumiento-container {
+.seguimiento-container {
   padding: 20px;
 }
 
@@ -92,13 +92,14 @@ header {
   display: flex;
   align-items: center;
   gap: 10px;
-  cursor: pointer;
 }
 
 .mascota-cell img {
-  width: 40px;
-  height: 40px;
+  width: 42px;
+  height: 42px;
   border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #ddd;
 }
 
 .badge {
@@ -132,3 +133,40 @@ footer {
   background-color: rgba(255, 255, 255, 0.4);
   border-top: 1px solid #ccc;
 }
+
+.mat-icon {
+  font-size: 22px;
+  color: #1976d2;
+}
+
+button[mat-icon-button] {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+table {
+  background: transparent;
+}
+
+.mat-row {
+  background: rgba(255, 255, 255, 0.85);
+  transition: 0.2s;
+}
+
+.mat-row:hover {
+  background: rgba(255, 255, 255, 1);
+}
+
+
+.mat-mdc-row {
+  background: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(6px);
+  transition: all 0.2s ease-in-out;
+}
+
+.mat-mdc-row:hover {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+

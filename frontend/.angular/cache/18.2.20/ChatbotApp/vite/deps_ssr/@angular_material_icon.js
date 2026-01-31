@@ -7,7 +7,7 @@ import {
 } from "./chunk-7ARQESE3.js";
 import {
   MatCommonModule
-} from "./chunk-SKQEDIY7.js";
+} from "./chunk-XSCCNACE.js";
 import {
   DOCUMENT
 } from "./chunk-FWX7UIPA.js";
